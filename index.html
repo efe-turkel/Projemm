@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Efe | Full-Stack Geliştirici & UI/UX Tasarımcı</title>
+  <meta name="description" content="Efe'nin kişisel web sitesi, portfolyosu ve CV'si. Modern web teknolojileri, projeler, uzmanlık alanları ve sosyal bağlantılar.">
+  <meta name="keywords" content="Efe, portfolyo, web geliştirici, full-stack, frontend, backend, CV, özgeçmiş, yazılımcı">
+  <meta name="author" content="Efe">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Efe | Kişisel Portfolyo & CV">
+  <meta property="og:description" content="Modern web teknolojileri, projeler, uzmanlık alanları ve interaktif CV.">
+  <meta property="og:image" content="assets/avatar.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Scroll Progress Indicator -->
+  <div id="scroll-progress-container">
+    <div id="scroll-progress-bar"></div>
+  </div>
+
+  <!-- Custom Glowing Cursor (Disabled on touch devices automatically) -->
+  <div class="custom-cursor" id="custom-cursor"></div>
+  <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+
+  <!-- Dynamic Interactive Particle Canvas Background -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Glowing Aurora Ambient Glows -->
+  <div class="aurora-glow aurora-1"></div>
+  <div class="aurora-glow aurora-2"></div>
+  <div class="aurora-glow aurora-3"></div>
+
+  <!-- Navigation Header -->
+  <header class="navbar-wrapper" id="navbar">
+    <div class="navbar-container">
+      <a href="#hero" class="brand-logo" id="brand-logo">
+        <span class="logo-bracket">&lt;</span>
+        <span class="logo-name">Efe</span>
+        <span class="logo-dot">.</span>
+        <span class="logo-suffix">dev</span>
+        <span class="logo-bracket">/&gt;</span>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="nav-links" id="nav-links">
+        <a href="#hero" class="nav-link active"><i class="fa-solid fa-house"></i> Başlangıç</a>
+        <a href="#about" class="nav-link"><i class="fa-regular fa-user"></i> Hakkımda</a>
+        <a href="#skills" class="nav-link"><i class="fa-solid fa-code"></i> Yetenekler</a>
+        <a href="#experience" class="nav-link"><i class="fa-solid fa-briefcase"></i> Deneyim</a>
+        <a href="#projects" class="nav-link"><i class="fa-solid fa-layer-group"></i> Projeler</a>
+        <a href="#contact" class="nav-link"><i class="fa-regular fa-paper-plane"></i> İletişim</a>
+      </nav>
+
+      <!-- Action Utilities -->
+      <div class="nav-actions">
+        <!-- Sound FX Toggle Button -->
+        <button class="icon-btn" id="sound-toggle" aria-label="Ses Efektlerini Aç/Kapat" title="Ses Efektleri">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button class="icon-btn" id="theme-toggle" aria-label="Temayı Değiştir" title="Karanlık/Aydınlık Tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <!-- CV Modal Trigger Button -->
+        <button class="btn btn-outline-glow btn-sm" id="open-cv-btn">
+          <i class="fa-regular fa-file-lines"></i>
+          <span>CV Görüntüle</span>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Menüyü Aç">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Navigation -->
+    <div class="mobile-drawer" id="mobile-drawer">
+      <a href="#hero" class="mobile-nav-link"><i class="fa-solid fa-house"></i> Başlangıç</a>
+      <a href="#about" class="mobile-nav-link"><i class="fa-regular fa-user"></i> Hakkımda</a>
+      <a href="#skills" class="mobile-nav-link"><i class="fa-solid fa-code"></i> Yetenekler</a>
+      <a href="#experience" class="mobile-nav-link"><i class="fa-solid fa-briefcase"></i> Deneyim</a>
+      <a href="#projects" class="mobile-nav-link"><i class="fa-solid fa-layer-group"></i> Projeler</a>
+      <a href="#contact" class="mobile-nav-link"><i class="fa-regular fa-paper-plane"></i> İletişim</a>
+      <div class="mobile-drawer-socials">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-container">
+        
+        <!-- Hero Content / Text -->
+        <div class="hero-content">
+          <!-- Availability Badge -->
+          <div class="hero-badge reveal">
+            <span class="pulse-status"></span>
+            <span>Yeni Projelere & Fırsatlara Açık</span>
+          </div>
+
+          <!-- Main Headline -->
+          <h1 class="hero-title reveal">
+            Merhaba, Ben <span class="gradient-text text-glow">Efe</span>
+            <br>
+            <span class="typewriter-prefix">Ben bir </span>
+            <span class="typewriter-text" id="typewriter"></span>
+            <span class="typewriter-cursor">|</span>
+          </h1>
+
+          <p class="hero-description reveal">
+            Kullanıcı deneyimini odağına alan, modern, hızlı ve görsel olarak etkileyici dijital ürünler inşa ediyorum. Web geliştirme, modern arayüz tasarımı ve yenilikçi teknolojilerle fikirleri gerçeğe dönüştürüyorum.
+          </p>
+
+          <!-- Primary & Secondary Action Buttons -->
+          <div class="hero-actions reveal">
+            <a href="#projects" class="btn btn-primary-glow">
+              <i class="fa-solid fa-rocket"></i>
+              <span>Projelerimi Keşfet</span>
+            </a>
+            <button class="btn btn-secondary-glass" id="hero-cv-btn">
+              <i class="fa-solid fa-download"></i>
+              <span>Özgeçmiş / CV</span>
+            </button>
+            <a href="#contact" class="btn btn-ghost">
+              <i class="fa-regular fa-comments"></i>
+              <span>İletişime Geç</span>
+            </a>
+          </div>
+
+          <!-- Connected Social Media Links Bar -->
+          <div class="hero-social-bar reveal">
+            <span class="social-label">Beni Takip Edin:</span>
+            <div class="social-icons-wrapper">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon-box github-hover" title="GitHub Profilim" id="hero-github-link">
+                <i class="fa-brands fa-github"></i>
+                <span class="social-tooltip">GitHub</span>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon-box linkedin-hover" title="LinkedIn Profilim" id="hero-linkedin-link">
+                <i class="fa-brands fa-linkedin-in"></i>
+                <span class="social-tooltip">LinkedIn</span>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon-box instagram-hover" title="Instagram Profilim" id="hero-instagram-link">
+                <i class="fa-brands fa-instagram"></i>
+                <span class="social-tooltip">Instagram</span>
+              </a>
+              <a href="mailto:efe@example.com" class="social-icon-box email-hover" title="E-Posta Gönder" id="hero-email-link">
+                <i class="fa-regular fa-envelope"></i>
+                <span class="social-tooltip">E-Posta</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual / 3D Tilt Avatar Card -->
+        <div class="hero-visual reveal-zoom">
+          <div class="tilt-card-wrapper" id="hero-tilt-card">
+            <!-- Glassmorphism Card Frame -->
+            <div class="avatar-card-inner">
+              <div class="avatar-glow-ring"></div>
+              <div class="avatar-image-container">
+                <img src="assets/avatar.jpg" alt="Efe Profil Portresi" class="avatar-image" id="profile-img">
+              </div>
+
+              <!-- Floating Experience Badge 1 -->
+              <div class="floating-badge badge-top-left float-anim-1">
+                <div class="badge-icon"><i class="fa-solid fa-code-commit"></i></div>
+                <div class="badge-info">
+                  <span class="badge-number">3+ Yıl</span>
+                  <span class="badge-text">Geliştirme Deneyimi</span>
+                </div>
+              </div>
+
+              <!-- Floating Experience Badge 2 -->
+              <div class="floating-badge badge-bottom-right float-anim-2">
+                <div class="badge-icon tech-color"><i class="fa-solid fa-cube"></i></div>
+                <div class="badge-info">
+                  <span class="badge-number">25+</span>
+                  <span class="badge-text">Tamamlanan Proje</span>
+                </div>
+              </div>
+
+              <!-- Floating Experience Badge 3 -->
+              <div class="floating-badge badge-bottom-left float-anim-3">
+                <div class="badge-icon glow-green"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="badge-info">
+                  <span class="badge-number">100%</span>
+                  <span class="badge-text">Temiz & Modern Kod</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scroll Down Indicator -->
+      <a href="#stats" class="scroll-down-indicator" aria-label="Aşağı Kaydır">
+        <span class="mouse-icon">
+          <span class="mouse-wheel"></span>
+        </span>
+        <span class="scroll-text">Aşağı Kaydır</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </a>
+    </section>
+
+    <!-- KEY STATS HIGHLIGHT BANNER -->
+    <section class="stats-section" id="stats">
+      <div class="container">
+        <div class="stats-grid">
+          
+          <div class="stat-card glass-panel reveal">
+            <div class="stat-icon-wrapper">
+              <i class="fa-solid fa-laptop-code"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number-wrapper">
+                <span class="counter" data-target="25">0</span>
+                <span class="stat-plus">+</span>
+              </div>
+              <p class="stat-title">Başarıyla Tamamlanan Proje</p>
+            </div>
+          </div>
+
+          <div class="stat-card glass-panel reveal">
+            <div class="stat-icon-wrapper">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number-wrapper">
+                <span class="counter" data-target="15">0</span>
+                <span class="stat-plus">+</span>
+              </div>
+              <p class="stat-title">İşbirliği & Mutlu Müşteri</p>
+            </div>
+          </div>
+
+          <div class="stat-card glass-panel reveal">
+            <div class="stat-icon-wrapper">
+              <i class="fa-solid fa-terminal"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number-wrapper">
+                <span class="counter" data-target="120">0</span>
+                <span class="stat-plus">K+</span>
+              </div>
+              <p class="stat-title">Yazılan Kod Satırı</p>
+            </div>
+          </div>
+
+          <div class="stat-card glass-panel reveal">
+            <div class="stat-icon-wrapper">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number-wrapper">
+                <span class="counter" data-target="100">0</span>
+                <span class="stat-plus">%</span>
+              </div>
+              <p class="stat-title">Çözüm Odaklılık & Kalite</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="section about-section" id="about">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header reveal">
+          <span class="section-tag"><i class="fa-regular fa-id-badge"></i> Tanışalım</span>
+          <h2 class="section-title">Hakkımda & <span class="gradient-text">Vizyonum</span></h2>
+          <p class="section-subtitle">Teknolojiye olan merakımı, estetik ve işlevsel çözümler üreten bir kariyere dönüştürdüm.</p>
+        </div>
+
+        <div class="about-grid">
+          
+          <!-- About Story -->
+          <div class="about-story glass-panel reveal-left">
+            <h3 class="about-story-title">
+              <i class="fa-solid fa-wand-magic-sparkles text-glow"></i>
+              Geleceği Kodla Şekillendiriyorum
+            </h3>
+            <p class="about-paragraph">
+              Merhaba! Ben Efe. Web ekosistemine ilk adımı attığım günden bu yana, yalnızca çalışan kodlar değil; kullanıcıda iz bırakan, akıcı ve yüksek performanslı dijital deneyimler geliştirmeye odaklanıyorum.
+            </p>
+            <p class="about-paragraph">
+              Modern frontend mimarileri, ölçeklenebilir backend sistemleri, dinamik mikro-animasyonlar ve estetik arayüz tasarımları üzerinde çalışıyorum. Sürekli yeni teknolojileri deneyimlemek, problemlere yaratıcı çözümler üretmek ve küresel standartlarda işler çıkarmak en büyük motivasyonum.
+            </p>
+
+            <!-- Quick Details Pill Grid -->
+            <div class="about-info-grid">
+              <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-location-dot"></i> Konum:</span>
+                <span class="info-value">İstanbul, Türkiye</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-briefcase"></i> Çalışma Şekli:</span>
+                <span class="info-value">Uzaktan / Hibrit / Freelance</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-language"></i> Diller:</span>
+                <span class="info-value">Türkçe (Anadil), İngilizce (İleri)</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-heart"></i> İlgi Alanları:</span>
+                <span class="info-value">Web3, Yapay Zeka, 3D Web, UI/UX</span>
+              </div>
+            </div>
+
+            <div class="about-cta-row">
+              <button class="btn btn-primary-glow" id="about-cv-btn">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>CV Detaylarını Aç</span>
+              </button>
+              <a href="#contact" class="btn btn-outline-glow">
+                <i class="fa-regular fa-envelope"></i>
+                <span>Mesaj Bırak</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Feature Cards / Value Props -->
+          <div class="about-highlights reveal-right">
+            
+            <div class="highlight-card glass-panel">
+              <div class="highlight-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+              <div class="highlight-text">
+                <h4>Piksel Hassasiyetinde UI/UX</h4>
+                <p>Göz alıcı renk paletleri, modern tipografi ve kullanıcıyı içine çeken estetik arayüzler tasarlarım.</p>
+              </div>
+            </div>
+
+            <div class="highlight-card glass-panel">
+              <div class="highlight-icon"><i class="fa-solid fa-gauge-high"></i></div>
+              <div class="highlight-text">
+                <h4>Yüksek Hız & Performans</h4>
+                <p>Temiz kod yapısı, optimize edilmiş kaynaklar ve SEO dostu modern mimariler kurgularım.</p>
+              </div>
+            </div>
+
+            <div class="highlight-card glass-panel">
+              <div class="highlight-icon"><i class="fa-solid fa-network-wired"></i></div>
+              <div class="highlight-text">
+                <h4>Uçtan Uca (Full-Stack) Mimari</h4>
+                <p>Frontend tasarımından veritabanı kurgusuna ve API entegrasyonlarına kadar bütünsel çözümler üretirim.</p>
+              </div>
+            </div>
+
+            <div class="highlight-card glass-panel">
+              <div class="highlight-icon"><i class="fa-solid fa-infinity"></i></div>
+              <div class="highlight-text">
+                <h4>Sürekli Öğrenme & Gelişim</h4>
+                <p>Yapay zeka araçları, modern framework'ler ve sektörel trendleri yakından takip eder, projelerime uygularım.</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS & SPECIALTIES SECTION -->
+    <section class="section skills-section" id="skills">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header reveal">
+          <span class="section-tag"><i class="fa-solid fa-cubes"></i> Yetenekler & Araçlar</span>
+          <h2 class="section-title">Uzmanlık <span class="gradient-text">Alanlarım</span></h2>
+          <p class="section-subtitle">Projelerimde kullandığım güncel teknolojiler, programlama dilleri ve geliştirme araçları.</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs-wrapper reveal">
+          <button class="filter-tab active" data-filter="all">Tümü</button>
+          <button class="filter-tab" data-filter="frontend">Frontend & UI</button>
+          <button class="filter-tab" data-filter="backend">Backend & DB</button>
+          <button class="filter-tab" data-filter="tools">Araçlar & DevOps</button>
+          <button class="filter-tab" data-filter="design">Tasarım & Yaratıcı</button>
+        </div>
+
+        <!-- Skills Grid Cards -->
+        <div class="skills-grid" id="skills-grid">
+          
+          <!-- Skill: JavaScript / TypeScript -->
+          <div class="skill-card glass-panel reveal" data-category="frontend">
+            <div class="skill-head">
+              <div class="skill-icon-box js-color"><i class="fa-brands fa-js"></i></div>
+              <div class="skill-info">
+                <h4>JavaScript (ES6+) / TypeScript</h4>
+                <span>Modern Web & Tip Güvenliği</span>
+              </div>
+              <span class="skill-pct">92%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 92%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>Async/Await</span>
+              <span>DOM</span>
+              <span>TypeScript Interfaces</span>
+            </div>
+          </div>
+
+          <!-- Skill: React & Next.js -->
+          <div class="skill-card glass-panel reveal" data-category="frontend">
+            <div class="skill-head">
+              <div class="skill-icon-box react-color"><i class="fa-brands fa-react"></i></div>
+              <div class="skill-info">
+                <h4>React.js & Next.js</h4>
+                <span>SPA, SSR, Hydration, Hooks</span>
+              </div>
+              <span class="skill-pct">90%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 90%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>Custom Hooks</span>
+              <span>Redux/Zustand</span>
+              <span>SSR / SSG</span>
+            </div>
+          </div>
+
+          <!-- Skill: HTML5 & Modern CSS3 -->
+          <div class="skill-card glass-panel reveal" data-category="frontend">
+            <div class="skill-head">
+              <div class="skill-icon-box css-color"><i class="fa-brands fa-css3-alt"></i></div>
+              <div class="skill-info">
+                <h4>HTML5, CSS3 & Animations</h4>
+                <span>Glassmorphism, Flex/Grid, Animasyon</span>
+              </div>
+              <span class="skill-pct">96%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 96%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>Keyframes</span>
+              <span>Tailwind CSS</span>
+              <span>Responsive Design</span>
+            </div>
+          </div>
+
+          <!-- Skill: Node.js & Express -->
+          <div class="skill-card glass-panel reveal" data-category="backend">
+            <div class="skill-head">
+              <div class="skill-icon-box node-color"><i class="fa-brands fa-node"></i></div>
+              <div class="skill-info">
+                <h4>Node.js & Express</h4>
+                <span>RESTful API, Middleware, Auth</span>
+              </div>
+              <span class="skill-pct">85%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 85%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>JWT</span>
+              <span>CORS</span>
+              <span>Microservices</span>
+            </div>
+          </div>
+
+          <!-- Skill: Python & AI APIs -->
+          <div class="skill-card glass-panel reveal" data-category="backend">
+            <div class="skill-head">
+              <div class="skill-icon-box python-color"><i class="fa-brands fa-python"></i></div>
+              <div class="skill-info">
+                <h4>Python & AI Entegrasyonları</h4>
+                <span>FastAPI, Otomasyon, LLM API'leri</span>
+              </div>
+              <span class="skill-pct">82%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 82%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>FastAPI</span>
+              <span>Prompt Eng.</span>
+              <span>Web Scraping</span>
+            </div>
+          </div>
+
+          <!-- Skill: Databases -->
+          <div class="skill-card glass-panel reveal" data-category="backend">
+            <div class="skill-head">
+              <div class="skill-icon-box db-color"><i class="fa-solid fa-database"></i></div>
+              <div class="skill-info">
+                <h4>PostgreSQL & MongoDB</h4>
+                <span>İlişkisel & NoSQL Veritabanları</span>
+              </div>
+              <span class="skill-pct">84%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 84%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>Prisma ORM</span>
+              <span>Mongoose</span>
+              <span>Indexing</span>
+            </div>
+          </div>
+
+          <!-- Skill: Git & GitHub -->
+          <div class="skill-card glass-panel reveal" data-category="tools">
+            <div class="skill-head">
+              <div class="skill-icon-box git-color"><i class="fa-brands fa-git-alt"></i></div>
+              <div class="skill-info">
+                <h4>Git, GitHub & CI/CD</h4>
+                <span>Versiyonlama, PR, GitHub Actions</span>
+              </div>
+              <span class="skill-pct">90%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 90%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>Git Flow</span>
+              <span>Workflows</span>
+              <span>Code Review</span>
+            </div>
+          </div>
+
+          <!-- Skill: Docker & Cloud -->
+          <div class="skill-card glass-panel reveal" data-category="tools">
+            <div class="skill-head">
+              <div class="skill-icon-box docker-color"><i class="fa-brands fa-docker"></i></div>
+              <div class="skill-info">
+                <h4>Docker & Dağıtım</h4>
+                <span>Konteynerizasyon, Vercel, VPS</span>
+              </div>
+              <span class="skill-pct">78%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 78%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>Dockerfile</span>
+              <span>Compose</span>
+              <span>Cloud Deploy</span>
+            </div>
+          </div>
+
+          <!-- Skill: Figma & UI Design -->
+          <div class="skill-card glass-panel reveal" data-category="design">
+            <div class="skill-head">
+              <div class="skill-icon-box figma-color"><i class="fa-brands fa-figma"></i></div>
+              <div class="skill-info">
+                <h4>Figma & UI/UX Tasarım</h4>
+                <span>Prototipleme, Tasarım Sistemleri, Wireframe</span>
+              </div>
+              <span class="skill-pct">88%</span>
+            </div>
+            <div class="skill-progress-track">
+              <div class="skill-progress-fill" style="width: 88%;"></div>
+            </div>
+            <div class="skill-tags">
+              <span>Auto Layout</span>
+              <span>Design Tokens</span>
+              <span>Components</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE & EDUCATION TIMELINE SECTION -->
+    <section class="section experience-section" id="experience">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header reveal">
+          <span class="section-tag"><i class="fa-regular fa-clock"></i> Kariyer Yolculuğum</span>
+          <h2 class="section-title">Deneyim & <span class="gradient-text">Eğitim</span></h2>
+          <p class="section-subtitle">Sürekli kendini geliştiren, sorumluluk alan ve değer üreten bir profesyonel geçmiş.</p>
+        </div>
+
+        <!-- Toggle Switcher -->
+        <div class="timeline-switch-wrapper reveal">
+          <button class="timeline-switch-btn active" id="btn-show-exp">
+            <i class="fa-solid fa-briefcase"></i> İş Deneyimi
+          </button>
+          <button class="timeline-switch-btn" id="btn-show-edu">
+            <i class="fa-solid fa-graduation-cap"></i> Eğitim & Sertifikalar
+          </button>
+        </div>
+
+        <!-- Experience Timeline View -->
+        <div class="timeline-wrapper" id="timeline-experience">
+          
+          <!-- Item 1 -->
+          <div class="timeline-item reveal">
+            <div class="timeline-marker">
+              <div class="marker-dot"></div>
+              <div class="marker-line"></div>
+            </div>
+            <div class="timeline-content glass-panel">
+              <div class="timeline-top">
+                <span class="timeline-badge current">2023 - Günümüz</span>
+                <span class="timeline-location"><i class="fa-solid fa-map-pin"></i> İstanbul / Remote</span>
+              </div>
+              <h3 class="timeline-role">Kıdemli Full-Stack Geliştirici & UI Danışmanı</h3>
+              <h4 class="timeline-company"><i class="fa-solid fa-building"></i> TechVision Dijital Çözümler</h4>
+              <p class="timeline-desc">
+                Ölçeklenebilir SaaS platformları ve kullanıcı odaklı modern web uygulamalarının baştan sona mimari kurgusu ve geliştirilmesi. UI/UX tasarım standartlarının belirlenmesi ve API servis entegrasyonları.
+              </p>
+              <div class="timeline-tech-stack">
+                <span>React.js</span>
+                <span>Next.js</span>
+                <span>Node.js</span>
+                <span>PostgreSQL</span>
+                <span>TailwindCSS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="timeline-item reveal">
+            <div class="timeline-marker">
+              <div class="marker-dot"></div>
+              <div class="marker-line"></div>
+            </div>
+            <div class="timeline-content glass-panel">
+              <div class="timeline-top">
+                <span class="timeline-badge">2022 - 2023</span>
+                <span class="timeline-location"><i class="fa-solid fa-map-pin"></i> Hibrit</span>
+              </div>
+              <h3 class="timeline-role">Frontend Web Geliştirici</h3>
+              <h4 class="timeline-company"><i class="fa-solid fa-building"></i> Nexus Dijital Stüdyo</h4>
+              <p class="timeline-desc">
+                Etkileşimli kurumsal web siteleri, e-ticaret panelleri ve mikro-animasyonlu kullanıcı deneyimlerinin kodlanması. Sayfa yüklenme sürelerinde %40 performans artışı sağlayan optimizasyonlar.
+              </p>
+              <div class="timeline-tech-stack">
+                <span>JavaScript ES6+</span>
+                <span>CSS Animations</span>
+                <span>REST API</span>
+                <span>Figma</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="timeline-item reveal">
+            <div class="timeline-marker">
+              <div class="marker-dot"></div>
+              <div class="marker-line"></div>
+            </div>
+            <div class="timeline-content glass-panel">
+              <div class="timeline-top">
+                <span class="timeline-badge">2021 - 2022</span>
+                <span class="timeline-location"><i class="fa-solid fa-map-pin"></i> Freelance</span>
+              </div>
+              <h3 class="timeline-role">Serbest Yazılım Geliştirici & UI Tasarımcı</h3>
+              <h4 class="timeline-company"><i class="fa-solid fa-laptop-code"></i> Bağımsız / Freelance</h4>
+              <p class="timeline-desc">
+                Yerli ve uluslararası müşterilere özel web siteleri, prototip arayüzler ve dijital portfolyoların hayata geçirilmesi. Müşteri iletişimi ve zamanında teslimat yönetimi.
+              </p>
+              <div class="timeline-tech-stack">
+                <span>HTML5 / CSS3</span>
+                <span>JavaScript</span>
+                <span>WordPress / Headless</span>
+                <span>UI Prototyping</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Education Timeline View (Hidden by default, switched via JS) -->
+        <div class="timeline-wrapper hidden" id="timeline-education">
+          
+          <!-- Edu Item 1 -->
+          <div class="timeline-item reveal">
+            <div class="timeline-marker">
+              <div class="marker-dot"></div>
+              <div class="marker-line"></div>
+            </div>
+            <div class="timeline-content glass-panel">
+              <div class="timeline-top">
+                <span class="timeline-badge current">2020 - 2024</span>
+                <span class="timeline-location"><i class="fa-solid fa-graduation-cap"></i> Lisans Derecesi</span>
+              </div>
+              <h3 class="timeline-role">Bilgisayar Mühendisliği / Yazılım</h3>
+              <h4 class="timeline-company"><i class="fa-solid fa-university"></i> Üniversite Eğitimi</h4>
+              <p class="timeline-desc">
+                Veri yapıları ve algoritmalar, yazılım mühendisliği prensipleri, veritabanı yönetim sistemleri ve ağ mimarileri üzerine kapsamlı teorik ve pratik eğitim.
+              </p>
+              <div class="timeline-tech-stack">
+                <span>Veri Yapıları</span>
+                <span>OOP</span>
+                <span>Veritabanları</span>
+                <span>Yapay Zeka Temelleri</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edu Item 2 -->
+          <div class="timeline-item reveal">
+            <div class="timeline-marker">
+              <div class="marker-dot"></div>
+              <div class="marker-line"></div>
+            </div>
+            <div class="timeline-content glass-panel">
+              <div class="timeline-top">
+                <span class="timeline-badge">2023</span>
+                <span class="timeline-location"><i class="fa-solid fa-certificate"></i> Profesyonel Sertifika</span>
+              </div>
+              <h3 class="timeline-role">İleri Seviye Full-Stack & Bulut Mimarileri</h3>
+              <h4 class="timeline-company"><i class="fa-solid fa-award"></i> Meta / Coursera Sertifikasyon</h4>
+              <p class="timeline-desc">
+                Reaktif arayüzler, API güvenliği, mikroservisler, CI/CD süreçleri ve modern bulut dağıtım stratejileri üzerine uluslararası geçerliliğe sahip uzmanlık programı.
+              </p>
+              <div class="timeline-tech-stack">
+                <span>Full-Stack Mastery</span>
+                <span>Cloud Deployment</span>
+                <span>DevOps Pratikleri</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FEATURED PROJECTS SECTION -->
+    <section class="section projects-section" id="projects">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header reveal">
+          <span class="section-tag"><i class="fa-solid fa-palette"></i> Ürettiklerim</span>
+          <h2 class="section-title">Öne Çıkan <span class="gradient-text">Projelerim</span></h2>
+          <p class="section-subtitle">Fikir aşamasından yayına kadar özenle geliştirdiğim bazı seçkin çalışmalarım.</p>
+        </div>
+
+        <!-- Project Filter Buttons -->
+        <div class="filter-tabs-wrapper reveal">
+          <button class="project-tab active" data-pfilter="all">Tüm Projeler</button>
+          <button class="project-tab" data-pfilter="saas">SaaS & Yapay Zeka</button>
+          <button class="project-tab" data-pfilter="fintech">FinTech & Web3</button>
+          <button class="project-tab" data-pfilter="mobile">Mobil Çözümler</button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid">
+          
+          <!-- Project 1: AI SaaS Dashboard -->
+          <div class="project-card glass-panel reveal" data-category="saas">
+            <div class="project-img-wrapper">
+              <img src="assets/project1.jpg" alt="Quantum AI Analitik Paneli" class="project-img">
+              <div class="project-overlay">
+                <button class="project-quick-view-btn" data-project="1">
+                  <i class="fa-regular fa-eye"></i> İncele
+                </button>
+              </div>
+              <span class="project-category-badge">Yapay Zeka / SaaS</span>
+            </div>
+            <div class="project-body">
+              <div class="project-meta">
+                <span class="project-featured-star"><i class="fa-solid fa-star"></i> Öne Çıkan</span>
+                <span class="project-date">2024</span>
+              </div>
+              <h3 class="project-title">Quantum AI - Akıllı Veri Analitiği Paneli</h3>
+              <p class="project-desc">
+                Gerçek zamanlı yapay zeka modelleriyle tahminleme yapan, interaktif finans ve kullanıcı metrikleri sunan modern bir SaaS kontrol paneli.
+              </p>
+              <div class="project-tags">
+                <span>React.js</span>
+                <span>TypeScript</span>
+                <span>Chart.js</span>
+                <span>Tailwind</span>
+                <span>FastAPI</span>
+              </div>
+              <div class="project-card-footer">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub Deposu">
+                  <i class="fa-brands fa-github"></i> Kodlar
+                </a>
+                <a href="#projects" class="project-link project-live-demo" data-project="1" title="Canlı Önizleme">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Canlı Demo
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2: FinTech & Web3 -->
+          <div class="project-card glass-panel reveal" data-category="fintech">
+            <div class="project-img-wrapper">
+              <img src="assets/project2.jpg" alt="Cypherex Portföy Yöneticisi" class="project-img">
+              <div class="project-overlay">
+                <button class="project-quick-view-btn" data-project="2">
+                  <i class="fa-regular fa-eye"></i> İncele
+                </button>
+              </div>
+              <span class="project-category-badge">FinTech & Web3</span>
+            </div>
+            <div class="project-body">
+              <div class="project-meta">
+                <span class="project-featured-star"><i class="fa-solid fa-bolt"></i> Yeni</span>
+                <span class="project-date">2024</span>
+              </div>
+              <h3 class="project-title">Cypherex - Kripto & Varlık Portföy Platformu</h3>
+              <p class="project-desc">
+                Kullanıcıların dijital varlıklarını, canlı piyasa grafiklerini ve portföy dağılımlarını anlık websocket bağlantılarıyla takip edebildiği web uygulaması.
+              </p>
+              <div class="project-tags">
+                <span>Next.js</span>
+                <span>WebSockets</span>
+                <span>Node.js</span>
+                <span>PostgreSQL</span>
+                <span>Glassmorphism</span>
+              </div>
+              <div class="project-card-footer">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub Deposu">
+                  <i class="fa-brands fa-github"></i> Kodlar
+                </a>
+                <a href="#projects" class="project-link project-live-demo" data-project="2" title="Canlı Önizleme">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Canlı Demo
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3: FitSync Mobile App -->
+          <div class="project-card glass-panel reveal" data-category="mobile">
+            <div class="project-img-wrapper">
+              <img src="assets/project3.jpg" alt="FitSync & LinkUp Mobil Uygulama" class="project-img">
+              <div class="project-overlay">
+                <button class="project-quick-view-btn" data-project="3">
+                  <i class="fa-regular fa-eye"></i> İncele
+                </button>
+              </div>
+              <span class="project-category-badge">Mobil & Sosyal</span>
+            </div>
+            <div class="project-body">
+              <div class="project-meta">
+                <span class="project-featured-star"><i class="fa-solid fa-fire"></i> Popüler</span>
+                <span class="project-date">2023</span>
+              </div>
+              <h3 class="project-title">FitSync - Akıllı Sağlık & Sosyal Egzersiz Takibi</h3>
+              <p class="project-desc">
+                Günlük aktivite analizleri, antrenman programları ve sporcular arası etkileşimi tek bir dinamik arayüzde birleştiren mobil uygulama konsepti.
+              </p>
+              <div class="project-tags">
+                <span>React Native</span>
+                <span>Figma UI/UX</span>
+                <span>Firebase</span>
+                <span>Lottie Animations</span>
+              </div>
+              <div class="project-card-footer">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub Deposu">
+                  <i class="fa-brands fa-github"></i> Kodlar
+                </a>
+                <a href="#projects" class="project-link project-live-demo" data-project="3" title="Canlı Önizleme">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Canlı Demo
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CV & RESUME INTERACTIVE SHOWCASE SECTION -->
+    <section class="section cv-section" id="cv-section">
+      <div class="container">
+        <div class="cv-highlight-card glass-panel reveal">
+          <div class="cv-highlight-content">
+            <span class="section-tag"><i class="fa-regular fa-file-pdf"></i> Özgeçmiş Dokümanı</span>
+            <h2 class="cv-title">Detaylı CV'mi <span class="gradient-text">İnceleyin veya İndirin</span></h2>
+            <p class="cv-description">
+              Yeteneklerimi, iş deneyimlerimi, eğitim geçmişimi ve sertifikalarımı içeren güncel CV dokümanımı tek tıkla doğrudan tarayıcınızda görüntüleyebilir veya PDF olarak indirebilirsiniz.
+            </p>
+            <div class="cv-features-list">
+              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> Güncel Teknolojik Yetenek Havuzu</div>
+              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> Doğrulanmış Projeler & Referanslar</div>
+              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> Baskıya & PDF Kaydetmeye Uygun Düzen</div>
+            </div>
+            <div class="cv-actions-row">
+              <button class="btn btn-primary-glow" id="cta-open-cv-btn">
+                <i class="fa-regular fa-eye"></i>
+                <span>CV'yi Şimdi Aç & İncele</span>
+              </button>
+              <button class="btn btn-outline-glow" id="cta-download-cv-btn">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                <span>PDF Olarak Yazdır / Kaydet</span>
+              </button>
+            </div>
+          </div>
+          <div class="cv-preview-graphic">
+            <div class="cv-mockup-sheet">
+              <div class="cv-sheet-header">
+                <div class="cv-sheet-avatar">
+                  <img src="assets/avatar.jpg" alt="Efe">
+                </div>
+                <div class="cv-sheet-info">
+                  <h4>EFE</h4>
+                  <p>Full-Stack Developer</p>
+                </div>
+              </div>
+              <div class="cv-sheet-lines">
+                <div class="line w-80"></div>
+                <div class="line w-60"></div>
+                <div class="line w-100"></div>
+                <div class="line w-70"></div>
+                <div class="line w-90"></div>
+              </div>
+              <div class="cv-sheet-stamp">
+                <i class="fa-solid fa-stamp"></i> GÜNCEL CV
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header reveal">
+          <span class="section-tag"><i class="fa-regular fa-paper-plane"></i> İletişim</span>
+          <h2 class="section-title">Birlikte <span class="gradient-text">Harika İşler Üretelim</span></h2>
+          <p class="section-subtitle">Yeni bir proje fikriniz mi var veya ekibinize değer katacak bir geliştirici mi arıyorsunuz? Mesaj bırakın, en kısa sürede dönüş yapayım.</p>
+        </div>
+
+        <div class="contact-grid">
+          
+          <!-- Contact Info Cards & Social Hub -->
+          <div class="contact-info-panel reveal-left">
+            
+            <div class="contact-card glass-panel">
+              <div class="contact-card-icon ig-color"><i class="fa-brands fa-instagram"></i></div>
+              <div class="contact-card-content">
+                <span class="contact-label">Instagram</span>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="contact-value" id="contact-ig-link">@efe.dev</a>
+              </div>
+              <i class="fa-solid fa-chevron-right contact-arrow"></i>
+            </div>
+
+            <div class="contact-card glass-panel">
+              <div class="contact-card-icon gh-color"><i class="fa-brands fa-github"></i></div>
+              <div class="contact-card-content">
+                <span class="contact-label">GitHub</span>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="contact-value" id="contact-gh-link">github.com/efe</a>
+              </div>
+              <i class="fa-solid fa-chevron-right contact-arrow"></i>
+            </div>
+
+            <div class="contact-card glass-panel">
+              <div class="contact-card-icon li-color"><i class="fa-brands fa-linkedin-in"></i></div>
+              <div class="contact-card-content">
+                <span class="contact-label">LinkedIn</span>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="contact-value" id="contact-li-link">linkedin.com/in/efe</a>
+              </div>
+              <i class="fa-solid fa-chevron-right contact-arrow"></i>
+            </div>
+
+            <div class="contact-card glass-panel">
+              <div class="contact-card-icon mail-color"><i class="fa-regular fa-envelope"></i></div>
+              <div class="contact-card-content">
+                <span class="contact-label">E-Posta</span>
+                <a href="mailto:efe@example.com" class="contact-value" id="contact-mail-link">efe@example.com</a>
+              </div>
+              <i class="fa-solid fa-chevron-right contact-arrow"></i>
+            </div>
+
+            <div class="contact-card glass-panel">
+              <div class="contact-card-icon loc-color"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="contact-card-content">
+                <span class="contact-label">Konum</span>
+                <span class="contact-value">İstanbul, Türkiye (GMT+3)</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Interactive Contact Form -->
+          <div class="contact-form-panel glass-panel reveal-right">
+            <h3 class="form-title"><i class="fa-regular fa-paper-plane text-glow"></i> Bana Mesaj Gönder</h3>
+            <p class="form-desc">Formu doldurarak doğrudan bana ulaşabilirsiniz. Tüm mesajlara 24 saat içerisinde yanıt veriyorum.</p>
+
+            <form id="contact-form" novalidate>
+              
+              <div class="form-group">
+                <label for="form-name">Adınız Soyadınız <span class="required-star">*</span></label>
+                <div class="input-wrapper">
+                  <i class="fa-regular fa-user input-icon"></i>
+                  <input type="text" id="form-name" name="name" placeholder="Örn: Ahmet Yılmaz" required>
+                </div>
+                <span class="input-error-msg" id="name-error">Lütfen adınızı giriniz.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="form-email">E-Posta Adresiniz <span class="required-star">*</span></label>
+                <div class="input-wrapper">
+                  <i class="fa-regular fa-envelope input-icon"></i>
+                  <input type="email" id="form-email" name="email" placeholder="Örn: ahmet@example.com" required>
+                </div>
+                <span class="input-error-msg" id="email-error">Lütfen geçerli bir e-posta adresi giriniz.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="form-subject">Konu <span class="required-star">*</span></label>
+                <div class="input-wrapper">
+                  <i class="fa-regular fa-bookmark input-icon"></i>
+                  <input type="text" id="form-subject" name="subject" placeholder="Örn: Yeni Proje İşbirliği" required>
+                </div>
+                <span class="input-error-msg" id="subject-error">Lütfen mesaj konusunu belirtiniz.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="form-message">Mesajınız <span class="required-star">*</span></label>
+                <div class="input-wrapper textarea-wrapper">
+                  <i class="fa-regular fa-comment-dots input-icon"></i>
+                  <textarea id="form-message" name="message" rows="4" placeholder="Projenizden veya görüşmek istediğiniz konudan bahsedin..." required></textarea>
+                </div>
+                <span class="input-error-msg" id="message-error">Lütfen mesajınızı yazınız.</span>
+              </div>
+
+              <button type="submit" class="btn btn-primary-glow btn-full" id="submit-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span id="btn-text">Mesajı Gönder</span>
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#hero" class="brand-logo">
+            <span class="logo-bracket">&lt;</span>
+            <span class="logo-name">Efe</span>
+            <span class="logo-dot">.</span>
+            <span class="logo-suffix">dev</span>
+            <span class="logo-bracket">/&gt;</span>
+          </a>
+          <p class="footer-tagline">Tutkuyla tasarlanmış, modern ve performanslı web deneyimleri.</p>
+        </div>
+
+        <div class="footer-links-group">
+          <a href="#hero">Başlangıç</a>
+          <a href="#about">Hakkımda</a>
+          <a href="#skills">Yetenekler</a>
+          <a href="#projects">Projeler</a>
+          <a href="#experience">Deneyim</a>
+          <a href="#contact">İletişim</a>
+        </div>
+
+        <div class="footer-socials">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© <span id="current-year">2026</span> Efe. Tüm hakları saklıdır.</p>
+        <p class="footer-subtext">Vanilla HTML5, Modern CSS3 & JavaScript ile sıfırdan sevgiyle kodlandı.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING BACK TO TOP BUTTON -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Yukarı Çık" title="Başa Dön">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- INTERACTIVE CV MODAL -->
+  <div class="modal-overlay" id="cv-modal" role="dialog" aria-modal="true" aria-labelledby="cv-modal-title">
+    <div class="modal-dialog glass-panel" id="cv-printable-area">
+      <!-- Modal Close Button -->
+      <button class="modal-close-btn" id="close-cv-modal" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- CV Modal Header -->
+      <div class="cv-header">
+        <div class="cv-avatar-box">
+          <img src="assets/avatar.jpg" alt="Efe CV Profil" class="cv-avatar-img">
+        </div>
+        <div class="cv-header-details">
+          <h2 id="cv-modal-title" class="cv-name">EFE</h2>
+          <p class="cv-headline">Kıdemli Full-Stack Web Geliştirici & UI/UX Tasarımcı</p>
+          <div class="cv-contact-chips">
+            <span><i class="fa-solid fa-envelope"></i> efe@example.com</span>
+            <span><i class="fa-solid fa-location-dot"></i> İstanbul, Türkiye</span>
+            <span><i class="fa-brands fa-github"></i> github.com/efe</span>
+            <span><i class="fa-brands fa-linkedin"></i> linkedin.com/in/efe</span>
+            <span><i class="fa-brands fa-instagram"></i> @efe.dev</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="cv-divider">
+
+      <!-- CV Summary -->
+      <div class="cv-block">
+        <h3 class="cv-block-title"><i class="fa-solid fa-bullseye"></i> Profesyonel Özet</h3>
+        <p class="cv-text">
+          Modern web teknolojileri (JavaScript/TypeScript, React, Next.js, Node.js, modern CSS mimarileri) konusunda 3+ yıl deneyimli Full-Stack geliştirici. Kullanıcı deneyimini ön planda tutan, yüksek performanslı, mobil uyumlu ve estetik dijital ürünler geliştirmeye odaklı. Takım çalışmasına yatkın, problem çözme becerisi yüksek ve teknolojik gelişmeleri yakından takip eden bir profesyonel.
+        </p>
+      </div>
+
+      <!-- CV Skills -->
+      <div class="cv-block">
+        <h3 class="cv-block-title"><i class="fa-solid fa-code"></i> Uzmanlık Alanları & Teknik Beceriler</h3>
+        <div class="cv-skills-cloud">
+          <div class="cv-skill-group">
+            <strong>Frontend:</strong> JavaScript (ES6+), TypeScript, React.js, Next.js, HTML5, Modern CSS3, Tailwind CSS, Responsive Web Design, WebGL Canvas
+          </div>
+          <div class="cv-skill-group">
+            <strong>Backend & Veri:</strong> Node.js, Express, Python, FastAPI, PostgreSQL, MongoDB, RESTful API, WebSockets, JWT Authentication
+          </div>
+          <div class="cv-skill-group">
+            <strong>Araçlar & Metodolojiler:</strong> Git, GitHub, Docker, CI/CD, Figma, Agile/Scrum, Vite, Vercel Dağıtımı, UI/UX Prototyping
+          </div>
+        </div>
+      </div>
+
+      <!-- CV Experience -->
+      <div class="cv-block">
+        <h3 class="cv-block-title"><i class="fa-solid fa-briefcase"></i> İş Deneyimi</h3>
+        
+        <div class="cv-job">
+          <div class="cv-job-header">
+            <strong>Kıdemli Full-Stack Geliştirici & UI Danışmanı</strong>
+            <span class="cv-job-date">2023 - Günümüz | TechVision Dijital Çözümler</span>
+          </div>
+          <ul class="cv-bullets">
+            <li>Modern SaaS analitik panelleri ve kullanıcı dostu arayüzler geliştirildi.</li>
+            <li>REST API ve WebSocket altyapıları kurularak veri aktarım hızında %35 iyileşme sağlandı.</li>
+            <li>Tasarım ekibi ile ortak çalışılarak ortak UI komponent kütüphanesi oluşturuldu.</li>
+          </ul>
+        </div>
+
+        <div class="cv-job">
+          <div class="cv-job-header">
+            <strong>Frontend Web Geliştirici</strong>
+            <span class="cv-job-date">2022 - 2023 | Nexus Dijital Stüdyo</span>
+          </div>
+          <ul class="cv-bullets">
+            <li>Yüksek trafikli e-ticaret ve kurumsal web sitelerinin frontend mimarisi kodlandı.</li>
+            <li>Mobil uyumluluk testleri ve Lighthouse hız optimizasyonları ile skorlar 95+ seviyesine çıkarıldı.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CV Education -->
+      <div class="cv-block">
+        <h3 class="cv-block-title"><i class="fa-solid fa-graduation-cap"></i> Eğitim</h3>
+        <div class="cv-job">
+          <div class="cv-job-header">
+            <strong>Bilgisayar Mühendisliği Lisans Derecesi</strong>
+            <span class="cv-job-date">2020 - 2024</span>
+          </div>
+          <p class="cv-text">Yazılım tasarımı, algoritmalar, veritabanı sistemleri ve modern ağ teknolojileri eğitimi.</p>
+        </div>
+      </div>
+
+      <!-- CV Actions Bottom -->
+      <div class="cv-modal-footer">
+        <button class="btn btn-outline-glow btn-sm" id="cv-print-btn">
+          <i class="fa-solid fa-print"></i> Yazdır / PDF İndir
+        </button>
+        <button class="btn btn-primary-glow btn-sm" id="cv-close-bottom">
+          <i class="fa-solid fa-check"></i> Kapat
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT DETAILS PREVIEW MODAL -->
+  <div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true">
+    <div class="modal-dialog glass-panel" id="project-modal-dialog">
+      <button class="modal-close-btn" id="close-project-modal" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="project-modal-content">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- JavaScript Application Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
