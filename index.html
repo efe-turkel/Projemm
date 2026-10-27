@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Efe | Full-Stack Geliştirici & UI/UX Tasarımcı</title>
-  <meta name="description" content="Efe'nin kişisel web sitesi, portfolyosu ve CV'si. Modern web teknolojileri, projeler, uzmanlık alanları ve sosyal bağlantılar.">
-  <meta name="keywords" content="Efe, portfolyo, web geliştirici, full-stack, frontend, backend, CV, özgeçmiş, yazılımcı">
-  <meta name="author" content="Efe">
+  <title>Efe Türkel | Veri Bilimi & Veri Analitiği | Bilgisayar Mühendisliği Öğrencisi</title>
+  <meta name="description" content="İstanbul Nişantaşı Üniversitesi Bilgisayar Mühendisliği 3. sınıf öğrencisi Efe Türkel'in Veri Bilimi, Veri Analizi, Makine Öğrenmesi ve İş Zekası (Power BI/SQL) portfolyosu.">
+  <meta name="keywords" content="Efe Türkel, veri bilimi, veri analizi, data science, data analyst, machine learning, python, SQL, Nişantaşı Üniversitesi, bilgisayar mühendisliği, portfolyo, CV">
+  <meta name="author" content="Efe Türkel">
 
   <!-- Open Graph / Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Efe | Kişisel Portfolyo & CV">
-  <meta property="og:description" content="Modern web teknolojileri, projeler, uzmanlık alanları ve interaktif CV.">
+  <meta property="og:title" content="Efe Türkel | Veri Bilimi & Veri Analitiği Portfolyosu">
+  <meta property="og:description" content="Veri analizi, makine öğrenmesi modelleri, SQL veritabanı analitiği ve Power BI dashboard çalışmaları.">
   <meta property="og:image" content="assets/avatar.jpg">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 
   <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,10 +33,6 @@
     <div id="scroll-progress-bar"></div>
   </div>
 
-  <!-- Custom Glowing Cursor (Disabled on touch devices automatically) -->
-  <div class="custom-cursor" id="custom-cursor"></div>
-  <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
-
   <!-- Dynamic Interactive Particle Canvas Background -->
   <canvas id="bg-canvas"></canvas>
 
@@ -49,20 +45,20 @@
   <header class="navbar-wrapper" id="navbar">
     <div class="navbar-container">
       <a href="#hero" class="brand-logo" id="brand-logo">
-        <span class="logo-bracket">&lt;</span>
+        <span class="logo-bracket">[</span>
         <span class="logo-name">Efe</span>
         <span class="logo-dot">.</span>
-        <span class="logo-suffix">dev</span>
-        <span class="logo-bracket">/&gt;</span>
+        <span class="logo-suffix">data</span>
+        <span class="logo-bracket">]</span>
       </a>
 
       <!-- Desktop Navigation Menu -->
       <nav class="nav-links" id="nav-links">
         <a href="#hero" class="nav-link active"><i class="fa-solid fa-house"></i> Başlangıç</a>
         <a href="#about" class="nav-link"><i class="fa-regular fa-user"></i> Hakkımda</a>
-        <a href="#skills" class="nav-link"><i class="fa-solid fa-code"></i> Yetenekler</a>
-        <a href="#experience" class="nav-link"><i class="fa-solid fa-briefcase"></i> Deneyim</a>
-        <a href="#projects" class="nav-link"><i class="fa-solid fa-layer-group"></i> Projeler</a>
+        <a href="#skills" class="nav-link"><i class="fa-solid fa-chart-simple"></i> Yetenekler</a>
+        <a href="#experience" class="nav-link"><i class="fa-solid fa-graduation-cap"></i> Eğitim & Yolculuk</a>
+        <a href="#projects" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Projeler</a>
         <a href="#contact" class="nav-link"><i class="fa-regular fa-paper-plane"></i> İletişim</a>
       </nav>
 
@@ -97,14 +93,15 @@
     <div class="mobile-drawer" id="mobile-drawer">
       <a href="#hero" class="mobile-nav-link"><i class="fa-solid fa-house"></i> Başlangıç</a>
       <a href="#about" class="mobile-nav-link"><i class="fa-regular fa-user"></i> Hakkımda</a>
-      <a href="#skills" class="mobile-nav-link"><i class="fa-solid fa-code"></i> Yetenekler</a>
-      <a href="#experience" class="mobile-nav-link"><i class="fa-solid fa-briefcase"></i> Deneyim</a>
-      <a href="#projects" class="mobile-nav-link"><i class="fa-solid fa-layer-group"></i> Projeler</a>
+      <a href="#skills" class="mobile-nav-link"><i class="fa-solid fa-chart-simple"></i> Yetenekler</a>
+      <a href="#experience" class="mobile-nav-link"><i class="fa-solid fa-graduation-cap"></i> Eğitim & Yolculuk</a>
+      <a href="#projects" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> Projeler</a>
       <a href="#contact" class="mobile-nav-link"><i class="fa-regular fa-paper-plane"></i> İletişim</a>
       <div class="mobile-drawer-socials">
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://www.kaggle.com" target="_blank" rel="noopener noreferrer" aria-label="Kaggle"><i class="fa-brands fa-kaggle"></i></a>
+        <a href="mailto:efefturkel@gmail.com" aria-label="E-Posta"><i class="fa-regular fa-envelope"></i></a>
       </div>
     </div>
   </header>
@@ -119,12 +116,12 @@
           <!-- Availability Badge -->
           <div class="hero-badge reveal">
             <span class="pulse-status"></span>
-            <span>Yeni Projelere & Fırsatlara Açık</span>
+            <span>İstanbul Nişantaşı Üniv. Bilgisayar Müh. (3. Sınıf) • Staj & Projelere Açık</span>
           </div>
 
           <!-- Main Headline -->
           <h1 class="hero-title reveal">
-            Merhaba, Ben <span class="gradient-text text-glow">Efe</span>
+            Merhaba, Ben <span class="gradient-text text-glow">Efe Fevzi Türkel</span>
             <br>
             <span class="typewriter-prefix">Ben bir </span>
             <span class="typewriter-text" id="typewriter"></span>
@@ -132,14 +129,14 @@
           </h1>
 
           <p class="hero-description reveal">
-            Kullanıcı deneyimini odağına alan, modern, hızlı ve görsel olarak etkileyici dijital ürünler inşa ediyorum. Web geliştirme, modern arayüz tasarımı ve yenilikçi teknolojilerle fikirleri gerçeğe dönüştürüyorum.
+            Büyük veri kümelerinden anlamlı içgörüler ve stratejik kararlar çıkaran, makine öğrenmesi modelleri ve iş zekası araçlarıyla (Python, SQL, Power BI) çalışan 3. sınıf Bilgisayar Mühendisliği öğrencisiyim. Finansal veri, kredi risk analitiği ve karar destek sistemleri üzerine yoğunlaşıyorum.
           </p>
 
           <!-- Primary & Secondary Action Buttons -->
           <div class="hero-actions reveal">
             <a href="#projects" class="btn btn-primary-glow">
-              <i class="fa-solid fa-rocket"></i>
-              <span>Projelerimi Keşfet</span>
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>Projelerimi İncele</span>
             </a>
             <button class="btn btn-secondary-glass" id="hero-cv-btn">
               <i class="fa-solid fa-download"></i>
@@ -153,21 +150,21 @@
 
           <!-- Connected Social Media Links Bar -->
           <div class="hero-social-bar reveal">
-            <span class="social-label">Beni Takip Edin:</span>
+            <span class="social-label">Bağlantılarım:</span>
             <div class="social-icons-wrapper">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon-box github-hover" title="GitHub Profilim" id="hero-github-link">
+              <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" class="social-icon-box github-hover" title="GitHub Profilim" id="hero-github-link">
                 <i class="fa-brands fa-github"></i>
                 <span class="social-tooltip">GitHub</span>
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon-box linkedin-hover" title="LinkedIn Profilim" id="hero-linkedin-link">
+              <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer" class="social-icon-box linkedin-hover" title="LinkedIn Profilim" id="hero-linkedin-link">
                 <i class="fa-brands fa-linkedin-in"></i>
                 <span class="social-tooltip">LinkedIn</span>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon-box instagram-hover" title="Instagram Profilim" id="hero-instagram-link">
-                <i class="fa-brands fa-instagram"></i>
-                <span class="social-tooltip">Instagram</span>
+              <a href="https://www.kaggle.com" target="_blank" rel="noopener noreferrer" class="social-icon-box kaggle-hover" title="Kaggle Profilim" id="hero-kaggle-link">
+                <i class="fa-brands fa-kaggle"></i>
+                <span class="social-tooltip">Kaggle</span>
               </a>
-              <a href="mailto:efe@example.com" class="social-icon-box email-hover" title="E-Posta Gönder" id="hero-email-link">
+              <a href="mailto:efefturkel@gmail.com" class="social-icon-box email-hover" title="E-Posta Gönder" id="hero-email-link">
                 <i class="fa-regular fa-envelope"></i>
                 <span class="social-tooltip">E-Posta</span>
               </a>
@@ -182,33 +179,33 @@
             <div class="avatar-card-inner">
               <div class="avatar-glow-ring"></div>
               <div class="avatar-image-container">
-                <img src="assets/avatar.jpg" alt="Efe Profil Portresi" class="avatar-image" id="profile-img">
+                <img src="assets/avatar.jpg" alt="Efe Fevzi Türkel Profil Portresi" class="avatar-image" id="profile-img">
               </div>
 
               <!-- Floating Experience Badge 1 -->
               <div class="floating-badge badge-top-left float-anim-1">
-                <div class="badge-icon"><i class="fa-solid fa-code-commit"></i></div>
+                <div class="badge-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div class="badge-info">
-                  <span class="badge-number">3+ Yıl</span>
-                  <span class="badge-text">Geliştirme Deneyimi</span>
+                  <span class="badge-number">3. Sınıf</span>
+                  <span class="badge-text">Nişantaşı Üniv. Müh.</span>
                 </div>
               </div>
 
               <!-- Floating Experience Badge 2 -->
               <div class="floating-badge badge-bottom-right float-anim-2">
-                <div class="badge-icon tech-color"><i class="fa-solid fa-cube"></i></div>
+                <div class="badge-icon tech-color"><i class="fa-solid fa-chart-line"></i></div>
                 <div class="badge-info">
-                  <span class="badge-number">25+</span>
-                  <span class="badge-text">Tamamlanan Proje</span>
+                  <span class="badge-number">150K+</span>
+                  <span class="badge-text">İşlenen Veri Satırı</span>
                 </div>
               </div>
 
               <!-- Floating Experience Badge 3 -->
               <div class="floating-badge badge-bottom-left float-anim-3">
-                <div class="badge-icon glow-green"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="badge-icon glow-green"><i class="fa-solid fa-database"></i></div>
                 <div class="badge-info">
-                  <span class="badge-number">100%</span>
-                  <span class="badge-text">Temiz & Modern Kod</span>
+                  <span class="badge-number">Python & SQL</span>
+                  <span class="badge-text">Analitik Modelleme</span>
                 </div>
               </div>
             </div>
@@ -234,12 +231,12 @@
           
           <div class="stat-card glass-panel reveal">
             <div class="stat-icon-wrapper">
-              <i class="fa-solid fa-laptop-code"></i>
+              <i class="fa-solid fa-graduation-cap"></i>
             </div>
             <div class="stat-content">
               <div class="stat-number-wrapper">
-                <span class="counter" data-target="25">0</span>
-                <span class="stat-plus">+</span>
+                <span class="counter" data-target="3">0</span>
+                <span class="stat-plus">. Sınıf</span>
               </div>
               <p class="stat-title">İstanbul Nişantaşı Üniversitesi</p>
             </div>
