@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initSoundEffects();
   initTheme();
   initCanvasBackground();
-  initCustomCursor();
   initScrollProgress();
   initNavbar();
   initTypewriter();
@@ -158,40 +157,46 @@ function initCanvasBackground() {
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
 
+  // Optimized lightweight particle count for silky 60fps performance without CPU/GPU lag
   const particles = [];
-  const particleCount = Math.min(Math.floor((width * height) / 13000), 100);
-  const maxDistance = 140;
+  const particleCount = Math.min(Math.max(Math.floor((width * height) / 38000), 25), 45);
+  const maxDistance = 110;
+  const maxDistSq = maxDistance * maxDistance;
 
   const mouse = {
     x: null,
     y: null,
-    radius: 160
+    radius: 130
   };
+  const mouseRadiusSq = mouse.radius * mouse.radius;
 
   window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
-  });
+  }, { passive: true });
 
   window.addEventListener('mouseleave', () => {
     mouse.x = null;
     mouse.y = null;
   });
 
+  let resizeTimeout;
   window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }, 150);
+  }, { passive: true });
 
   class Particle {
     constructor() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.8;
-      this.vy = (Math.random() - 0.5) * 0.8;
-      this.radius = Math.random() * 2 + 1.2;
-      this.baseColor = Math.random() > 0.4 ? 'rgba(0, 242, 254,' : 'rgba(157, 78, 221,';
-      this.alpha = Math.random() * 0.5 + 0.3;
+      this.vx = (Math.random() - 0.5) * 0.6;
+      this.vy = (Math.random() - 0.5) * 0.6;
+      this.radius = Math.random() * 1.5 + 1;
+      this.color = Math.random() > 0.4 ? 'rgba(0, 242, 254, 0.65)' : 'rgba(157, 78, 221, 0.65)';
     }
 
     update() {
@@ -201,17 +206,18 @@ function initCanvasBackground() {
       if (this.x < 0 || this.x > width) this.vx = -this.vx;
       if (this.y < 0 || this.y > height) this.vy = -this.vy;
 
-      // Mouse interaction
+      // Mouse repulsion using squared distance (fast, no sqrt overhead)
       if (mouse.x !== null && mouse.y !== null) {
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < mouse.radius) {
+        const distSq = dx * dx + dy * dy;
+        if (distSq < mouseRadiusSq && distSq > 0) {
+          const dist = Math.sqrt(distSq);
           const force = (mouse.radius - dist) / mouse.radius;
           const dirX = dx / dist;
           const dirY = dy / dist;
-          this.x -= dirX * force * 1.8;
-          this.y -= dirY * force * 1.8;
+          this.x -= dirX * force * 1.5;
+          this.y -= dirY * force * 1.5;
         }
       }
     }
@@ -219,9 +225,7 @@ function initCanvasBackground() {
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `${this.baseColor} ${this.alpha})`;
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = 'rgba(0, 242, 254, 0.5)';
+      ctx.fillStyle = this.color;
       ctx.fill();
     }
   }
@@ -233,20 +237,21 @@ function initCanvasBackground() {
   function animate() {
     ctx.clearRect(0, 0, width, height);
 
-    // Draw connecting constellation lines
+    // Fast constellation lines
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
-        const dist = Math.hypot(dx, dy);
+        const distSq = dx * dx + dy * dy;
 
-        if (dist < maxDistance) {
-          const lineAlpha = (1 - dist / maxDistance) * 0.22;
+        if (distSq < maxDistSq) {
+          const dist = Math.sqrt(distSq);
+          const lineAlpha = (1 - dist / maxDistance) * 0.18;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
           ctx.strokeStyle = `rgba(0, 242, 254, ${lineAlpha})`;
-          ctx.lineWidth = 0.8;
+          ctx.lineWidth = 0.6;
           ctx.stroke();
         }
       }
@@ -257,74 +262,31 @@ function initCanvasBackground() {
       for (let i = 0; i < particles.length; i++) {
         const dx = mouse.x - particles[i].x;
         const dy = mouse.y - particles[i].y;
-        const dist = Math.hypot(dx, dy);
+        const distSq = dx * dx + dy * dy;
 
-        if (dist < mouse.radius) {
-          const lineAlpha = (1 - dist / mouse.radius) * 0.35;
+        if (distSq < mouseRadiusSq) {
+          const dist = Math.sqrt(distSq);
+          const lineAlpha = (1 - dist / mouse.radius) * 0.25;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.strokeStyle = `rgba(157, 78, 221, ${lineAlpha})`;
-          ctx.lineWidth = 1;
+          ctx.lineWidth = 0.8;
           ctx.stroke();
         }
       }
     }
 
     // Update and draw particles
-    particles.forEach(p => {
-      p.update();
-      p.draw();
-    });
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+    }
 
     requestAnimationFrame(animate);
   }
 
   animate();
-}
-
-/* ===================================================================
-   4. CUSTOM GLOWING CURSOR WITH SMOOTH INTERPOLATION
-   =================================================================== */
-function initCustomCursor() {
-  const cursor = document.getElementById('custom-cursor');
-  const cursorDot = document.getElementById('custom-cursor-dot');
-  if (!cursor || !cursorDot) return;
-
-  let mouseX = -100;
-  let mouseY = -100;
-  let cursorX = -100;
-  let cursorY = -100;
-
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    cursorDot.style.left = `${mouseX}px`;
-    cursorDot.style.top = `${mouseY}px`;
-    cursor.style.opacity = '1';
-    cursorDot.style.opacity = '1';
-  });
-
-  window.addEventListener('mouseleave', () => {
-    cursor.style.opacity = '0';
-    cursorDot.style.opacity = '0';
-  });
-
-  function renderCursor() {
-    cursorX += (mouseX - cursorX) * 0.18;
-    cursorY += (mouseY - cursorY) * 0.18;
-    cursor.style.left = `${cursorX}px`;
-    cursor.style.top = `${cursorY}px`;
-    requestAnimationFrame(renderCursor);
-  }
-  renderCursor();
-
-  // Hover states on clickable targets
-  const hoverElements = document.querySelectorAll('a, button, input, textarea, .glass-panel, .contact-card, .skill-card');
-  hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('active-hover'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('active-hover'));
-  });
 }
 
 /* ===================================================================
@@ -420,10 +382,10 @@ function initTypewriter() {
   if (!textElement) return;
 
   const roles = [
-    'Full-Stack Geliştirici.',
-    'Kreatif UI/UX Tasarımcısı.',
-    'Yapay Zeka & Web3 Meraklısı.',
-    'Hızlı & Modern Web Mimarı.'
+    'Veri Bilimi Meraklısı.',
+    'Veri Analisti Adayı.',
+    'Nişantaşı Üniv. Bilgisayar Müh. Öğrencisi.',
+    'Python & Makine Öğrenmesi Tutkunu.'
   ];
 
   let roleIndex = 0;
@@ -664,49 +626,49 @@ function initModals() {
 
   const projectData = {
     1: {
-      title: 'Quantum AI - Akıllı Veri Analitiği SaaS Paneli',
-      category: 'Yapay Zeka & SaaS Mimarisi',
-      image: 'assets/project1.jpg',
-      description: 'Kurumsal kullanıcılar için geliştirilen bu analitik kontrol paneli, makine öğrenimi modellerinden gelen anlık tahminleme verilerini işler ve interaktif grafiklerle görselleştirir. Modern bulut altyapısı ve yüksek veri akışına uyumlu tasarımıyla operasyonel verimliliği maksimize eder.',
+      title: 'Quantum Churn - Müşteri Kayıp Tahmini & ML Modeli',
+      category: 'Makine Öğrenmesi & Veri Analitiği',
+      image: 'assets/ds_churn.jpg',
+      description: 'Telekom ve dijital abonelik platformlarında müşteri kaybını (churn) önceden tahmin etmek amacıyla geliştirilen uçtan uca makine öğrenmesi ve keşifsel veri analizi projesi. Veri ön işleme, korelasyon analizleri, hiperparametre optimizasyonu ve karar mekanizmasıyla şirketlerin müşteri tutundurma stratejilerine analitik katkı sağlar.',
       features: [
-        'Anlık veri akışı ve interaktif finansal tahminleme grafikleri',
-        'Çok kullanıcılı rol tabanlı yetkilendirme (RBAC) ve JWT güvenliği',
-        'Koyu mod uyumlu, responsive ve erişilebilir kullanıcı arayüzü',
-        'FastAPI ve Redis ile mikroservis destekli hızlı veri önbellekleme'
+        'Eksik veri tamamlama, aykırı değer analizi ve One-Hot encoding adımları',
+        'Random Forest ve XGBoost sınıflandırıcıları ile %89 AUC-ROC doğruluk skoru',
+        'Özellik Önem Düzeyi (Feature Importance) grafiği ile en riskli müşteri faktörlerinin tespiti',
+        'Karışıklık Matrisi (Confusion Matrix) ve ROC Eğrisi ile kapsamlı model validasyonu'
       ],
-      tech: ['React.js', 'TypeScript', 'FastAPI', 'Chart.js', 'TailwindCSS', 'PostgreSQL', 'Docker'],
-      github: 'https://github.com',
-      demo: 'https://github.com'
+      tech: ['Python', 'Scikit-Learn', 'Pandas', 'NumPy', 'Seaborn', 'XGBoost', 'Jupyter'],
+      github: 'https://github.com/efe-turkel/Projemm',
+      demo: 'https://github.com/efe-turkel/Projemm'
     },
     2: {
-      title: 'Cypherex - Kripto & Varlık Portföy Platformu',
-      category: 'FinTech & Web3 Ekosistemi',
-      image: 'assets/project2.jpg',
-      description: 'Dijital varlıklarını tek bir merkezden yönetmek isteyen yatırımcılar için tasarlanmış gerçek zamanlı portföy takip sistemi. WebSockets üzerinden anlık piyasa fiyatlamalarını ve varlık dağılım oranlarını canlı olarak sunar.',
+      title: 'OmniSales - E-Ticaret & Perakende Satış BI Dashboard\'u',
+      category: 'İş Zekası & Power BI',
+      image: 'assets/ds_bi.jpg',
+      description: '150K+ satırlık e-ticaret satış, müşteri ve sipariş verisinden ciro trendleri, RFM müşteri segmentasyonu, ürün kategori kârlılığı ve bölgesel satış metriklerini ortaya koyan interaktif iş zekası paneli. Yönetici ve karar vericilerin anlık karar almasını kolaylaştırır.',
       features: [
-        'Canlı WebSocket fiyat beslemesi ve otomatik kâr/zarar hesaplayıcı',
-        'Gelişmiş varlık dağılım pasta ve trend grafikleri',
-        'Hardware wallet (Ledger vb.) ve Web3 cüzdan entegrasyonu',
-        'Yüksek güvenlikli API haberleşmesi ve rate limiting koruması'
+        'PostgreSQL üzerinde ilişkisel veri modeli (Star Schema) kurgusu',
+        'İleri SQL ve Pencere Fonksiyonları (Window Functions) ile RFM müşteri segmentasyonu',
+        'Power BI DAX ölçüleri ile dinamik ciro artış oranı, sepet ortalaması ve kâr marjı hesaplamaları',
+        'Coğrafi ısı haritası ve etkileşimli filtreleme panelleri'
       ],
-      tech: ['Next.js', 'Node.js', 'WebSockets', 'PostgreSQL', 'Prisma ORM', 'CSS Glassmorphism'],
-      github: 'https://github.com',
-      demo: 'https://github.com'
+      tech: ['Power BI', 'SQL (PostgreSQL)', 'DAX', 'Veri Modelleme', 'Excel', 'İş Zekası'],
+      github: 'https://github.com/efe-turkel/Projemm',
+      demo: 'https://github.com/efe-turkel/Projemm'
     },
     3: {
-      title: 'FitSync - Akıllı Sağlık & Sosyal Egzersiz Takibi',
-      category: 'Mobil Uygulama & Sosyal Platform',
-      image: 'assets/project3.jpg',
-      description: 'Kullanıcıların antrenman rutinlerini, yakılan kalorilerini ve sağlık metriklerini kaydetmelerine olanak tanıyan, aynı zamanda sporcu topluluğuyla başarıları paylaşmayı sağlayan dinamik bir mobil uygulama.',
+      title: 'TrendPulse - Zaman Serileri ile Finansal Trend & Talep Tahmini',
+      category: 'Zaman Serileri & Tahminleme',
+      image: 'assets/ds_forecast.jpg',
+      description: 'Tarihsel finansal piyasa ve talep verilerini analiz ederek mevsimsellik, durağanlık ve trend bileşenlerini inceleyen, Prophet ve ARIMA modelleri ile gelecek dönemsel tahminler üreten interaktif Python Streamlit analitik uygulaması.',
       features: [
-        'Adım sayar, kalp ritmi ve kalori tüketimi anlık veri senkronizasyonu',
-        'Kişiselleştirilmiş HIIT antrenman programları ve video rehberler',
-        'Sosyal akış: Arkadaşlarla antrenman paylaşımı ve hikaye özellikleri',
-        'Lottie animasyonlarıyla desteklenen akıcı kullanıcı deneyimi'
+        'Zaman serisi ayrıştırması (Mevsimsellik, Trend, Artık Bileşenler)',
+        'Facebook Prophet & ARIMA algoritmaları ile %95 güven aralığında gelecek projeksiyonları',
+        'Plotly ile yakınlaştırılabilir, etkileşimli finans ve talep grafikleri',
+        'Kullanıcının tahmin ufkunu (30, 60, 90 gün) seçebildiği dinamik Streamlit arayüzü'
       ],
-      tech: ['React Native', 'Firebase', 'Figma UI/UX', 'Lottie', 'Node.js REST API'],
-      github: 'https://github.com',
-      demo: 'https://github.com'
+      tech: ['Python', 'Streamlit', 'Plotly', 'Prophet', 'ARIMA', 'İstatistik', 'Pandas'],
+      github: 'https://github.com/efe-turkel/Projemm',
+      demo: 'https://github.com/efe-turkel/Projemm'
     }
   };
 

@@ -137,47 +137,6 @@ body {
   transition: width 0.08s linear;
 }
 
-/* Custom Cursor */
-.custom-cursor {
-  position: fixed;
-  width: 36px;
-  height: 36px;
-  border: 2px solid var(--accent-cyan);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, opacity 0.3s ease;
-  z-index: 99999;
-  opacity: 0;
-}
-
-.custom-cursor-dot {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background-color: var(--accent-cyan);
-  box-shadow: 0 0 10px var(--accent-cyan);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 100000;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.custom-cursor.active-hover {
-  width: 56px;
-  height: 56px;
-  background-color: rgba(0, 242, 254, 0.12);
-  border-color: var(--accent-purple);
-}
-
-@media (pointer: coarse) {
-  .custom-cursor, .custom-cursor-dot {
-    display: none !important;
-  }
-}
-
 /* Background Interactive Canvas */
 #bg-canvas {
   position: fixed;
@@ -796,6 +755,12 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 20px rgba(0, 242, 254, 0.45);
 }
 
+.kaggle-hover:hover {
+  color: #20beff;
+  border-color: #20beff;
+  box-shadow: 0 0 20px rgba(32, 190, 255, 0.45);
+}
+
 /* Hero Visual & 3D Tilt Card */
 .hero-visual {
   display: flex;
@@ -1246,6 +1211,13 @@ h1, h2, h3, h4, h5, h6 {
 .git-color { color: #f05032; background: rgba(240, 80, 50, 0.1); }
 .docker-color { color: #2496ed; background: rgba(36, 150, 237, 0.1); }
 .figma-color { color: #a259ff; background: rgba(162, 89, 255, 0.1); }
+.pandas-color { color: #38bdf8; background: rgba(56, 189, 248, 0.1); }
+.sql-color { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+.bi-color { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+.ml-color { color: #ec4899; background: rgba(236, 72, 153, 0.1); }
+.stats-color { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+.chart-color { color: #a855f7; background: rgba(168, 85, 247, 0.1); }
+.colab-color { color: #f97316; background: rgba(249, 115, 22, 0.1); }
 
 .skill-info {
   flex-grow: 1;
@@ -1835,6 +1807,11 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+.kg-color {
+  background: #20beff;
+  color: #fff;
+}
+
 .contact-card-content {
   flex-grow: 1;
   display: flex;
@@ -2379,8 +2356,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   #scroll-progress-container,
-  .custom-cursor,
-  .custom-cursor-dot,
   #bg-canvas,
   .aurora-glow,
   .navbar-wrapper,
