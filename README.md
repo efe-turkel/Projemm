@@ -4,7 +4,7 @@
 
 ## ✨ Öne Çıkan Özellikler
 - **🌌 İnteraktif Parçacık Ağı (HTML5 Canvas):** Fare hareketlerine duyarlı veri konstelasyonu ve aurora ambiyans ışıkları.
-- **📊 Veri Bilimi & Analitik Projeleri:** Müşteri Kayıp (Churn) Tahmini, E-Ticaret Power BI/SQL Satış Dashboard'u ve Zaman Serileri Tahminleme Modeli.
+- **📊 Veri Analitiği & Portföy Projeleri:** Kredi Risk Analitiği & Portföy Performans Paneli (SQL/Excel) ve E-Ticaret Satış & Operasyonel Analitik Paneli (SQL/Excel).
 - **📄 İnteraktif & Yazdırılabilir CV:** Doğrulanmış akademik geçmiş (Nişantaşı Üniv. 3. Sınıf), OPET iş deneyimi, Coderspace sertifikası ve tek tıkla A4 PDF formatında kaydetme.
 - **🛠️ Canlı Yetenek Filtreleme:** Python, SQL, EDA, Scikit-Learn, Power BI ve veri araçları arasında dinamik kategori filtreleme.
 - **📱 Profesyonel Bağlantılar:** GitHub (`efe-turkel`), LinkedIn (`efe-fevzi-türke`), Kaggle ve doğrudan e-posta erişimi (`efefturkel@gmail.com`).

@@ -527,8 +527,9 @@ function initFilterTabs() {
       const filter = tab.getAttribute('data-pfilter');
 
       projectCards.forEach(card => {
-        const category = card.getAttribute('data-category');
-        if (filter === 'all' || category === filter) {
+        const categoryAttr = card.getAttribute('data-category') || '';
+        const categories = categoryAttr.split(/\s+/);
+        if (filter === 'all' || categories.includes(filter)) {
           card.style.display = 'flex';
           setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
         } else {
@@ -626,49 +627,37 @@ function initModals() {
 
   const projectData = {
     1: {
-      title: 'Quantum Churn - Müşteri Kayıp Tahmini & ML Modeli',
-      category: 'Makine Öğrenmesi & Veri Analitiği',
-      image: 'assets/ds_churn.jpg',
-      description: 'Telekom ve dijital abonelik platformlarında müşteri kaybını (churn) önceden tahmin etmek amacıyla geliştirilen uçtan uca makine öğrenmesi ve keşifsel veri analizi projesi. Veri ön işleme, korelasyon analizleri, hiperparametre optimizasyonu ve karar mekanizmasıyla şirketlerin müşteri tutundurma stratejilerine analitik katkı sağlar.',
+      title: 'Kredi Risk Analitiği & Portföy Performans Paneli',
+      category: 'Finansal Veri & Kredi Risk Analitiği',
+      image: 'assets/credit_risk_dashboard.png',
+      description: 'Müşteri demografisi, kredi türleri ve taksit geri ödeme verilerini entegre ederek kredi portföyünün temerrüt (default) ve gecikme dinamiklerini inceleyen uçtan uca analitik risk yönetimi projesi. Ham ilişkisel veritabanı verileri SQL ile modellenmiş ve temizlenmiş; ardından Excel ortamında dinamik bir Yönetici Risk Paneli (Executive Risk Dashboard) haline getirilmiştir.',
       features: [
-        'Eksik veri tamamlama, aykırı değer analizi ve One-Hot encoding adımları',
-        'Random Forest ve XGBoost sınıflandırıcıları ile %89 AUC-ROC doğruluk skoru',
-        'Özellik Önem Düzeyi (Feature Importance) grafiği ile en riskli müşteri faktörlerinin tespiti',
-        'Karışıklık Matrisi (Confusion Matrix) ve ROC Eğrisi ile kapsamlı model validasyonu'
+        'İlişkisel Veri Modellemesi: musteriler, krediler ve taksitler tablolarının INNER JOIN ile birleştirilmesi',
+        'İş Mantığına Dayalı Risk Sınıflandırması: CASE WHEN mantığıyla 0-30 gün (Normal), 31-90 gün (Riskli/Yakın İzleme) ve 90+ gün (Batık / Temerrüt - NPL) segmentasyonu',
+        'Dinamik Yönetici KPI Kartları: Portföy bazında Toplam Tahsilat ve Riskli / Batık Tutar hücre tabanlı hesaplamaları',
+        'Görsel Dağılım Grafikleri: 2B Pasta Grafiği ile portföy risk ağırlığı, 2B Kümelenmiş Sütun Grafiği ile meslek grubu bazlı tahsilat hacmi analizi',
+        'Dinamik Slicer & Rapor Bağlantıları: Şehir ve kredi türü dilimleyicilerinin tüm Pivot tablolara bağlanarak tek tıkla senkronize filtreleme sağlaması',
+        'Stratejik Analitik Çıkarımlar: Yüksek tahsilat hacimli meslek gruplarında yoğunlaşan gecikmeler tespit edilerek ek teminat kriteri önerildi'
       ],
-      tech: ['Python', 'Scikit-Learn', 'Pandas', 'NumPy', 'Seaborn', 'XGBoost', 'Jupyter'],
-      github: 'https://github.com/efe-turkel/Projemm',
-      demo: 'https://github.com/efe-turkel/Projemm'
+      tech: ['SQL (PostgreSQL / MySQL)', 'Excel Pivot Tables', 'Dilimleyiciler (Slicers)', 'Rapor Bağlantıları', 'KPI Mimarisi', 'Portföy Risk Modellemesi'],
+      github: 'https://github.com/efe-turkel/credit-risk-analytics-dashboard',
+      demo: 'https://github.com/efe-turkel/credit-risk-analytics-dashboard'
     },
     2: {
-      title: 'OmniSales - E-Ticaret & Perakende Satış BI Dashboard\'u',
-      category: 'İş Zekası & Power BI',
-      image: 'assets/ds_bi.jpg',
-      description: '150K+ satırlık e-ticaret satış, müşteri ve sipariş verisinden ciro trendleri, RFM müşteri segmentasyonu, ürün kategori kârlılığı ve bölgesel satış metriklerini ortaya koyan interaktif iş zekası paneli. Yönetici ve karar vericilerin anlık karar almasını kolaylaştırır.',
+      title: 'E-Ticaret Satış & Operasyonel Analitik Paneli',
+      category: 'E-Ticaret Analitiği & Karar Destek',
+      image: 'assets/ecommerce_dashboard.png',
+      description: 'İlişkisel veritabanı mimarisi kurarak ham e-ticaret satış, müşteri ve sipariş verilerini SQL ile işleyen; elde edilen veri modelini Excel üzerinden kârlılık, operasyonel fire ve bölgesel performans metriklerine dönüştüren uçtan uca analitik karar destek paneli.',
       features: [
-        'PostgreSQL üzerinde ilişkisel veri modeli (Star Schema) kurgusu',
-        'İleri SQL ve Pencere Fonksiyonları (Window Functions) ile RFM müşteri segmentasyonu',
-        'Power BI DAX ölçüleri ile dinamik ciro artış oranı, sepet ortalaması ve kâr marjı hesaplamaları',
-        'Coğrafi ısı haritası ve etkileşimli filtreleme panelleri'
+        'İlişkisel Veritabanı Mimarisi: musteriler, urunler ve siparisler tabloları arasında Foreign Key ilişkileri ve SQL sorgu optimizasyonu',
+        'Veri Temizleme & Standardizasyon: Sayısal format dönüşümleri, kuruş ayracı optimizasyonu ve kârlılık formülasyonları',
+        'Operasyonel Kayıp & İade Matrisi: Giyim (%0 fire ile en stabil grup), Ev Yaşam (%25 iade oranı) ve Elektronik (%28,58 operasyonel kayıp) analizi',
+        'Bölgesel Ciro Analitiği: 32.350 TL toplam cironun %51,6\'sını (16.700 TL) oluşturan İstanbul ve sırasıyla İzmir, Ankara, Antalya, Bursa pazar dağılımı',
+        'Çoklu Pivot Table & Slicers: Tek panel üzerinden departman ve kategori bazlı anlık interaktif filtreleme desteği'
       ],
-      tech: ['Power BI', 'SQL (PostgreSQL)', 'DAX', 'Veri Modelleme', 'Excel', 'İş Zekası'],
-      github: 'https://github.com/efe-turkel/Projemm',
-      demo: 'https://github.com/efe-turkel/Projemm'
-    },
-    3: {
-      title: 'TrendPulse - Zaman Serileri ile Finansal Trend & Talep Tahmini',
-      category: 'Zaman Serileri & Tahminleme',
-      image: 'assets/ds_forecast.jpg',
-      description: 'Tarihsel finansal piyasa ve talep verilerini analiz ederek mevsimsellik, durağanlık ve trend bileşenlerini inceleyen, Prophet ve ARIMA modelleri ile gelecek dönemsel tahminler üreten interaktif Python Streamlit analitik uygulaması.',
-      features: [
-        'Zaman serisi ayrıştırması (Mevsimsellik, Trend, Artık Bileşenler)',
-        'Facebook Prophet & ARIMA algoritmaları ile %95 güven aralığında gelecek projeksiyonları',
-        'Plotly ile yakınlaştırılabilir, etkileşimli finans ve talep grafikleri',
-        'Kullanıcının tahmin ufkunu (30, 60, 90 gün) seçebildiği dinamik Streamlit arayüzü'
-      ],
-      tech: ['Python', 'Streamlit', 'Plotly', 'Prophet', 'ARIMA', 'İstatistik', 'Pandas'],
-      github: 'https://github.com/efe-turkel/Projemm',
-      demo: 'https://github.com/efe-turkel/Projemm'
+      tech: ['SQL (Foreign Key & JOIN)', 'Excel Dinamik Dashboard', 'Pivot Tablolar', 'Operasyonel Metrikler', 'Veri Temizleme', 'Kârlılık Analizi'],
+      github: 'https://github.com/efe-turkel/ecommerce-sales-sql-excel',
+      demo: 'https://github.com/efe-turkel/ecommerce-sales-sql-excel'
     }
   };
 
@@ -681,26 +670,23 @@ function initModals() {
         <span class="project-category-badge" style="position: static; margin-bottom: 12px; display: inline-block;">${data.category}</span>
         <h2 style="font-size: 1.8rem; margin-top: 8px; margin-bottom: 12px;">${data.title}</h2>
       </div>
-      <div style="border-radius: 16px; overflow: hidden; margin-bottom: 24px; max-height: 340px;">
-        <img src="${data.image}" alt="${data.title}" style="width: 100%; height: 100%; object-fit: cover;">
+      <div style="border-radius: 16px; overflow: hidden; margin-bottom: 24px; max-height: 400px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center;">
+        <img src="${data.image}" alt="${data.title}" style="width: 100%; height: auto; max-height: 380px; object-fit: contain; display: block;">
       </div>
       <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-size: 1.05rem;">
         ${data.description}
       </p>
-      <h4 style="margin-bottom: 12px; font-size: 1.15rem;"><i class="fa-solid fa-sparkles text-glow"></i> Temel Özellikler:</h4>
+      <h4 style="margin-bottom: 12px; font-size: 1.15rem;"><i class="fa-solid fa-sparkles text-glow"></i> Temel Özellikler & Analitik Çıkarımlar:</h4>
       <ul style="padding-left: 20px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.7;">
         ${data.features.map(f => `<li>${f}</li>`).join('')}
       </ul>
-      <h4 style="margin-bottom: 12px; font-size: 1.15rem;"><i class="fa-solid fa-code"></i> Kullanılan Teknolojiler:</h4>
+      <h4 style="margin-bottom: 12px; font-size: 1.15rem;"><i class="fa-solid fa-code"></i> Kullanılan Teknolojiler & Beceriler:</h4>
       <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;">
         ${data.tech.map(t => `<span style="font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--bg-glass); border: 1px solid var(--border-color); color: var(--accent-cyan);">${t}</span>`).join('')}
       </div>
       <div style="display: flex; gap: 14px; flex-wrap: wrap;">
         <a href="${data.github}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-glow btn-sm">
-          <i class="fa-brands fa-github"></i> GitHub Deposunu Aç
-        </a>
-        <a href="${data.demo}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-glow btn-sm">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> Canlı Uygulamaya Git
+          <i class="fa-brands fa-github"></i> GitHub Deposunu Aç & Kodları İncele
         </a>
       </div>
     `;
