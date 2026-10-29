@@ -50,7 +50,7 @@ function initMusicPlayer() {
 
     bgMusic.addEventListener('ended', () => {
       bgMusic.currentTime = 0;
-      bgMusic.play().catch(() => {});
+      bgMusic.play().catch(() => { });
     });
   }
 
@@ -62,7 +62,7 @@ function initMusicPlayer() {
         bgMusic.play().then(() => {
           musicPlaying = true;
           updateMusicUI();
-        }).catch(() => {});
+        }).catch(() => { });
       }
       window.removeEventListener('pointerdown', resumeOnGesture);
       window.removeEventListener('keydown', resumeOnGesture);
