@@ -22,96 +22,108 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ===================================================================
-   1. SOUND EFFECTS (Web Audio API Synthesizer - Zero External Files)
+   1. BACKGROUND MUSIC PLAYER (Eminem - Lose Yourself, Verse 1)
    =================================================================== */
-let audioCtx = null;
-let soundEnabled = true;
+let bgMusic = null;
+let musicPlaying = false;
 
 function initSoundEffects() {
-  const soundToggleBtn = document.getElementById('sound-toggle');
-  const savedSound = localStorage.getItem('efe_sound_enabled');
-
-  if (savedSound !== null) {
-    soundEnabled = savedSound === 'true';
-  }
-  updateSoundIcon();
-
-  if (soundToggleBtn) {
-    soundToggleBtn.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      localStorage.setItem('efe_sound_enabled', soundEnabled);
-      updateSoundIcon();
-      if (soundEnabled) {
-        playSound('toggle');
-        showToast('Ses efektleri açıldı 🔊', 'info');
-      } else {
-        showToast('Ses efektleri kapatıldı 🔇', 'info');
-      }
-    });
-  }
-
-  // Bind subtle sound to interactive elements
-  const interactiveSelector = 'button, .btn, .nav-link, .social-icon-box, .filter-tab, .project-tab, .contact-card';
-  document.querySelectorAll(interactiveSelector).forEach(el => {
-    el.addEventListener('click', () => {
-      if (soundEnabled) playSound('click');
-    });
-  });
+  initMusicPlayer();
 }
 
-function updateSoundIcon() {
+function initMusicPlayer() {
+  bgMusic = document.getElementById('bg-music');
+  const soundToggleBtn = document.getElementById('sound-toggle');
+
+  if (bgMusic) {
+    bgMusic.volume = 0.55; // Dengeli ve net ses seviyesi
+
+    bgMusic.addEventListener('play', () => {
+      musicPlaying = true;
+      updateMusicUI();
+    });
+
+    bgMusic.addEventListener('pause', () => {
+      musicPlaying = false;
+      updateMusicUI();
+    });
+
+    bgMusic.addEventListener('ended', () => {
+      bgMusic.currentTime = 0;
+      bgMusic.play().catch(() => {});
+    });
+  }
+
+  // Önceki tercih kontrolü
+  const savedMusic = localStorage.getItem('efe_music_enabled');
+  if (savedMusic === 'true') {
+    const resumeOnGesture = () => {
+      if (bgMusic && bgMusic.paused && localStorage.getItem('efe_music_enabled') === 'true') {
+        bgMusic.play().then(() => {
+          musicPlaying = true;
+          updateMusicUI();
+        }).catch(() => {});
+      }
+      window.removeEventListener('pointerdown', resumeOnGesture);
+      window.removeEventListener('keydown', resumeOnGesture);
+    };
+    window.addEventListener('pointerdown', resumeOnGesture, { once: true });
+    window.addEventListener('keydown', resumeOnGesture, { once: true });
+  }
+
+  if (soundToggleBtn) {
+    soundToggleBtn.addEventListener('click', toggleMusic);
+  }
+
+  updateMusicUI();
+}
+
+function toggleMusic() {
+  if (!bgMusic) {
+    bgMusic = document.getElementById('bg-music');
+  }
+  if (!bgMusic) return;
+
+  if (bgMusic.paused) {
+    bgMusic.play().then(() => {
+      musicPlaying = true;
+      localStorage.setItem('efe_music_enabled', 'true');
+      updateMusicUI();
+      showToast('🎵 Çalıyor: Eminem - Lose Yourself', 'info');
+    }).catch(err => {
+      console.warn('Playback error:', err);
+      showToast('Müziği başlatmak için lütfen tıklayın', 'warning');
+    });
+  } else {
+    bgMusic.pause();
+    musicPlaying = false;
+    localStorage.setItem('efe_music_enabled', 'false');
+    updateMusicUI();
+    showToast('Müzik duraklatıldı 🔇', 'info');
+  }
+}
+
+function updateMusicUI() {
   const soundToggleBtn = document.getElementById('sound-toggle');
   if (!soundToggleBtn) return;
   const icon = soundToggleBtn.querySelector('i');
-  if (icon) {
-    icon.className = soundEnabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+
+  if (musicPlaying) {
+    if (icon) icon.className = 'fa-solid fa-volume-high';
+    soundToggleBtn.classList.add('is-playing');
+    soundToggleBtn.setAttribute('title', 'Müziği Durdur (Eminem - Lose Yourself)');
+    soundToggleBtn.setAttribute('aria-label', 'Müziği Durdur');
+  } else {
+    if (icon) icon.className = 'fa-solid fa-volume-xmark';
+    soundToggleBtn.classList.remove('is-playing');
+    soundToggleBtn.setAttribute('title', 'Eminem - Lose Yourself (Çal)');
+    soundToggleBtn.setAttribute('aria-label', 'Müziği Çal');
   }
 }
 
+// Geriye dönük uyumluluk: diğer tıklama olaylarındaki playSound çağrıları hata üretmesin
 function playSound(type) {
-  if (!soundEnabled) return;
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    if (!audioCtx) audioCtx = new AudioContext();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    const now = audioCtx.currentTime;
-
-    if (type === 'click') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(480, now);
-      osc.frequency.exponentialRampToValueAtTime(780, now + 0.06);
-      gain.gain.setValueAtTime(0.04, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-      osc.start(now);
-      osc.stop(now + 0.06);
-    } else if (type === 'toggle') {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(320, now);
-      osc.frequency.exponentialRampToValueAtTime(640, now + 0.12);
-      gain.gain.setValueAtTime(0.05, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-      osc.start(now);
-      osc.stop(now + 0.12);
-    } else if (type === 'success') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(523.25, now); // C5
-      osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
-      osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
-      gain.gain.setValueAtTime(0.06, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-      osc.start(now);
-      osc.stop(now + 0.3);
-    }
-  } catch (e) {
-    // Audio context not allowed until user interaction
-  }
+  // Eminem Lose Yourself arka plan müziği devrede
 }
 
 /* ===================================================================

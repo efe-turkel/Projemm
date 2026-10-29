@@ -402,6 +402,25 @@ h6 {
   box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
 }
 
+.icon-btn.is-playing {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 242, 254, 0.2);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.45);
+  animation: musicPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes musicPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.65);
+    transform: scale(1.08);
+  }
+}
+
 /* ===================================================================
    NAVBAR
    =================================================================== */
@@ -792,12 +811,6 @@ h6 {
   color: var(--accent-cyan);
   border-color: var(--accent-cyan);
   box-shadow: 0 0 20px rgba(0, 242, 254, 0.45);
-}
-
-.kaggle-hover:hover {
-  color: #20beff;
-  border-color: #20beff;
-  box-shadow: 0 0 20px rgba(32, 190, 255, 0.45);
 }
 
 /* Hero Visual & 3D Tilt Card */

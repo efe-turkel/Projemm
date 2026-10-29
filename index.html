@@ -64,9 +64,9 @@
 
       <!-- Action Utilities -->
       <div class="nav-actions">
-        <!-- Sound FX Toggle Button -->
-        <button class="icon-btn" id="sound-toggle" aria-label="Ses Efektlerini Aç/Kapat" title="Ses Efektleri">
-          <i class="fa-solid fa-volume-high"></i>
+        <!-- Music Toggle Button (Eminem - Lose Yourself) -->
+        <button class="icon-btn" id="sound-toggle" aria-label="Müziği Çal/Durdur" title="Eminem - Lose Yourself (Çal / Durdur)">
+          <i class="fa-solid fa-volume-xmark"></i>
         </button>
 
         <!-- Theme Toggle Button -->
@@ -100,7 +100,6 @@
       <div class="mobile-drawer-socials">
         <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
         <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-        <a href="https://www.kaggle.com" target="_blank" rel="noopener noreferrer" aria-label="Kaggle"><i class="fa-brands fa-kaggle"></i></a>
         <a href="mailto:efefturkel@gmail.com" aria-label="E-Posta"><i class="fa-regular fa-envelope"></i></a>
       </div>
     </div>
@@ -159,10 +158,6 @@
               <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer" class="social-icon-box linkedin-hover" title="LinkedIn Profilim" id="hero-linkedin-link">
                 <i class="fa-brands fa-linkedin-in"></i>
                 <span class="social-tooltip">LinkedIn</span>
-              </a>
-              <a href="https://www.kaggle.com" target="_blank" rel="noopener noreferrer" class="social-icon-box kaggle-hover" title="Kaggle Profilim" id="hero-kaggle-link">
-                <i class="fa-brands fa-kaggle"></i>
-                <span class="social-tooltip">Kaggle</span>
               </a>
               <a href="mailto:efefturkel@gmail.com" class="social-icon-box email-hover" title="E-Posta Gönder" id="hero-email-link">
                 <i class="fa-regular fa-envelope"></i>
@@ -1041,7 +1036,6 @@
         <div class="footer-socials">
           <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
           <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-          <a href="https://www.kaggle.com" target="_blank" rel="noopener noreferrer" aria-label="Kaggle"><i class="fa-brands fa-kaggle"></i></a>
           <a href="mailto:efefturkel@gmail.com" aria-label="E-Posta"><i class="fa-regular fa-envelope"></i></a>
         </div>
       </div>
@@ -1208,6 +1202,12 @@
 
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div class="toast-container" id="toast-container"></div>
+
+  <!-- Background Music (Eminem - Lose Yourself) -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="assets/eminem-lose-yourself.mp3" type="audio/mpeg">
+    <source src="assets/eminem-lose-yourself.m4a" type="audio/mp4">
+  </audio>
 
   <!-- JavaScript Application Logic -->
   <script src="script.js"></script>
