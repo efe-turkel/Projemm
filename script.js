@@ -131,7 +131,8 @@ function playSound(type) {
    =================================================================== */
 function initTheme() {
   const themeToggleBtn = document.getElementById('theme-toggle');
-  const currentTheme = localStorage.getItem('efe_theme') || 'dark';
+  const storedTheme = localStorage.getItem('efe_theme');
+  const currentTheme = storedTheme === 'light' ? 'light' : 'dark';
 
   document.documentElement.setAttribute('data-theme', currentTheme);
   updateThemeIcon(currentTheme);
@@ -161,6 +162,9 @@ function updateThemeIcon(theme) {
 /* ===================================================================
    3. DYNAMIC INTERACTIVE PARTICLES & CONSTELLATION CANVAS
    =================================================================== */
+/* ===================================================================
+   3. FULL-PAGE DATA ANALYTICS & FINANCIAL RISK VISUAL ENGINE
+   =================================================================== */
 function initCanvasBackground() {
   const canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
@@ -169,18 +173,16 @@ function initCanvasBackground() {
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
 
-  // Optimized lightweight particle count for silky 60fps performance without CPU/GPU lag
-  const particles = [];
-  const particleCount = Math.min(Math.max(Math.floor((width * height) / 38000), 25), 45);
-  const maxDistance = 110;
-  const maxDistSq = maxDistance * maxDistance;
-
+  // Analytical Mouse HUD State
   const mouse = {
     x: null,
     y: null,
-    radius: 130
+    radius: 150
   };
   const mouseRadiusSq = mouse.radius * mouse.radius;
+
+  // Expanding shockwave ripples on click
+  const ripples = [];
 
   window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
@@ -192,33 +194,55 @@ function initCanvasBackground() {
     mouse.y = null;
   });
 
+  window.addEventListener('click', (e) => {
+    ripples.push({
+      x: e.clientX,
+      y: e.clientY,
+      radius: 5,
+      maxRadius: Math.min(width, height) * 0.28,
+      alpha: 0.75
+    });
+  });
+
   let resizeTimeout;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      initDataStreamFormulas();
     }, 150);
   }, { passive: true });
 
-  class Particle {
-    constructor() {
+  // -------------------------------------------------------------
+  // A. Scatter & Cluster Data Nodes (Graph Network)
+  // -------------------------------------------------------------
+  const nodes = [];
+  const nodeCount = Math.min(Math.max(Math.floor((width * height) / 32000), 32), 52);
+  const maxDistance = 135;
+  const maxDistSq = maxDistance * maxDistance;
+
+  class DataNode {
+    constructor(id) {
+      this.id = id;
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.6;
-      this.vy = (Math.random() - 0.5) * 0.6;
-      this.radius = Math.random() * 1.5 + 1;
-      this.color = Math.random() > 0.4 ? 'rgba(0, 242, 254, 0.65)' : 'rgba(157, 78, 221, 0.65)';
+      this.vx = (Math.random() - 0.5) * 0.55;
+      this.vy = (Math.random() - 0.5) * 0.55;
+      this.isHub = id % 7 === 0; // Cluster centroid / hub node
+      this.baseRadius = this.isHub ? 3.8 : Math.random() * 1.5 + 1.8;
+      this.pulse = Math.random() * Math.PI * 2;
     }
 
     update() {
       this.x += this.vx;
       this.y += this.vy;
+      this.pulse += 0.04;
 
-      if (this.x < 0 || this.x > width) this.vx = -this.vx;
-      if (this.y < 0 || this.y > height) this.vy = -this.vy;
+      if (this.x < 15 || this.x > width - 15) this.vx = -this.vx;
+      if (this.y < 15 || this.y > height - 15) this.vy = -this.vy;
 
-      // Mouse repulsion using squared distance (fast, no sqrt overhead)
+      // Mouse repulsion
       if (mouse.x !== null && mouse.y !== null) {
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
@@ -226,73 +250,469 @@ function initCanvasBackground() {
         if (distSq < mouseRadiusSq && distSq > 0) {
           const dist = Math.sqrt(distSq);
           const force = (mouse.radius - dist) / mouse.radius;
-          const dirX = dx / dist;
-          const dirY = dy / dist;
-          this.x -= dirX * force * 1.5;
-          this.y -= dirY * force * 1.5;
+          this.x -= (dx / dist) * force * 1.8;
+          this.y -= (dy / dist) * force * 1.8;
         }
       }
     }
 
-    draw() {
+    draw(isDark) {
+      const pulseSize = this.isHub ? Math.sin(this.pulse) * 1.2 : 0;
+      const currentRadius = this.baseRadius + pulseSize;
+
+      // Hub outer pulse ring & Cluster tag
+      if (this.isHub) {
+        const ringAlpha = (Math.sin(this.pulse) + 1) * 0.22;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, currentRadius + 10, 0, Math.PI * 2);
+        ctx.strokeStyle = isDark ? `rgba(0, 242, 254, ${ringAlpha})` : `rgba(2, 132, 199, ${ringAlpha})`;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.font = '9px monospace';
+        ctx.fillStyle = isDark ? `rgba(0, 242, 254, ${ringAlpha * 2.5})` : `rgba(2, 132, 199, ${ringAlpha * 2.5})`;
+        ctx.fillText(`CLUSTER [ID:${this.id}]`, this.x + 12, this.y + 3);
+      }
+
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = this.color;
+      ctx.arc(this.x, this.y, currentRadius, 0, Math.PI * 2);
+      ctx.fillStyle = this.isHub
+        ? (isDark ? 'rgba(0, 242, 254, 0.95)' : 'rgba(2, 132, 199, 0.95)')
+        : (isDark ? 'rgba(157, 78, 221, 0.75)' : 'rgba(124, 58, 237, 0.75)');
       ctx.fill();
     }
   }
 
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
+  for (let i = 0; i < nodeCount; i++) {
+    nodes.push(new DataNode(i));
   }
 
+  // -------------------------------------------------------------
+  // B. Traveling Data Packets (Photon pulses along graph edges)
+  // -------------------------------------------------------------
+  const packets = [];
+  const packetCount = 14;
+
+  class DataPacket {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.fromNode = nodes[Math.floor(Math.random() * nodes.length)];
+      this.toNode = null;
+      this.progress = 0;
+      this.speed = Math.random() * 0.015 + 0.008;
+
+      // Find a neighbor node within connection distance
+      const neighbors = nodes.filter(n => {
+        if (n === this.fromNode) return false;
+        const dx = n.x - this.fromNode.x;
+        const dy = n.y - this.fromNode.y;
+        return (dx * dx + dy * dy) < maxDistSq;
+      });
+
+      if (neighbors.length > 0) {
+        this.toNode = neighbors[Math.floor(Math.random() * neighbors.length)];
+      } else {
+        this.fromNode = nodes[Math.floor(Math.random() * nodes.length)];
+      }
+    }
+
+    update() {
+      if (!this.toNode) {
+        this.reset();
+        return;
+      }
+
+      this.progress += this.speed;
+      if (this.progress >= 1) {
+        this.reset();
+      }
+    }
+
+    draw(isDark) {
+      if (!this.toNode) return;
+      const curX = this.fromNode.x + (this.toNode.x - this.fromNode.x) * this.progress;
+      const curY = this.fromNode.y + (this.toNode.y - this.fromNode.y) * this.progress;
+
+      ctx.beginPath();
+      ctx.arc(curX, curY, 2.4, 0, Math.PI * 2);
+      ctx.fillStyle = isDark ? '#00f2fe' : '#0284c7';
+      ctx.shadowColor = isDark ? '#00f2fe' : '#0284c7';
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  for (let i = 0; i < packetCount; i++) {
+    packets.push(new DataPacket());
+  }
+
+  // -------------------------------------------------------------
+  // C. Floating Live Data Science & Financial Risk Formula Chips
+  // -------------------------------------------------------------
+  const formulasData = [
+    'R² = 0.984',
+    'ROC-AUC: 0.942',
+    'SELECT * FROM risk_portfolio',
+    'f(x) = σ(Wᵀx + b)',
+    'NPL Ratio: 1.84%',
+    'p-value < 0.001',
+    'Σ(xᵢ - μ)² / N',
+    'df.groupby("segment").agg()',
+    'VaR (99% Conf: -1.4%)',
+    'Gaussian N(μ, σ²)',
+    'Loss: 0.0162 ↓',
+    'K-Means (k=3 Optimal)',
+    'β₁ = Cov(X,Y) / Var(X)',
+    'INNER JOIN loans ON id',
+    'ConfusionMatrix: 96.8% Acc',
+    'RandomForest(estimators=150)',
+    'F1-Score: 0.91',
+    'P(Y|X) = P(X|Y)P(Y)/P(X)'
+  ];
+
+  let floatingChips = [];
+  function initDataStreamFormulas() {
+    floatingChips = [];
+    const count = Math.min(Math.max(Math.floor(width / 130), 8), 15);
+    for (let i = 0; i < count; i++) {
+      floatingChips.push({
+        text: formulasData[i % formulasData.length],
+        x: Math.random() * (width - 160) + 20,
+        y: Math.random() * height,
+        vy: -(Math.random() * 0.35 + 0.2),
+        vx: (Math.random() - 0.5) * 0.15,
+        alpha: Math.random() * 0.35 + 0.22,
+        size: Math.random() > 0.5 ? 11 : 12
+      });
+    }
+  }
+  initDataStreamFormulas();
+
+  // -------------------------------------------------------------
+  // D. Animation Frame Loop
+  // -------------------------------------------------------------
+  let time = 0;
+
   function animate() {
+    time += 0.018;
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+
     ctx.clearRect(0, 0, width, height);
 
-    // Fast constellation lines
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
+    // --- 1. Coordinate Grid with Crosshairs & Scanning Sensor Beam ---
+    const gridStep = 95;
+    const scanX = ((time * 75) % (width + 600)) - 300;
+
+    ctx.lineWidth = 0.6;
+    for (let x = 30; x < width; x += gridStep) {
+      for (let y = 30; y < height; y += gridStep) {
+        const distToScan = Math.abs(x - scanX);
+        let alpha = isDark ? 0.08 : 0.06;
+
+        if (distToScan < 120) {
+          alpha += (1 - distToScan / 120) * 0.28;
+        }
+
+        ctx.strokeStyle = isDark ? `rgba(0, 242, 254, ${alpha})` : `rgba(2, 132, 199, ${alpha})`;
+
+        // Draw coordinate crosshair '+'
+        ctx.beginPath();
+        ctx.moveTo(x - 4, y);
+        ctx.lineTo(x + 4, y);
+        ctx.moveTo(x, y - 4);
+        ctx.lineTo(x, y + 4);
+        ctx.stroke();
+      }
+    }
+
+    // --- 2. Live Continuous Financial / Risk Regression Trend Waves ---
+    const waveY = height * 0.56;
+    const waveY2 = waveY + 45;
+
+    // Draw area corridor
+    ctx.beginPath();
+    for (let x = 0; x <= width; x += 18) {
+      const y1 = waveY + Math.sin(x * 0.0032 + time * 0.9) * 45 + Math.cos(x * 0.0016 - time * 0.5) * 22;
+      if (x === 0) ctx.moveTo(x, y1);
+      else ctx.lineTo(x, y1);
+    }
+    for (let x = width; x >= 0; x -= 18) {
+      const y2 = waveY2 + Math.sin(x * 0.0035 + time * 0.75) * 40 + Math.cos(x * 0.002 + time * 0.4) * 25;
+      ctx.lineTo(x, y2);
+    }
+    ctx.closePath();
+    ctx.fillStyle = isDark ? 'rgba(0, 242, 254, 0.035)' : 'rgba(2, 132, 199, 0.025)';
+    ctx.fill();
+
+    // Primary trend line (Bullish / Cumulative return line)
+    ctx.beginPath();
+    for (let x = 0; x <= width; x += 12) {
+      const y = waveY + Math.sin(x * 0.0032 + time * 0.9) * 45 + Math.cos(x * 0.0016 - time * 0.5) * 22;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = isDark ? 'rgba(0, 242, 254, 0.38)' : 'rgba(2, 132, 199, 0.35)';
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    // Risk threshold line (Lower corridor boundary)
+    ctx.beginPath();
+    for (let x = 0; x <= width; x += 12) {
+      const y = waveY2 + Math.sin(x * 0.0035 + time * 0.75) * 40 + Math.cos(x * 0.002 + time * 0.4) * 25;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = isDark ? 'rgba(157, 78, 221, 0.28)' : 'rgba(124, 58, 237, 0.25)';
+    ctx.lineWidth = 1.1;
+    ctx.setLineDash([6, 6]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Live markers moving on wave
+    const sampleX = ((time * 48) % width);
+    const sampleY = waveY + Math.sin(sampleX * 0.0032 + time * 0.9) * 45 + Math.cos(sampleX * 0.0016 - time * 0.5) * 22;
+
+    ctx.beginPath();
+    ctx.arc(sampleX, sampleY, 4, 0, Math.PI * 2);
+    ctx.fillStyle = isDark ? '#00f2fe' : '#0284c7';
+    ctx.fill();
+
+    ctx.font = '10px monospace';
+    ctx.fillStyle = isDark ? 'rgba(0, 242, 254, 0.65)' : 'rgba(2, 132, 199, 0.75)';
+    ctx.fillText(`[μ: ${Math.round(sampleY)}]`, sampleX + 8, sampleY - 6);
+
+    // --- 2.1 Gaussian Normal Distribution Bell Curve ---
+    const bellCenterX = width * 0.74;
+    const bellCenterY = height * 0.28;
+    const bellSigma = 52;
+    const bellHeight = 56;
+
+    ctx.beginPath();
+    for (let x = bellCenterX - 150; x <= bellCenterX + 150; x += 4) {
+      const diff = (x - bellCenterX) / bellSigma;
+      const y = bellCenterY - Math.exp(-0.5 * diff * diff) * bellHeight;
+      if (x === bellCenterX - 150) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = isDark ? 'rgba(16, 185, 129, 0.45)' : 'rgba(5, 150, 105, 0.45)';
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Fill under bell curve
+    ctx.lineTo(bellCenterX + 150, bellCenterY);
+    ctx.lineTo(bellCenterX - 150, bellCenterY);
+    ctx.closePath();
+    ctx.fillStyle = isDark ? 'rgba(16, 185, 129, 0.05)' : 'rgba(5, 150, 105, 0.03)';
+    ctx.fill();
+
+    // Dashed Sigma lines (+1σ, -1σ, μ)
+    ctx.setLineDash([3, 4]);
+    ctx.strokeStyle = isDark ? 'rgba(16, 185, 129, 0.28)' : 'rgba(5, 150, 105, 0.28)';
+    [-bellSigma, 0, bellSigma].forEach(offset => {
+      const x = bellCenterX + offset;
+      const diff = offset / bellSigma;
+      const y = bellCenterY - Math.exp(-0.5 * diff * diff) * bellHeight;
+      ctx.beginPath();
+      ctx.moveTo(x, bellCenterY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    ctx.font = '10px monospace';
+    ctx.fillStyle = isDark ? 'rgba(16, 185, 129, 0.65)' : 'rgba(5, 150, 105, 0.7)';
+    ctx.fillText('N(μ, σ²) [GAUSSIAN RISK CI: 95%]', bellCenterX - 65, bellCenterY + 16);
+
+    // --- 2.2 Live Financial Candlestick & Volume Stream ---
+    const candleY = height * 0.84;
+    const candleSpacing = 36;
+    const candleCount = Math.floor(width / candleSpacing) + 2;
+
+    for (let i = 0; i < candleCount; i++) {
+      const cx = i * candleSpacing;
+      const seed = Math.sin(i * 1.35 + time * 1.15);
+      const isUp = seed > 0;
+      const bodyHeight = Math.abs(seed) * 24 + 6;
+      const wickTop = bodyHeight + Math.abs(Math.cos(i * 2.1 + time)) * 12;
+      const wickBottom = bodyHeight + Math.abs(Math.sin(i * 1.8 - time)) * 10;
+
+      const candleColor = isUp
+        ? (isDark ? 'rgba(0, 242, 254, 0.45)' : 'rgba(2, 132, 199, 0.45)')
+        : (isDark ? 'rgba(244, 63, 94, 0.42)' : 'rgba(225, 29, 72, 0.42)');
+
+      // Wick line
+      ctx.strokeStyle = candleColor;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(cx, candleY - wickTop);
+      ctx.lineTo(cx, candleY + wickBottom);
+      ctx.stroke();
+
+      // Body rectangle
+      ctx.fillStyle = candleColor;
+      const topY = isUp ? candleY - bodyHeight : candleY;
+      ctx.fillRect(cx - 4.5, topY, 9, bodyHeight);
+    }
+
+    // Candle Baseline & Label
+    ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+    ctx.beginPath();
+    ctx.moveTo(0, candleY);
+    ctx.lineTo(width, candleY);
+    ctx.stroke();
+
+    ctx.font = '10px monospace';
+    ctx.fillStyle = isDark ? 'rgba(0, 242, 254, 0.55)' : 'rgba(2, 132, 199, 0.65)';
+    ctx.fillText('FINANCIAL CANDLESTICK & RISK STREAM [LIVE]', 25, candleY - 38);
+
+    // --- 2.3 Data Matrix Ticker Columns ---
+    const streamCols = 7;
+    for (let c = 0; c < streamCols; c++) {
+      const colX = (width / (streamCols + 1)) * (c + 1);
+      const offset = c * 45;
+      const colY = ((time * 35 + offset) % (height + 200)) - 100;
+
+      ctx.font = '10px monospace';
+      ctx.fillStyle = isDark ? 'rgba(0, 242, 254, 0.22)' : 'rgba(2, 132, 199, 0.22)';
+      ctx.fillText(`0.${Math.floor(Math.abs(Math.sin(c + time)) * 9000 + 1000)}`, colX, colY);
+      ctx.fillText(`+${(Math.abs(Math.cos(c * 2 + time)) * 4.2).toFixed(2)}%`, colX, colY + 16);
+    }
+
+    // --- 3. Neural Data Node Network ---
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
         const distSq = dx * dx + dy * dy;
 
         if (distSq < maxDistSq) {
           const dist = Math.sqrt(distSq);
-          const lineAlpha = (1 - dist / maxDistance) * 0.18;
+          const lineAlpha = (1 - dist / maxDistance) * (isDark ? 0.22 : 0.16);
           ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(0, 242, 254, ${lineAlpha})`;
-          ctx.lineWidth = 0.6;
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = isDark ? `rgba(0, 242, 254, ${lineAlpha})` : `rgba(2, 132, 199, ${lineAlpha})`;
+          ctx.lineWidth = 0.75;
           ctx.stroke();
         }
       }
     }
 
-    // Connect particles to mouse
+    // Update & draw nodes
+    nodes.forEach(n => {
+      n.update();
+      n.draw(isDark);
+    });
+
+    // Update & draw traveling data packets
+    packets.forEach(p => {
+      p.update();
+      p.draw(isDark);
+    });
+
+    // --- 4. Floating Data Science & Financial Formulas ---
+    floatingChips.forEach(chip => {
+      chip.y += chip.vy;
+      chip.x += chip.vx;
+
+      if (chip.y < -20) {
+        chip.y = height + 20;
+        chip.x = Math.random() * (width - 160) + 20;
+        chip.text = formulasData[Math.floor(Math.random() * formulasData.length)];
+      }
+
+      ctx.font = `${chip.size}px 'Space Grotesk', 'Courier New', monospace`;
+      ctx.fillStyle = isDark
+        ? `rgba(0, 242, 254, ${chip.alpha})`
+        : `rgba(14, 116, 144, ${chip.alpha * 0.9})`;
+      ctx.fillText(chip.text, chip.x, chip.y);
+    });
+
+    // --- 5. Interactive Mouse HUD & Inspection Ring ---
     if (mouse.x !== null && mouse.y !== null) {
-      for (let i = 0; i < particles.length; i++) {
-        const dx = mouse.x - particles[i].x;
-        const dy = mouse.y - particles[i].y;
+      // Analytical Crosshair HUD around cursor
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 28, 0, Math.PI * 2);
+      ctx.strokeStyle = isDark ? 'rgba(0, 242, 254, 0.45)' : 'rgba(2, 132, 199, 0.45)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Mini corner ticks
+      ctx.beginPath();
+      ctx.moveTo(mouse.x - 38, mouse.y);
+      ctx.lineTo(mouse.x - 28, mouse.y);
+      ctx.moveTo(mouse.x + 28, mouse.y);
+      ctx.lineTo(mouse.x + 38, mouse.y);
+      ctx.moveTo(mouse.x, mouse.y - 38);
+      ctx.lineTo(mouse.x, mouse.y - 28);
+      ctx.moveTo(mouse.x, mouse.y + 28);
+      ctx.lineTo(mouse.x, mouse.y + 38);
+      ctx.stroke();
+
+      // Readout text next to cursor
+      ctx.font = '10px monospace';
+      ctx.fillStyle = isDark ? 'rgba(0, 242, 254, 0.75)' : 'rgba(2, 132, 199, 0.85)';
+      ctx.fillText(`X:${Math.round(mouse.x)} Y:${Math.round(mouse.y)} [DATA:ACTIVE]`, mouse.x + 36, mouse.y + 4);
+
+      // Connect mouse to nearest nodes & draw dynamic OLS best-fit regression line
+      const connectedNodes = [];
+      for (let i = 0; i < nodes.length && connectedNodes.length < 4; i++) {
+        const dx = mouse.x - nodes[i].x;
+        const dy = mouse.y - nodes[i].y;
         const distSq = dx * dx + dy * dy;
 
         if (distSq < mouseRadiusSq) {
           const dist = Math.sqrt(distSq);
-          const lineAlpha = (1 - dist / mouse.radius) * 0.25;
+          const alpha = (1 - dist / mouse.radius) * 0.45;
           ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = `rgba(157, 78, 221, ${lineAlpha})`;
-          ctx.lineWidth = 0.8;
+          ctx.moveTo(mouse.x, mouse.y);
+          ctx.lineTo(nodes[i].x, nodes[i].y);
+          ctx.strokeStyle = isDark ? `rgba(157, 78, 221, ${alpha})` : `rgba(124, 58, 237, ${alpha})`;
+          ctx.lineWidth = 1;
           ctx.stroke();
+          connectedNodes.push(nodes[i]);
         }
+      }
+
+      // Dynamic OLS Regression Line through connected nodes
+      if (connectedNodes.length >= 2) {
+        ctx.beginPath();
+        ctx.moveTo(connectedNodes[0].x, connectedNodes[0].y);
+        ctx.lineTo(connectedNodes[1].x, connectedNodes[1].y);
+        ctx.strokeStyle = isDark ? 'rgba(0, 242, 254, 0.75)' : 'rgba(2, 132, 199, 0.75)';
+        ctx.lineWidth = 1.6;
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.font = '10px monospace';
+        ctx.fillStyle = isDark ? '#00f2fe' : '#0284c7';
+        ctx.fillText('OLS REGRESSION [R²=0.984]', (connectedNodes[0].x + connectedNodes[1].x) / 2 + 10, (connectedNodes[0].y + connectedNodes[1].y) / 2);
       }
     }
 
-    // Update and draw particles
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
+    // --- 6. Click Shockwave Ripples ---
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const r = ripples[i];
+      r.radius += 5.5;
+      r.alpha -= 0.022;
+
+      if (r.alpha <= 0 || r.radius >= r.maxRadius) {
+        ripples.splice(i, 1);
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+      ctx.strokeStyle = isDark ? `rgba(0, 242, 254, ${r.alpha})` : `rgba(2, 132, 199, ${r.alpha})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
     }
 
     requestAnimationFrame(animate);
@@ -394,10 +814,10 @@ function initTypewriter() {
   if (!textElement) return;
 
   const roles = [
-    'Veri Bilimi Meraklısı.',
-    'Veri Analisti Adayı.',
-    'Nişantaşı Üniv. Bilgisayar Müh. Öğrencisi.',
-    'Python & Makine Öğrenmesi Tutkunu.'
+    'Bilgisayar Mühendisliği Öğrencisiyim.',
+    'Veri & Risk Analitiği Adayıyım.',
+    'Finansal Veri & Karar Destek Odaklıyım.',
+    'Python & SQL ile Değer Üretiyorum.'
   ];
 
   let roleIndex = 0;
@@ -823,12 +1243,17 @@ function showToast(message, type = 'info') {
   if (!container) return;
 
   const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-info'}"></i>
-    <span>${message}</span>
-  `;
+  const safeType = ['success', 'warning', 'info', 'error'].includes(type) ? type : 'info';
+  toast.className = `toast ${safeType}`;
 
+  const icon = document.createElement('i');
+  icon.className = `fa-solid ${safeType === 'success' ? 'fa-circle-check' : 'fa-circle-info'}`;
+
+  const textSpan = document.createElement('span');
+  textSpan.textContent = String(message);
+
+  toast.appendChild(icon);
+  toast.appendChild(textSpan);
   container.appendChild(toast);
 
   // Trigger animation
