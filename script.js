@@ -1217,21 +1217,43 @@ function initContactForm() {
       return;
     }
 
-    // Simulate sending with loading state
+    // Real asynchronous sending to Formspree
     if (submitBtn && btnText) {
       submitBtn.disabled = true;
       btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Gönderiliyor...';
     }
 
-    setTimeout(() => {
-      if (submitBtn && btnText) {
-        submitBtn.disabled = false;
-        btnText.innerHTML = 'Mesajı Gönder';
+    const formData = new FormData(form);
+
+    fetch('https://formspree.io/f/maeelbre', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
       }
-      form.reset();
-      playSound('success');
-      showToast('Mesajınız başarıyla iletildi! En kısa sürede dönüş yapacağım. 🚀', 'success');
-    }, 1200);
+    })
+      .then(response => {
+        if (response.ok) {
+          form.reset();
+          playSound('success');
+          showToast('Mesajınız başarıyla iletildi! En kısa sürede dönüş yapacağım. 🚀', 'success');
+        } else {
+          return response.json().then(data => {
+            throw new Error((data && data.error) || 'Mesaj gönderilemedi');
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Formspree submission error:', error);
+        playSound('click');
+        showToast('Bir hata oluştu. Lütfen doğrudan efefturkel@gmail.com adresine yazınız.', 'warning');
+      })
+      .finally(() => {
+        if (submitBtn && btnText) {
+          submitBtn.disabled = false;
+          btnText.innerHTML = 'Mesajı Gönder';
+        }
+      });
   });
 }
 
