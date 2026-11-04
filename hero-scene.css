@@ -1,0 +1,396 @@
+/**
+ * HERO SAHNESİ — karakter + arkada kod akan monitörler
+ * (hero-scene.js ile birlikte çalışır)
+ */
+
+.hero-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  background: #0a0f1f;
+  isolation: isolate;
+}
+
+/* ---------- Sahne: masa + monitör görseli (896x900) ---------- */
+/* Kart her zaman dikey olduğundan sahne yüksekliğe oturur, yanlardan hafif kırpılır (cover) */
+.scene-stage {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  min-width: 100%;
+  aspect-ratio: 896 / 900;
+  transform: translate(-50%, -50%);
+}
+
+.scene-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ---------- Gerçek monitör ekranları (koordinatlar görselden ölçüldü) ---------- */
+.scene-screen {
+  position: absolute;
+  z-index: 2;
+  overflow: hidden;
+  background: #0b1020;
+}
+
+.scene-screen::after {
+  /* ekran parlaması + tarama çizgileri */
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.07), transparent 45%);
+  mix-blend-mode: screen;
+}
+
+.scene-screen.s-left {
+  left: -0.2%;
+  top: 15.9%;
+  width: 26.7%;
+  height: 30.2%;
+  clip-path: polygon(0 0, 100% 6.3%, 100% 94%, 0 100%);
+}
+
+.scene-screen.s-center {
+  left: 27.5%;
+  top: 17.8%;
+  width: 45%;
+  height: 26.8%;
+}
+
+.scene-screen.s-right {
+  left: 73.5%;
+  top: 15.9%;
+  width: 26.7%;
+  height: 30.2%;
+  clip-path: polygon(0 6.3%, 100% 0, 100% 100%, 0 94%);
+}
+
+.screen-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Yan monitörler hafif açılı: içerik de perspektifle döner;
+   kartın yanlardan kırpılan kısmı için içerik iç tarafa kaydırılır */
+.s-left .screen-inner {
+  padding: 4% 0 4% 28%;
+  transform: perspective(500px) rotateY(10deg);
+  transform-origin: 100% 50%;
+}
+
+.s-right .screen-inner {
+  padding: 4% 28% 4% 0;
+  transform: perspective(500px) rotateY(-10deg);
+  transform-origin: 0% 50%;
+}
+
+/* Ekran ışığının duvara / çerçeveye yansıması */
+.screen-glow {
+  position: absolute;
+  z-index: 1;
+  border-radius: 12px;
+  filter: blur(18px);
+  opacity: 0.55;
+  animation: screenFlicker 7s ease-in-out infinite;
+}
+
+.screen-glow.g-left   { left: 0;     top: 14%; width: 27%; height: 34%; background: rgba(0, 242, 254, 0.45); }
+.screen-glow.g-center { left: 26%;   top: 15%; width: 48%; height: 32%; background: rgba(157, 78, 221, 0.5); animation-delay: -2s; }
+.screen-glow.g-right  { left: 73%;   top: 14%; width: 27%; height: 34%; background: rgba(0, 242, 254, 0.4); animation-delay: -4s; }
+
+@keyframes screenFlicker {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 0.7; }
+}
+
+.mon-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+
+.mon-bar i {
+  flex: 0 0 auto;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.mon-bar i:nth-child(2) { background: #febc2e; }
+.mon-bar i:nth-child(3) { background: #28c840; }
+.mon-bar span { margin-left: 3px; }
+
+/* ---------- Kod akışı ---------- */
+.mon-code {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: 0 7px;
+  mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+
+.mon-code-track {
+  display: block;
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 7.5px;
+  line-height: 1.55;
+  white-space: pre;
+  color: #c9d4f2;
+  animation: codeScroll var(--dur, 18s) linear infinite;
+  will-change: transform;
+}
+
+@keyframes codeScroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+.s-left .mon-code-track   { --dur: 20s; font-size: 6px; }
+.s-center .mon-code-track { --dur: 27s; }
+.s-left .mon-code,
+.s-right .mon-dash { padding-left: 4px; padding-right: 4px; }
+
+.mon-code-track .k { color: #c792ea; }
+.mon-code-track .f { color: #00f2fe; }
+.mon-code-track .s { color: #9ece6a; }
+.mon-code-track .n { color: #ff9e64; }
+.mon-code-track .c { color: #5c6a94; font-style: italic; }
+.mon-code-track .o { color: #89ddff; }
+
+/* ---------- Sağ monitör: canlı dashboard ---------- */
+.mon-dash {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px 7px 7px;
+}
+
+.dash-kpis {
+  display: flex;
+  gap: 4px;
+}
+
+.dash-kpi {
+  flex: 1;
+  padding: 3px 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: 'JetBrains Mono', Menlo, monospace;
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.3;
+}
+
+.dash-kpi b {
+  display: block;
+  font-size: 9px;
+  color: #00f2fe;
+}
+
+.dash-kpi:nth-child(2) b { color: #c792ea; }
+.dash-kpi:nth-child(3) b { color: #ff9e64; }
+
+/* Dar yan ekran için küçültülmüş panel */
+.s-right .dash-kpis { gap: 2px; }
+.s-right .dash-kpi { padding: 2px; font-size: 5px; }
+.s-right .dash-kpi b { font-size: 7px; }
+.s-right .dash-bars { gap: 2px; }
+
+.dash-bars {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  min-height: 0;
+}
+
+.dash-bars span {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, #00f2fe, #9d4edd);
+  transform-origin: bottom;
+  animation: barPulse var(--bd, 2.4s) ease-in-out infinite;
+  animation-delay: var(--bdel, 0s);
+}
+
+@keyframes barPulse {
+  0%, 100% { transform: scaleY(var(--b1, 0.4)); }
+  50%      { transform: scaleY(var(--b2, 0.9)); }
+}
+
+.dash-line {
+  flex: 0 0 22%;
+  width: 100%;
+}
+
+.dash-line path {
+  fill: none;
+  stroke: #9ece6a;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: lineDraw 5s ease-in-out infinite;
+}
+
+@keyframes lineDraw {
+  0%   { stroke-dashoffset: 260; }
+  55%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -260; }
+}
+
+/* ---------- Karakter ---------- */
+.scene-char {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: -1%;
+  height: 86%;
+  width: auto;
+  max-width: none;
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  filter:
+    drop-shadow(0 0 10px rgba(0, 242, 254, 0.28))
+    drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
+  animation: charBreath 5s ease-in-out infinite;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes charBreath {
+  0%, 100% { transform: translateX(-50%) scale(1, 1) rotate(0deg); }
+  50%      { transform: translateX(-50%) scale(1.008, 1.014) rotate(0.3deg); }
+}
+
+/* Karakterin arkasından monitör ışığı */
+.scene-backlight {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 28%;
+  width: 70%;
+  height: 60%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 40%, rgba(0, 242, 254, 0.22), rgba(157, 78, 221, 0.14) 45%, transparent 70%);
+  filter: blur(14px);
+  animation: backlightPulse 6s ease-in-out infinite;
+}
+
+@keyframes backlightPulse {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+/* Yükselen küçük kod parçacıkları */
+.scene-bits {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scene-bits span {
+  position: absolute;
+  bottom: -10%;
+  font-family: 'JetBrains Mono', Menlo, monospace;
+  font-size: 9px;
+  color: rgba(0, 242, 254, 0.55);
+  opacity: 0;
+  animation: bitRise var(--t, 9s) linear infinite;
+  animation-delay: var(--d, 0s);
+  left: var(--x, 10%);
+}
+
+@keyframes bitRise {
+  0%   { transform: translateY(0); opacity: 0; }
+  15%  { opacity: 0.8; }
+  85%  { opacity: 0.5; }
+  100% { transform: translateY(-420px); opacity: 0; }
+}
+
+/* DEMO: kıyafet seçici (A / B) */
+.scene-char {
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+.scene-char.swapping {
+  opacity: 0;
+}
+
+.scene-outfit-switch {
+  position: absolute;
+  z-index: 8;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(10, 15, 31, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.scene-outfit-switch button {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  font: 700 11px/1 'JetBrains Mono', Menlo, monospace;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.scene-outfit-switch button.active,
+.scene-outfit-switch button:hover {
+  color: #0a0f1f;
+  background: linear-gradient(135deg, #00f2fe, #9d4edd);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mon-code-track,
+  .dash-bars span,
+  .dash-line path,
+  .scene-char,
+  .scene-backlight,
+  .scene-bg,
+  .screen-glow,
+  .scene-bits span {
+    animation: none !important;
+  }
+  .dash-line path { stroke-dashoffset: 0; }
+}
+

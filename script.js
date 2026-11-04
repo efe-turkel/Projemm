@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize all modular components
   initSoundEffects();
   initTheme();
+  initLanguage();
   initCanvasBackground();
   initScrollProgress();
   initNavbar();
@@ -84,22 +85,24 @@ function toggleMusic() {
   }
   if (!bgMusic) return;
 
+  const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
+
   if (bgMusic.paused) {
     bgMusic.play().then(() => {
       musicPlaying = true;
       localStorage.setItem('efe_music_enabled', 'true');
       updateMusicUI();
-      showToast('🎵 Çalıyor: Eminem - Lose Yourself', 'info');
+      showToast(t?.toastMusicPlaying || '🎵 Çalıyor: Eminem - Lose Yourself', 'info');
     }).catch(err => {
       console.warn('Playback error:', err);
-      showToast('Müziği başlatmak için lütfen tıklayın', 'warning');
+      showToast(t?.toastMusicPrompt || 'Müziği başlatmak için lütfen tıklayın', 'warning');
     });
   } else {
     bgMusic.pause();
     musicPlaying = false;
     localStorage.setItem('efe_music_enabled', 'false');
     updateMusicUI();
-    showToast('Müzik duraklatıldı 🔇', 'info');
+    showToast(t?.toastMusicPaused || 'Müzik duraklatıldı 🔇', 'info');
   }
 }
 
@@ -107,17 +110,18 @@ function updateMusicUI() {
   const soundToggleBtn = document.getElementById('sound-toggle');
   if (!soundToggleBtn) return;
   const icon = soundToggleBtn.querySelector('i');
+  const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
 
   if (musicPlaying) {
     if (icon) icon.className = 'fa-solid fa-volume-high';
     soundToggleBtn.classList.add('is-playing');
-    soundToggleBtn.setAttribute('title', 'Müziği Durdur (Eminem - Lose Yourself)');
-    soundToggleBtn.setAttribute('aria-label', 'Müziği Durdur');
+    soundToggleBtn.setAttribute('title', t?.soundTitlePause || 'Müziği Durdur (Eminem - Lose Yourself)');
+    soundToggleBtn.setAttribute('aria-label', t?.soundTitlePause || 'Müziği Durdur');
   } else {
     if (icon) icon.className = 'fa-solid fa-volume-xmark';
     soundToggleBtn.classList.remove('is-playing');
-    soundToggleBtn.setAttribute('title', 'Eminem - Lose Yourself (Çal)');
-    soundToggleBtn.setAttribute('aria-label', 'Müziği Çal');
+    soundToggleBtn.setAttribute('title', t?.soundTitlePlay || 'Müziği Çal (Eminem - Lose Yourself)');
+    soundToggleBtn.setAttribute('aria-label', t?.soundTitlePlay || 'Müziği Çal');
   }
 }
 
@@ -145,7 +149,11 @@ function initTheme() {
       localStorage.setItem('efe_theme', newTheme);
       updateThemeIcon(newTheme);
       playSound('toggle');
-      showToast(`${newTheme === 'dark' ? 'Karanlık' : 'Aydınlık'} tema etkinleştirildi`, 'info');
+      const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
+      const themeToast = newTheme === 'dark'
+        ? (t?.toastThemeDark || 'Karanlık tema etkinleştirildi 🌙')
+        : (t?.toastThemeLight || 'Aydınlık tema etkinleştirildi ☀️');
+      showToast(themeToast, 'info');
     });
   }
 }
@@ -156,6 +164,123 @@ function updateThemeIcon(theme) {
   const icon = themeToggleBtn.querySelector('i');
   if (icon) {
     icon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  }
+}
+
+/* ===================================================================
+   2.1 MULTI-LANGUAGE SYSTEM (TR / EN)
+   =================================================================== */
+const ALLOWED_LANGS = ['tr', 'en'];
+let currentLang = ALLOWED_LANGS.includes(localStorage.getItem('efe_lang'))
+  ? localStorage.getItem('efe_lang')
+  : 'tr';
+
+function initLanguage() {
+  const langToggleBtn = document.getElementById('lang-toggle');
+  const mobileLangToggleBtn = document.getElementById('mobile-lang-toggle');
+
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', () => {
+      const newLang = currentLang === 'tr' ? 'en' : 'tr';
+      setLanguage(newLang, true);
+    });
+  }
+
+  if (mobileLangToggleBtn) {
+    mobileLangToggleBtn.addEventListener('click', () => {
+      const newLang = currentLang === 'tr' ? 'en' : 'tr';
+      setLanguage(newLang, true);
+    });
+  }
+
+  setLanguage(currentLang, false);
+}
+
+function setLanguage(lang, showNotification = false) {
+  if (typeof translations === 'undefined' || !translations[lang]) return;
+  currentLang = lang;
+  localStorage.setItem('efe_lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+
+  // Update navbar indicator
+  const optTr = document.getElementById('lang-opt-tr');
+  const optEn = document.getElementById('lang-opt-en');
+  if (optTr && optEn) {
+    if (lang === 'tr') {
+      optTr.classList.add('active');
+      optEn.classList.remove('active');
+    } else {
+      optTr.classList.remove('active');
+      optEn.classList.add('active');
+    }
+  }
+
+  // Update mobile drawer toggle label
+  const mobileLangLabel = document.getElementById('mobile-lang-label');
+  if (mobileLangLabel) {
+    mobileLangLabel.textContent = lang === 'tr' ? 'Switch to English (EN)' : "Türkçe'ye Geç (TR)";
+  }
+
+  // Update document title
+  if (translations[lang].pageTitle) {
+    document.title = translations[lang].pageTitle;
+  }
+
+  // Update sound toggle button title/label
+  updateMusicUI();
+
+  // Translate all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = translations[lang][key];
+    if (val !== undefined) {
+      if (val.includes('<') && val.includes('>')) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    }
+  });
+
+  // Translate data-i18n-placeholder
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const val = translations[lang][key];
+    if (val !== undefined) {
+      el.placeholder = val;
+    }
+  });
+
+  // Translate data-i18n-title
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    const val = translations[lang][key];
+    if (val !== undefined) {
+      el.title = val;
+    }
+  });
+
+  // Translate data-i18n-aria
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const key = el.getAttribute('data-i18n-aria');
+    const val = translations[lang][key];
+    if (val !== undefined) {
+      el.setAttribute('aria-label', val);
+    }
+  });
+
+  // Restart typewriter with localized roles
+  initTypewriter();
+
+  // If a project modal is open, re-render it
+  const projectModal = document.getElementById('project-modal');
+  if (projectModal && projectModal.classList.contains('open') && window._currentProjectId && typeof window.openProjectModal === 'function') {
+    window.openProjectModal(window._currentProjectId);
+  }
+
+  if (showNotification) {
+    playSound('click');
+    showToast(translations[lang].toastLangChanged || 'Language changed', 'info');
   }
 }
 
@@ -809,16 +934,24 @@ function initNavbar() {
 /* ===================================================================
    7. TYPEWRITER EFFECT
    =================================================================== */
+let typewriterTimeout = null;
+
 function initTypewriter() {
   const textElement = document.getElementById('typewriter');
   if (!textElement) return;
 
-  const roles = [
-    'Bilgisayar Mühendisliği Öğrencisiyim.',
-    'Veri & Risk Analitiği Adayıyım.',
-    'Finansal Veri & Karar Destek Odaklıyım.',
-    'Python & SQL ile Değer Üretiyorum.'
-  ];
+  if (typewriterTimeout) {
+    clearTimeout(typewriterTimeout);
+  }
+
+  const roles = (typeof translations !== 'undefined' && translations[currentLang]?.typewriterRoles)
+    ? translations[currentLang].typewriterRoles
+    : [
+        'Bilgisayar Mühendisliği Öğrencisiyim.',
+        'Veri & Risk Analitiği Adayıyım.',
+        'Finansal Veri & Karar Destek Odaklıyım.',
+        'Python & SQL ile Değer Üretiyorum.'
+      ];
 
   let roleIndex = 0;
   let charIndex = 0;
@@ -826,7 +959,7 @@ function initTypewriter() {
   let typeSpeed = 100;
 
   function type() {
-    const currentRole = roles[roleIndex];
+    const currentRole = roles[roleIndex] || '';
 
     if (isDeleting) {
       textElement.textContent = currentRole.substring(0, charIndex - 1);
@@ -847,7 +980,7 @@ function initTypewriter() {
       typeSpeed = 450; // Pause before typing new text
     }
 
-    setTimeout(type, typeSpeed);
+    typewriterTimeout = setTimeout(type, typeSpeed);
   }
 
   type();
@@ -1094,8 +1227,20 @@ function initModals() {
   };
 
   function openProjectModal(id) {
-    const data = projectData[id];
+    window._currentProjectId = id;
+    const isEn = currentLang === 'en';
+    const data = (typeof projectModalData !== 'undefined' && projectModalData[id] && projectModalData[id][currentLang])
+      ? projectModalData[id][currentLang]
+      : projectData[id];
     if (!data || !projectContent) return;
+
+    const featuresHeading = isEn 
+      ? '<i class="fa-solid fa-sparkles text-glow"></i> Key Features & Analytical Takeaways:' 
+      : '<i class="fa-solid fa-sparkles text-glow"></i> Temel Özellikler & Analitik Çıkarımlar:';
+    const techHeading = isEn
+      ? '<i class="fa-solid fa-code"></i> Tech Stack & Methodologies:'
+      : '<i class="fa-solid fa-code"></i> Kullanılan Teknolojiler & Beceriler:';
+    const githubBtnLabel = data.githubBtnText || (isEn ? 'Open GitHub Repository & Inspect Code' : 'GitHub Deposunu Aç & Kodları İncele');
 
     projectContent.innerHTML = `
       <div style="margin-bottom: 20px;">
@@ -1108,17 +1253,17 @@ function initModals() {
       <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-size: 1.05rem;">
         ${data.description}
       </p>
-      <h4 style="margin-bottom: 12px; font-size: 1.15rem;"><i class="fa-solid fa-sparkles text-glow"></i> Temel Özellikler & Analitik Çıkarımlar:</h4>
+      <h4 style="margin-bottom: 12px; font-size: 1.15rem;">${featuresHeading}</h4>
       <ul style="padding-left: 20px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.7;">
         ${data.features.map(f => `<li>${f}</li>`).join('')}
       </ul>
-      <h4 style="margin-bottom: 12px; font-size: 1.15rem;"><i class="fa-solid fa-code"></i> Kullanılan Teknolojiler & Beceriler:</h4>
+      <h4 style="margin-bottom: 12px; font-size: 1.15rem;">${techHeading}</h4>
       <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;">
         ${data.tech.map(t => `<span style="font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--bg-glass); border: 1px solid var(--border-color); color: var(--accent-cyan);">${t}</span>`).join('')}
       </div>
       <div style="display: flex; gap: 14px; flex-wrap: wrap;">
         <a href="${data.github}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-glow btn-sm">
-          <i class="fa-brands fa-github"></i> GitHub Deposunu Aç & Kodları İncele
+          <i class="fa-brands fa-github"></i> ${githubBtnLabel}
         </a>
       </div>
     `;
@@ -1130,7 +1275,10 @@ function initModals() {
     }
   }
 
+  window.openProjectModal = openProjectModal;
+
   function closeProjectModal() {
+    window._currentProjectId = null;
     if (projectModal) {
       projectModal.classList.remove('open');
       document.body.style.overflow = '';
@@ -1190,8 +1338,28 @@ function initContactForm() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
+  let lastSubmitTime = 0;
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    // Anti-spam Honeypot check
+    const honeypot = form.querySelector('input[name="_gotcha"]');
+    if (honeypot && honeypot.value) {
+      form.reset();
+      return;
+    }
+
+    // Client-side rate limit (60s cooldown against spam flooding)
+    const now = Date.now();
+    if (now - lastSubmitTime < 60000) {
+      const waitMsg = currentLang === 'en'
+        ? 'Please wait a moment before sending another message.'
+        : 'Yeni bir mesaj göndermeden önce lütfen 1 dakika bekleyiniz.';
+      showToast(waitMsg, 'warning');
+      return;
+    }
+
     let isValid = true;
 
     fields.forEach(({ input, error, isEmail }) => {
@@ -1218,9 +1386,10 @@ function initContactForm() {
     }
 
     // Real asynchronous sending to Formspree
+    const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
     if (submitBtn && btnText) {
       submitBtn.disabled = true;
-      btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Gönderiliyor...';
+      btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ' + (t?.formSending || 'Gönderiliyor...');
     }
 
     const formData = new FormData(form);
@@ -1234,9 +1403,10 @@ function initContactForm() {
     })
       .then(response => {
         if (response.ok) {
+          lastSubmitTime = Date.now();
           form.reset();
           playSound('success');
-          showToast('Mesajınız başarıyla iletildi! En kısa sürede dönüş yapacağım. 🚀', 'success');
+          showToast(t?.formSuccess || 'Mesajınız başarıyla iletildi! En kısa sürede dönüş yapacağım. 🚀', 'success');
         } else {
           return response.json().then(data => {
             throw new Error((data && data.error) || 'Mesaj gönderilemedi');
@@ -1246,12 +1416,12 @@ function initContactForm() {
       .catch(error => {
         console.error('Formspree submission error:', error);
         playSound('click');
-        showToast('Bir hata oluştu. Lütfen doğrudan efefturkel@gmail.com adresine yazınız.', 'warning');
+        showToast(t?.formErrorGeneral || 'Bir hata oluştu. Lütfen doğrudan efefturkel@gmail.com adresine yazınız.', 'warning');
       })
       .finally(() => {
         if (submitBtn && btnText) {
           submitBtn.disabled = false;
-          btnText.innerHTML = 'Mesajı Gönder';
+          btnText.textContent = t?.formBtnSubmit || 'Mesajı Gönder';
         }
       });
   });
