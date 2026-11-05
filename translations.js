@@ -300,7 +300,28 @@ const translations = {
     toastThemeLight: "Aydınlık tema etkinleştirildi ☀️",
     toastMusicPlaying: "🎵 Çalıyor: Eminem - Lose Yourself",
     toastMusicPaused: "Müzik duraklatıldı 🔇",
-    toastMusicPrompt: "Müziği başlatmak için lütfen tıklayın"
+    toastMusicPrompt: "Müziği başlatmak için lütfen tıklayın",
+
+    // Additional Timeline, CV & Contact Labels
+    edu1Tag1: "Veri Yapıları & Algoritmalar",
+    edu1Tag2: "İstatistik & Olasılık",
+    edu1Tag3: "Veritabanı Tasarımı",
+    edu2Tag1: "Veri Bilimi",
+    edu2Tag2: "Yapay Zeka",
+    exp1Tag1: "Operasyonel Süreçler",
+    exp1Tag2: "Finansal & Kasa Mutabakatı",
+    exp1Tag3: "Ekip Koordinasyonu",
+    exp1Tag4: "İş Disiplini",
+    exp2Tag1: "Kredi Risk Analitiği",
+    exp3Tag1: "Finansal Risk Analitiği",
+    exp3Tag2: "İleri SQL & Python",
+    exp3Tag3: "Veri Modelleme",
+    exp3Tag4: "Karar Destek",
+    cvMockupSub: "Bilgisayar Müh. (3. Sınıf) | Veri Bilimi & Analitiği",
+    cvChipUniv: "İst. Nişantaşı Üniv. (3. Sınıf)",
+    cvSkillG1Val: "SQL, MySQL, PostgreSQL, İlişkisel Veritabanı Tasarımı",
+    cvSkillG3Val: "Matplotlib, Microsoft Excel (İleri Düzey), Dashboard Tasarımı",
+    contactLabelEmail: "E-Posta"
   },
 
   en: {
@@ -599,7 +620,28 @@ const translations = {
     toastThemeLight: "Light theme activated ☀️",
     toastMusicPlaying: "🎵 Playing: Eminem - Lose Yourself",
     toastMusicPaused: "Music paused 🔇",
-    toastMusicPrompt: "Click to play background music"
+    toastMusicPrompt: "Click to play background music",
+
+    // Additional Timeline, CV & Contact Labels
+    edu1Tag1: "Data Structures & Algorithms",
+    edu1Tag2: "Statistics & Probability",
+    edu1Tag3: "Database Design",
+    edu2Tag1: "Data Science",
+    edu2Tag2: "Artificial Intelligence",
+    exp1Tag1: "Operational Processes",
+    exp1Tag2: "Financial & Cash Reconciliation",
+    exp1Tag3: "Team Coordination",
+    exp1Tag4: "Work Ethic & Discipline",
+    exp2Tag1: "Credit Risk Analytics",
+    exp3Tag1: "Financial Risk Analytics",
+    exp3Tag2: "Advanced SQL & Python",
+    exp3Tag3: "Data Modeling",
+    exp3Tag4: "Decision Support",
+    cvMockupSub: "Computer Eng. (3rd Year) | Data Science & Analytics",
+    cvChipUniv: "Ist. Nisantasi Univ. (3rd Year)",
+    cvSkillG1Val: "SQL, MySQL, PostgreSQL, Relational Database Design",
+    cvSkillG3Val: "Matplotlib, Microsoft Excel (Advanced), Dashboard Design",
+    contactLabelEmail: "Email"
   }
 };
 

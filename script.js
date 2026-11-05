@@ -201,6 +201,7 @@ function setLanguage(lang, showNotification = false) {
   currentLang = lang;
   localStorage.setItem('efe_lang', lang);
   document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('data-fx-lang', lang);
 
   // Update navbar indicator
   const optTr = document.getElementById('lang-opt-tr');
@@ -277,6 +278,8 @@ function setLanguage(lang, showNotification = false) {
   if (projectModal && projectModal.classList.contains('open') && window._currentProjectId && typeof window.openProjectModal === 'function') {
     window.openProjectModal(window._currentProjectId);
   }
+
+  if (typeof window._refreshFxDots === 'function') window._refreshFxDots();
 
   if (showNotification) {
     playSound('click');
@@ -1479,3 +1482,353 @@ function initScrollReveal() {
 
   revealElements.forEach(el => revealObserver.observe(el));
 }
+
+
+/* ===================================================================
+   16. INTRO CURTAIN & ADVANCED SCROLL / INTERACTION EFFECTS
+   =================================================================== */
+(function () {
+  'use strict';
+
+  const root = document.documentElement;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+  const fxEnabled = () => root.classList.contains('fx-on');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setupIntroCleanup();
+    setupStagger();
+    setupSettleObserver();
+    setupSpotlight();
+    if (finePointer && !reduceMotion) setupMagnetic();
+    const dots = setupDots();
+    setupScrollEffects(dots);
+  });
+
+  function setupIntroCleanup() {
+    const intro = document.getElementById('fx-intro');
+    if (intro) setTimeout(() => intro.remove(), 3800);
+  }
+
+  function setupStagger() {
+    const REVEAL = '.reveal, .reveal-left, .reveal-right, .reveal-zoom';
+    const groups = [
+      '.hero-content', '.stats-grid', '.skills-grid', '.projects-grid',
+      '.about-highlights', '.about-info-grid', '.timeline-wrapper',
+      '.contact-info-panel', '.cv-features-list'
+    ];
+
+    groups.forEach(sel => {
+      document.querySelectorAll(sel).forEach(group => {
+        let i = 0;
+        Array.from(group.children).forEach(child => {
+          if (child.matches(REVEAL)) {
+            child.style.setProperty('--i', String(i % 6));
+            i++;
+          }
+        });
+      });
+    });
+  }
+
+  function setupSettleObserver() {
+    const els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-zoom');
+
+    const settle = el => {
+      if (el.dataset.fxSettling) return;
+      el.dataset.fxSettling = '1';
+      const inHero = !!el.closest('.hero-section');
+      setTimeout(() => el.classList.add('fx-settled'), inHero ? 4800 : 2200);
+    };
+
+    const mo = new MutationObserver(muts => {
+      muts.forEach(m => {
+        if (m.target.classList.contains('active')) settle(m.target);
+      });
+    });
+
+    els.forEach(el => {
+      if (el.classList.contains('active')) settle(el);
+      mo.observe(el, { attributes: true, attributeFilter: ['class'] });
+    });
+  }
+
+  function setupSpotlight() {
+    document.querySelectorAll('.glass-panel').forEach(panel => {
+      if (panel.classList.contains('modal-dialog')) return;
+      if (getComputedStyle(panel).position === 'static') panel.style.position = 'relative';
+      const spot = document.createElement('span');
+      spot.className = 'fx-spot';
+      spot.setAttribute('aria-hidden', 'true');
+      panel.appendChild(spot);
+    });
+
+    if (!finePointer) return;
+    let raf = 0;
+    document.addEventListener('pointermove', e => {
+      if (!fxEnabled() || raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const panel = e.target.closest && e.target.closest('.glass-panel');
+        if (!panel) return;
+        const r = panel.getBoundingClientRect();
+        panel.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        panel.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    }, { passive: true });
+  }
+
+  function setupMagnetic() {
+    const targets = document.querySelectorAll('.btn, .icon-btn, .lang-switch-btn, .back-to-top-btn');
+    targets.forEach(el => {
+      el.addEventListener('pointermove', e => {
+        if (!fxEnabled()) return;
+        const r = el.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+        const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+        el.style.translate = (dx * 10).toFixed(1) + 'px ' + (dy * 8).toFixed(1) + 'px';
+      });
+      el.addEventListener('pointerleave', () => { el.style.translate = ''; });
+    });
+  }
+
+  function setupDots() {
+    const ids = ['hero', 'about', 'skills', 'experience', 'projects', 'cv-section', 'contact'];
+    const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+    const wrap = document.createElement('nav');
+    wrap.className = 'fx-dots';
+    wrap.setAttribute('aria-label', 'Bölüm gezintisi');
+
+    const labelFor = id => {
+      const link = document.querySelector('#nav-links a[href="#' + id + '"]');
+      if (link) return link.textContent.trim();
+      return root.lang === 'en' ? 'Resume' : 'Özgeçmiş';
+    };
+
+    const dots = sections.map(sec => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'fx-dot';
+      b.setAttribute('aria-label', labelFor(sec.id));
+      b.dataset.label = labelFor(sec.id);
+      b.addEventListener('mouseenter', () => { b.dataset.label = labelFor(sec.id); });
+      b.addEventListener('click', () => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      wrap.appendChild(b);
+      return { el: b, sec };
+    });
+
+    document.body.appendChild(wrap);
+    setTimeout(() => wrap.classList.add('fx-visible'), 3600);
+    window._refreshFxDots = () => {
+      dots.forEach(d => {
+        const lbl = labelFor(d.sec.id);
+        d.el.setAttribute('aria-label', lbl);
+        d.el.dataset.label = lbl;
+      });
+    };
+    return dots;
+  }
+
+  function setupScrollEffects(dots) {
+    const sections = Array.from(document.querySelectorAll('main > section'));
+    const auroras = Array.from(document.querySelectorAll('.aurora-glow'));
+    const heroVisual = document.querySelector('.hero-visual');
+    const auroraSpeed = [0.10, 0.18, 0.06];
+    let ticking = false;
+    let wasOn = true;
+
+    function resetInline() {
+      sections.forEach(s => s.style.removeProperty('--exit'));
+      auroras.forEach(a => { a.style.translate = ''; });
+      if (heroVisual) heroVisual.style.translate = '';
+    }
+
+    function update() {
+      ticking = false;
+      const on = fxEnabled();
+      if (!on) {
+        if (wasOn) resetInline();
+        wasOn = false;
+        return;
+      }
+      wasOn = true;
+
+      const vh = window.innerHeight;
+      const y = window.scrollY;
+
+      if (!reduceMotion) {
+        sections.forEach(sec => {
+          const r = sec.getBoundingClientRect();
+          const start = vh * 0.6;
+          const exit = clamp((start - r.bottom) / start, 0, 1);
+          sec.style.setProperty('--exit', exit.toFixed(3));
+        });
+
+        auroras.forEach((a, i) => {
+          a.style.translate = '0 ' + (-y * (auroraSpeed[i] || 0.08)).toFixed(1) + 'px';
+        });
+        if (heroVisual) {
+          const p = clamp(y, 0, vh * 1.2);
+          heroVisual.style.translate = '0 ' + (-p * 0.08).toFixed(1) + 'px';
+        }
+      }
+
+      let activeIdx = 0;
+      dots.forEach((d, i) => {
+        const r = d.sec.getBoundingClientRect();
+        if (r.top <= vh * 0.5 && r.bottom > vh * 0.5) activeIdx = i;
+      });
+      dots.forEach((d, i) => d.el.classList.toggle('active', i === activeIdx));
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+})();
+
+/* ===================================================================
+   17. HERO SCENE — CHARACTER & ANIMATED MULTI-MONITOR STAGE
+   =================================================================== */
+(function () {
+  'use strict';
+
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  function hl(line) {
+    let out = esc(line);
+    if (/^\s*(#|--)/.test(line)) return '<span class="c">' + out + '</span>';
+    out = out
+      .replace(/(&#39;[^&]*?&#39;|'[^']*')/g, '<span class="s">$1</span>')
+      .replace(/\b(import|from|as|def|return|SELECT|FROM|JOIN|INNER|ON|CASE|WHEN|THEN|ELSE|END|GROUP BY|ORDER BY|WITH|AS|AND|for|in|if)\b/g, '<span class="k">$1</span>')
+      .replace(/\b(read_csv|merge|groupby|fit|predict|roc_auc_score|SUM|COUNT|AVG|plot|print|train_test_split|RandomForestClassifier)\b/g, '<span class="f">$1</span>')
+      .replace(/\b(\d+(\.\d+)?)\b/g, '<span class="n">$1</span>');
+    return out;
+  }
+
+  const PY = [
+    "import pandas as pd",
+    "from sklearn.ensemble import RandomForestClassifier",
+    "from sklearn.metrics import roc_auc_score",
+    "",
+    "# Kredi portfoyu yukle",
+    "df = pd.read_csv('loans.csv')",
+    "df = df.merge(customers, on='id')",
+    "df['dpd'] = df['days_past_due']",
+    "",
+    "def risk_tier(dpd):",
+    "    if dpd <= 30: return 'Normal'",
+    "    if dpd <= 90: return 'Watchlist'",
+    "    return 'NPL'",
+    "",
+    "df['tier'] = df['dpd'].apply(risk_tier)",
+    "X = df[features]",
+    "y = df['default']",
+    "model = RandomForestClassifier(300)",
+    "model.fit(X_train, y_train)",
+    "p = model.predict(X_test)",
+    "print(roc_auc_score(y_test, p))"
+  ];
+
+  const SQL = [
+    "-- risk segmentasyonu",
+    "SELECT c.city,",
+    "  l.loan_type,",
+    "  SUM(i.amount) AS total,",
+    "  CASE",
+    "    WHEN i.dpd <= 30 THEN 'Normal'",
+    "    WHEN i.dpd <= 90 THEN 'Watch'",
+    "    ELSE 'NPL'",
+    "  END AS tier",
+    "FROM customers c",
+    "INNER JOIN loans l ON l.cid = c.id",
+    "INNER JOIN installments i",
+    "  ON i.loan_id = l.id",
+    "GROUP BY c.city, l.loan_type",
+    "ORDER BY total DESC;",
+    "",
+    "WITH npl AS (",
+    "  SELECT * FROM loans",
+    "  WHERE dpd > 90",
+    ")",
+    "SELECT COUNT(*) FROM npl;"
+  ];
+
+  function codeTrack(lines) {
+    const html = lines.map(hl).join('\n');
+    return '<code class="mon-code-track">' + html + '\n\n' + html + '\n\n</code>';
+  }
+
+  function dashboard() {
+    const bars = [
+      [0.35, 0.8], [0.5, 0.95], [0.3, 0.65], [0.6, 1], [0.4, 0.75],
+      [0.55, 0.9], [0.25, 0.6], [0.5, 0.85], [0.35, 0.7]
+    ].map((b, i) =>
+      '<span style="--b1:' + b[0] + ';--b2:' + b[1] + ';--bd:' + (2 + (i % 4) * 0.45).toFixed(2) +
+      's;--bdel:' + (i * 0.18).toFixed(2) + 's"></span>'
+    ).join('');
+
+    return (
+      '<div class="mon-dash">' +
+      '<div class="dash-kpis">' +
+      '<div class="dash-kpi">AUC<b>0.94</b></div>' +
+      '<div class="dash-kpi">NPL<b>1.8%</b></div>' +
+      '<div class="dash-kpi">ROWS<b>150K</b></div>' +
+      '</div>' +
+      '<div class="dash-bars">' + bars + '</div>' +
+      '<svg class="dash-line" viewBox="0 0 120 30" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path d="M0,24 C12,22 18,10 30,14 C42,18 48,6 62,9 C76,12 82,20 96,12 C106,7 112,5 120,3"/>' +
+      '</svg>' +
+      '</div>'
+    );
+  }
+
+  function bits() {
+    const chars = ['</>', '{ }', '01', 'SQL', 'df', 'AUC', '=>', 'ML', '1010', 'NPL'];
+    return chars.map((c, i) =>
+      '<span style="--x:' + (8 + i * 9) + '%;--t:' + (8 + (i % 4) * 2) + 's;--d:' + (-i * 1.3).toFixed(1) + 's">' + esc(c) + '</span>'
+    ).join('');
+  }
+
+  function build(mount) {
+    const src = mount.dataset.char || 'assets/efe_character.png';
+    const alt = mount.dataset.alt || 'Efe Fevzi Türkel';
+    const bg = mount.dataset.bg || 'assets/desk_scene.jpg';
+    mount.classList.add('hero-scene');
+    mount.innerHTML =
+      '<div class="scene-stage">' +
+      '<img class="scene-bg" src="' + bg + '" alt="" aria-hidden="true" draggable="false">' +
+      '<div class="screen-glow g-left"></div>' +
+      '<div class="screen-glow g-center"></div>' +
+      '<div class="screen-glow g-right"></div>' +
+      '<div class="scene-screen s-left"><div class="screen-inner">' +
+      '<div class="mon-bar"><i></i><i></i><i></i><span>risk_model.py</span></div>' +
+      '<div class="mon-code">' + codeTrack(PY) + '</div>' +
+      '</div></div>' +
+      '<div class="scene-screen s-center"><div class="screen-inner">' +
+      '<div class="mon-bar"><i></i><i></i><i></i><span>credit_risk.sql</span></div>' +
+      '<div class="mon-code">' + codeTrack(SQL) + '</div>' +
+      '</div></div>' +
+      '<div class="scene-screen s-right"><div class="screen-inner">' +
+      '<div class="mon-bar"><i></i><i></i><i></i><span>dashboard.xlsx</span></div>' +
+      dashboard() +
+      '</div></div>' +
+      '</div>' +
+      '<div class="scene-backlight"></div>' +
+      '<div class="scene-bits" aria-hidden="true">' + bits() + '</div>' +
+      '<img class="scene-char" id="profile-img" src="' + src + '" alt="' + alt + '" draggable="false">';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const mount = document.getElementById('hero-scene-mount');
+    if (mount) build(mount);
+  });
+})();

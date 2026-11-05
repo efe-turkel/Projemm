@@ -36,9 +36,6 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" href="style.css">
-  <!-- Scroll animasyon katmanı + hero sahnesi -->
-  <link rel="stylesheet" href="demo-effects.css">
-  <link rel="stylesheet" href="hero-scene.css">
   <script>
     // Animasyon katmanını ilk boyamadan önce etkinleştir (titreme olmasın)
     document.documentElement.classList.add('fx-on');
@@ -54,8 +51,8 @@
       <div class="fx-intro-name" id="fx-intro-name"></div>
       <div class="fx-intro-line"></div>
       <div class="fx-intro-sub">
-        <span class="fx-sub-tr">Veri Bilimi<span>·</span>Finansal Risk Analitiği</span>
-        <span class="fx-sub-en">Data Science<span>·</span>Financial Risk Analytics</span>
+                <span class="fx-sub-tr">Veri Bilimi</span>
+                <span class="fx-sub-en">Data Science</span>
       </div>
     </div>
   </div>
@@ -107,18 +104,25 @@
 
       <!-- Desktop Navigation Menu -->
       <nav class="nav-links" id="nav-links">
-        <a href="#hero" class="nav-link active"><i class="fa-solid fa-house"></i> <span data-i18n="navHome">Başlangıç</span></a>
-        <a href="#about" class="nav-link"><i class="fa-regular fa-user"></i> <span data-i18n="navAbout">Hakkımda</span></a>
-        <a href="#skills" class="nav-link"><i class="fa-solid fa-chart-simple"></i> <span data-i18n="navSkills">Yetenekler</span></a>
-        <a href="#experience" class="nav-link"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="navExperience">Eğitim & Yolculuk</span></a>
-        <a href="#projects" class="nav-link"><i class="fa-solid fa-diagram-project"></i> <span data-i18n="navProjects">Projeler</span></a>
-        <a href="#contact" class="nav-link"><i class="fa-regular fa-paper-plane"></i> <span data-i18n="navContact">İletişim</span></a>
+        <a href="#hero" class="nav-link active"><i class="fa-solid fa-house"></i> <span
+            data-i18n="navHome">Başlangıç</span></a>
+        <a href="#about" class="nav-link"><i class="fa-regular fa-user"></i> <span
+            data-i18n="navAbout">Hakkımda</span></a>
+        <a href="#skills" class="nav-link"><i class="fa-solid fa-chart-simple"></i> <span
+            data-i18n="navSkills">Yetenekler</span></a>
+        <a href="#experience" class="nav-link"><i class="fa-solid fa-graduation-cap"></i> <span
+            data-i18n="navExperience">Eğitim & Yolculuk</span></a>
+        <a href="#projects" class="nav-link"><i class="fa-solid fa-diagram-project"></i> <span
+            data-i18n="navProjects">Projeler</span></a>
+        <a href="#contact" class="nav-link"><i class="fa-regular fa-paper-plane"></i> <span
+            data-i18n="navContact">İletişim</span></a>
       </nav>
 
       <!-- Action Utilities -->
       <div class="nav-actions">
         <!-- Language Switcher Button (TR / EN) -->
-        <button class="lang-switch-btn" id="lang-toggle" aria-label="Dili Değiştir / Switch Language" title="Türkçe / English">
+        <button class="lang-switch-btn" id="lang-toggle" aria-label="Dili Değiştir / Switch Language"
+          title="Türkçe / English">
           <i class="fa-solid fa-globe"></i>
           <span class="lang-opt active" id="lang-opt-tr">TR</span>
           <span class="lang-sep">/</span>
@@ -132,7 +136,8 @@
         </button>
 
         <!-- Theme Toggle Button -->
-        <button class="icon-btn" id="theme-toggle" aria-label="Temayı Değiştir" title="Karanlık/Aydınlık Tema">
+        <button class="icon-btn" id="theme-toggle" aria-label="Temayı Değiştir" title="Karanlık/Aydınlık Tema"
+          data-i18n-title="themeTitle">
           <i class="fa-solid fa-moon"></i>
         </button>
 
@@ -159,12 +164,18 @@
           <span id="mobile-lang-label">Switch to English (EN)</span>
         </button>
       </div>
-      <a href="#hero" class="mobile-nav-link"><i class="fa-solid fa-house"></i> <span data-i18n="navHome">Başlangıç</span></a>
-      <a href="#about" class="mobile-nav-link"><i class="fa-regular fa-user"></i> <span data-i18n="navAbout">Hakkımda</span></a>
-      <a href="#skills" class="mobile-nav-link"><i class="fa-solid fa-chart-simple"></i> <span data-i18n="navSkills">Yetenekler</span></a>
-      <a href="#experience" class="mobile-nav-link"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="navExperience">Eğitim & Yolculuk</span></a>
-      <a href="#projects" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> <span data-i18n="navProjects">Projeler</span></a>
-      <a href="#contact" class="mobile-nav-link"><i class="fa-regular fa-paper-plane"></i> <span data-i18n="navContact">İletişim</span></a>
+      <a href="#hero" class="mobile-nav-link"><i class="fa-solid fa-house"></i> <span
+          data-i18n="navHome">Başlangıç</span></a>
+      <a href="#about" class="mobile-nav-link"><i class="fa-regular fa-user"></i> <span
+          data-i18n="navAbout">Hakkımda</span></a>
+      <a href="#skills" class="mobile-nav-link"><i class="fa-solid fa-chart-simple"></i> <span
+          data-i18n="navSkills">Yetenekler</span></a>
+      <a href="#experience" class="mobile-nav-link"><i class="fa-solid fa-graduation-cap"></i> <span
+          data-i18n="navExperience">Eğitim & Yolculuk</span></a>
+      <a href="#projects" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> <span
+          data-i18n="navProjects">Projeler</span></a>
+      <a href="#contact" class="mobile-nav-link"><i class="fa-regular fa-paper-plane"></i> <span
+          data-i18n="navContact">İletişim</span></a>
       <div class="mobile-drawer-socials">
         <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i
             class="fa-brands fa-github"></i></a>
@@ -185,12 +196,14 @@
           <!-- Availability Badge -->
           <div class="hero-badge reveal">
             <span class="pulse-status"></span>
-            <span data-i18n="heroBadge">İstanbul Nişantaşı Üniv. Bilgisayar Müh. (3. Sınıf) • Staj & Projelere Açık</span>
+            <span data-i18n="heroBadge">İstanbul Nişantaşı Üniv. Bilgisayar Müh. (3. Sınıf) • Staj & Projelere
+              Açık</span>
           </div>
 
           <!-- Main Headline -->
           <h1 class="hero-title reveal">
-            <span data-i18n="heroGreeting">Merhaba, Ben </span><span class="gradient-text text-glow">Efe Fevzi Türkel</span>
+            <span data-i18n="heroGreeting">Merhaba, Ben </span><span class="gradient-text text-glow">Efe Fevzi
+              Türkel</span>
             <br>
             <span class="typewriter-prefix" data-i18n="typewriterPrefix">Ben </span>
             <span class="typewriter-text" id="typewriter"></span>
@@ -250,7 +263,7 @@
               <div class="avatar-glow-ring"></div>
               <div class="avatar-image-container">
                 <!-- Karakter + kod akan monitörler (hero-scene.js doldurur) -->
-                <div id="hero-scene-mount" data-char="assets/efe_character_a.png"
+                <div id="hero-scene-mount" data-char="assets/efe_character.png"
                   data-alt="Efe Fevzi Türkel - animasyon karakteri"></div>
               </div>
 
@@ -430,9 +443,12 @@
       <div class="container">
         <!-- Section Header -->
         <div class="section-header reveal">
-          <span class="section-tag"><i class="fa-regular fa-id-badge"></i> <span data-i18n="aboutTag">Tanışalım</span></span>
-          <h2 class="section-title"><span data-i18n="aboutTitlePre">Hakkımda & </span><span class="gradient-text" data-i18n="aboutTitleGrad">Vizyonum</span></h2>
-          <p class="section-subtitle" data-i18n="aboutSubtitle">Mühendislik temellerini verinin gücüyle birleştirerek iş kararlarına rehberlik
+          <span class="section-tag"><i class="fa-regular fa-id-badge"></i> <span
+              data-i18n="aboutTag">Tanışalım</span></span>
+          <h2 class="section-title"><span data-i18n="aboutTitlePre">Hakkımda & </span><span class="gradient-text"
+              data-i18n="aboutTitleGrad">Vizyonum</span></h2>
+          <p class="section-subtitle" data-i18n="aboutSubtitle">Mühendislik temellerini verinin gücüyle birleştirerek iş
+            kararlarına rehberlik
             eden içgörüler üretiyorum.</p>
         </div>
 
@@ -456,7 +472,8 @@
                 segmentasyonu ve portföy kârlılık metrikleri</strong> üzerine yoğunlaşıyorum.
             </p>
             <p class="about-paragraph" data-i18n="aboutP3">
-              Aynı zamanda Mart 2025 - Kasım 2026 döneminde <strong>OPET</strong> bünyesindeki görevimle dinamik ve yüksek tempolu
+              Aynı zamanda Mart 2025 - Kasım 2026 döneminde <strong>OPET</strong> bünyesindeki görevimle dinamik ve
+              yüksek tempolu
               çalışma ortamında operasyonel süreç yönetimi, vardiya sorumluluğu ve güçlü iş disiplini deneyimi kazandım.
               <strong>Coderspace</strong> onaylı <em>Veri Bilimi ve Yapay Zeka Sertifikası</em> sahibiyim.
             </p>
@@ -464,27 +481,33 @@
             <!-- Quick Details Pill Grid -->
             <div class="about-info-grid">
               <div class="info-item">
-                <span class="info-label"><i class="fa-solid fa-university"></i> <span data-i18n="infoUnivLabel">Üniversite:</span></span>
+                <span class="info-label"><i class="fa-solid fa-university"></i> <span
+                    data-i18n="infoUnivLabel">Üniversite:</span></span>
                 <span class="info-value" data-i18n="infoUnivVal">İstanbul Nişantaşı Üniversitesi</span>
               </div>
               <div class="info-item">
-                <span class="info-label"><i class="fa-solid fa-user-graduate"></i> <span data-i18n="infoDeptLabel">Bölüm & Sınıf:</span></span>
+                <span class="info-label"><i class="fa-solid fa-user-graduate"></i> <span data-i18n="infoDeptLabel">Bölüm
+                    & Sınıf:</span></span>
                 <span class="info-value" data-i18n="infoDeptVal">Bilgisayar Müh. (3. Sınıf / Ekim 2024 - Devam)</span>
               </div>
               <div class="info-item">
-                <span class="info-label"><i class="fa-solid fa-location-dot"></i> <span data-i18n="infoLocLabel">Konum:</span></span>
+                <span class="info-label"><i class="fa-solid fa-location-dot"></i> <span
+                    data-i18n="infoLocLabel">Konum:</span></span>
                 <span class="info-value" data-i18n="infoLocVal">İstanbul, Türkiye (Hibrit / Uzaktan / Ofis)</span>
               </div>
               <div class="info-item">
-                <span class="info-label"><i class="fa-solid fa-briefcase"></i> <span data-i18n="infoGoalLabel">Kariyer Hedefi:</span></span>
+                <span class="info-label"><i class="fa-solid fa-briefcase"></i> <span data-i18n="infoGoalLabel">Kariyer
+                    Hedefi:</span></span>
                 <span class="info-value" data-i18n="infoGoalVal">Veri Analitiği & Finansal Risk Stajyeri</span>
               </div>
               <div class="info-item">
-                <span class="info-label"><i class="fa-solid fa-language"></i> <span data-i18n="infoLangLabel">Diller:</span></span>
+                <span class="info-label"><i class="fa-solid fa-language"></i> <span
+                    data-i18n="infoLangLabel">Diller:</span></span>
                 <span class="info-value" data-i18n="infoLangVal">Türkçe (Anadil), İngilizce (İyi)</span>
               </div>
               <div class="info-item">
-                <span class="info-label"><i class="fa-solid fa-medal"></i> <span data-i18n="infoSportLabel">Spor & Disiplin:</span></span>
+                <span class="info-label"><i class="fa-solid fa-medal"></i> <span data-i18n="infoSportLabel">Spor &
+                    Disiplin:</span></span>
                 <span class="info-value" data-i18n="infoSportVal">Taekwondo (Lisanslı Dereceler) & Fitness</span>
               </div>
             </div>
@@ -508,7 +531,8 @@
               <div class="highlight-icon"><i class="fa-solid fa-broom"></i></div>
               <div class="highlight-text">
                 <h4 data-i18n="high1Title">Keşifsel Veri Analizi (EDA) & Temizlik</h4>
-                <p data-i18n="high1Desc">Ham veriyi eksik değerlerden ve aykırılıklardan arındırır, istatistiksel dağılımlar ve korelasyon
+                <p data-i18n="high1Desc">Ham veriyi eksik değerlerden ve aykırılıklardan arındırır, istatistiksel
+                  dağılımlar ve korelasyon
                   testleriyle analiz için en uygun forma getiririm.</p>
               </div>
             </div>
@@ -517,7 +541,8 @@
               <div class="highlight-icon"><i class="fa-solid fa-chart-column"></i></div>
               <div class="highlight-text">
                 <h4 data-i18n="high2Title">İş Zekası & Power BI Dashboard</h4>
-                <p data-i18n="high2Desc">Karmaşık iş metriklerini, satış trendlerini ve müşteri segmentlerini karar vericiler için anlık ve
+                <p data-i18n="high2Desc">Karmaşık iş metriklerini, satış trendlerini ve müşteri segmentlerini karar
+                  vericiler için anlık ve
                   anlaşılır interaktif gösterge panellerine dönüştürürüm.</p>
               </div>
             </div>
@@ -526,7 +551,8 @@
               <div class="highlight-icon"><i class="fa-solid fa-brain"></i></div>
               <div class="highlight-text">
                 <h4 data-i18n="high3Title">Makine Öğrenmesi & Modelleme</h4>
-                <p data-i18n="high3Desc">Scikit-Learn kütüphaneleriyle regresyon, sınıflandırma ve kümeleme algoritmaları kurgular; ROC-AUC,
+                <p data-i18n="high3Desc">Scikit-Learn kütüphaneleriyle regresyon, sınıflandırma ve kümeleme
+                  algoritmaları kurgular; ROC-AUC,
                   F1-skoru gibi metriklerle modelleri valide ederim.</p>
               </div>
             </div>
@@ -535,7 +561,8 @@
               <div class="highlight-icon"><i class="fa-solid fa-database"></i></div>
               <div class="highlight-text">
                 <h4 data-i18n="high4Title">İlişkisel Veritabanları & İleri SQL</h4>
-                <p data-i18n="high4Desc">PostgreSQL ve MySQL ortamlarında çok tablolu JOIN'ler, Window Functions ve alt sorgularla büyük veri
+                <p data-i18n="high4Desc">PostgreSQL ve MySQL ortamlarında çok tablolu JOIN'ler, Window Functions ve alt
+                  sorgularla büyük veri
                   setlerinden hızlı içgörüler sorgularım.</p>
               </div>
             </div>
@@ -551,9 +578,12 @@
       <div class="container">
         <!-- Section Header -->
         <div class="section-header reveal">
-          <span class="section-tag"><i class="fa-solid fa-cubes"></i> <span data-i18n="skillsTag">Yetenekler & Araçlar</span></span>
-          <h2 class="section-title"><span data-i18n="skillsTitlePre">Uzmanlık </span><span class="gradient-text" data-i18n="skillsTitleGrad">Alanlarım</span></h2>
-          <p class="section-subtitle" data-i18n="skillsSubtitle">Projelerimde kullandığım güncel teknolojiler, programlama dilleri ve geliştirme
+          <span class="section-tag"><i class="fa-solid fa-cubes"></i> <span data-i18n="skillsTag">Yetenekler &
+              Araçlar</span></span>
+          <h2 class="section-title"><span data-i18n="skillsTitlePre">Uzmanlık </span><span class="gradient-text"
+              data-i18n="skillsTitleGrad">Alanlarım</span></h2>
+          <p class="section-subtitle" data-i18n="skillsSubtitle">Projelerimde kullandığım güncel teknolojiler,
+            programlama dilleri ve geliştirme
             araçları.</p>
         </div>
 
@@ -759,9 +789,12 @@
       <div class="container">
         <!-- Section Header -->
         <div class="section-header reveal">
-          <span class="section-tag"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="expTag">Akademik & Proje Yolculuğum</span></span>
-          <h2 class="section-title"><span data-i18n="expTitlePre">Eğitim & </span><span class="gradient-text" data-i18n="expTitleGrad">Deneyim</span></h2>
-          <p class="section-subtitle" data-i18n="expSubtitle">Mühendislik temelleri, kurumsal iş disiplini ve finansal veri projelerim.</p>
+          <span class="section-tag"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="expTag">Akademik & Proje
+              Yolculuğum</span></span>
+          <h2 class="section-title"><span data-i18n="expTitlePre">Eğitim & </span><span class="gradient-text"
+              data-i18n="expTitleGrad">Deneyim</span></h2>
+          <p class="section-subtitle" data-i18n="expSubtitle">Mühendislik temelleri, kurumsal iş disiplini ve finansal
+            veri projelerim.</p>
         </div>
 
         <!-- Toggle Switcher -->
@@ -786,10 +819,12 @@
             <div class="timeline-content glass-panel">
               <div class="timeline-top">
                 <span class="timeline-badge current" data-i18n="edu1Badge">Ekim 2024 - Devam Ediyor (3. Sınıf)</span>
-                <span class="timeline-location"><i class="fa-solid fa-university"></i> <span data-i18n="edu1Location">İstanbul / Lisans</span></span>
+                <span class="timeline-location"><i class="fa-solid fa-university"></i> <span
+                    data-i18n="edu1Location">İstanbul / Lisans</span></span>
               </div>
               <h3 class="timeline-role" data-i18n="edu1Role">Bilgisayar Mühendisliği Lisans Programı</h3>
-              <h4 class="timeline-company"><i class="fa-solid fa-building-columns"></i> <span data-i18n="edu1Company">İstanbul Nişantaşı Üniversitesi</span>
+              <h4 class="timeline-company"><i class="fa-solid fa-building-columns"></i> <span
+                  data-i18n="edu1Company">İstanbul Nişantaşı Üniversitesi</span>
               </h4>
               <p class="timeline-desc" data-i18n="edu1Desc">
                 Veri Yapıları ve Algoritmalar, Veritabanı Yönetim Sistemleri (RDBMS), İstatistik ve Olasılık, Bilgisayar
@@ -799,9 +834,9 @@
               <div class="timeline-tech-stack">
                 <span>Python</span>
                 <span>SQL (MySQL & PostgreSQL)</span>
-                <span>Veri Yapıları & Algoritmalar</span>
-                <span>İstatistik & Olasılık</span>
-                <span>Veritabanı Tasarımı</span>
+                <span data-i18n="edu1Tag1">Veri Yapıları & Algoritmalar</span>
+                <span data-i18n="edu1Tag2">İstatistik & Olasılık</span>
+                <span data-i18n="edu1Tag3">Veritabanı Tasarımı</span>
               </div>
             </div>
           </div>
@@ -815,17 +850,19 @@
             <div class="timeline-content glass-panel">
               <div class="timeline-top">
                 <span class="timeline-badge" data-i18n="edu2Badge">Eylül 2026</span>
-                <span class="timeline-location"><i class="fa-solid fa-certificate"></i> <span data-i18n="edu2Location">Profesyonel Sertifika</span></span>
+                <span class="timeline-location"><i class="fa-solid fa-certificate"></i> <span
+                    data-i18n="edu2Location">Profesyonel Sertifika</span></span>
               </div>
               <h3 class="timeline-role" data-i18n="edu2Role">Veri Bilimi ve Yapay Zeka Sertifikası</h3>
-              <h4 class="timeline-company"><i class="fa-solid fa-award"></i> <span data-i18n="edu2Company">Coderspace</span></h4>
+              <h4 class="timeline-company"><i class="fa-solid fa-award"></i> <span
+                  data-i18n="edu2Company">Coderspace</span></h4>
               <p class="timeline-desc" data-i18n="edu2Desc">
                 Python ile Veri Analizi, Scikit-Learn ile Makine Öğrenmesi, Keşifsel Veri Analizi (EDA), Yapay Zeka
                 temelleri ve veri bilimi metodolojileri üzerine onaylı uzmanlık sertifikası.
               </p>
               <div class="timeline-tech-stack">
-                <span>Veri Bilimi</span>
-                <span>Yapay Zeka</span>
+                <span data-i18n="edu2Tag1">Veri Bilimi</span>
+                <span data-i18n="edu2Tag2">Yapay Zeka</span>
                 <span>Pandas & NumPy</span>
                 <span>Matplotlib & Seaborn</span>
                 <span>Scikit-Learn</span>
@@ -847,19 +884,21 @@
             <div class="timeline-content glass-panel">
               <div class="timeline-top">
                 <span class="timeline-badge" data-i18n="exp1Badge">Mart 2025 - Kasım 2026</span>
-                <span class="timeline-location"><i class="fa-solid fa-map-pin"></i> <span data-i18n="exp1Location">İstanbul / Saha & Operasyon</span></span>
+                <span class="timeline-location"><i class="fa-solid fa-map-pin"></i> <span
+                    data-i18n="exp1Location">İstanbul / Saha & Operasyon</span></span>
               </div>
               <h3 class="timeline-role" data-i18n="exp1Role">Akaryakıt Satış Görevlisi</h3>
-              <h4 class="timeline-company"><i class="fa-solid fa-gas-pump"></i> <span data-i18n="exp1Company">OPET</span></h4>
+              <h4 class="timeline-company"><i class="fa-solid fa-gas-pump"></i> <span
+                  data-i18n="exp1Company">OPET</span></h4>
               <p class="timeline-desc" data-i18n="exp1Desc">
                 Yoğun ve dinamik saha operasyonlarında müşteri hizmetleri, finansal mutabakat ve operasyonel süreç
                 yürütüldü. Vardiya intizamı, sorumluluk, yüksek iş disiplini ve takım koordinasyonu başarıyla sağlandı.
               </p>
               <div class="timeline-tech-stack">
-                <span>Operasyonel Süreçler</span>
-                <span>Finansal & Kasa Mutabakatı</span>
-                <span>Ekip Koordinasyonu</span>
-                <span>İş Disiplini</span>
+                <span data-i18n="exp1Tag1">Operasyonel Süreçler</span>
+                <span data-i18n="exp1Tag2">Finansal & Kasa Mutabakatı</span>
+                <span data-i18n="exp1Tag3">Ekip Koordinasyonu</span>
+                <span data-i18n="exp1Tag4">İş Disiplini</span>
               </div>
             </div>
           </div>
@@ -873,10 +912,12 @@
             <div class="timeline-content glass-panel">
               <div class="timeline-top">
                 <span class="timeline-badge" data-i18n="exp2Badge">Eylül 2026</span>
-                <span class="timeline-location"><i class="fa-solid fa-laptop-code"></i> <span data-i18n="exp2Location">Bağımsız & Portfolyo Projeleri</span></span>
+                <span class="timeline-location"><i class="fa-solid fa-laptop-code"></i> <span
+                    data-i18n="exp2Location">Bağımsız & Portfolyo Projeleri</span></span>
               </div>
               <h3 class="timeline-role" data-i18n="exp2Role">Veri Analitiği & Portföy Performans Projeleri</h3>
-              <h4 class="timeline-company"><i class="fa-solid fa-flask"></i> <span data-i18n="exp2Company">E-Ticaret & Kredi Risk Analitiği</span></h4>
+              <h4 class="timeline-company"><i class="fa-solid fa-flask"></i> <span data-i18n="exp2Company">E-Ticaret &
+                  Kredi Risk Analitiği</span></h4>
               <p class="timeline-desc" data-i18n="exp2Desc">
                 E-Commerce Sales & Operational Analytics Dashboard ve Kredi Risk Analitiği & Portföy Performans Paneli
                 projeleri geliştirildi. SQL, Python (Pandas, Matplotlib), MySQL ve Excel kullanılarak veri temizleme,
@@ -885,7 +926,7 @@
               <div class="timeline-tech-stack">
                 <span>SQL (MySQL/PostgreSQL)</span>
                 <span>Python & Pandas</span>
-                <span>Kredi Risk Analitiği</span>
+                <span data-i18n="exp2Tag1">Kredi Risk Analitiği</span>
                 <span>Excel & Dashboard</span>
               </div>
             </div>
@@ -900,10 +941,12 @@
             <div class="timeline-content glass-panel">
               <div class="timeline-top">
                 <span class="timeline-badge current" data-i18n="exp3Badge">Açık Fırsatlar</span>
-                <span class="timeline-location"><i class="fa-solid fa-bullseye"></i> <span data-i18n="exp3Location">İstanbul / Hibrit / Remote</span></span>
+                <span class="timeline-location"><i class="fa-solid fa-bullseye"></i> <span
+                    data-i18n="exp3Location">İstanbul / Hibrit / Remote</span></span>
               </div>
               <h3 class="timeline-role" data-i18n="exp3Role">Stajyer / Junior Veri & Risk Analisti</h3>
-              <h4 class="timeline-company"><i class="fa-solid fa-handshake"></i> <span data-i18n="exp3Company">Kariyer Hedefi & Staj Arayışı</span></h4>
+              <h4 class="timeline-company"><i class="fa-solid fa-handshake"></i> <span data-i18n="exp3Company">Kariyer
+                  Hedefi & Staj Arayışı</span></h4>
               <p class="timeline-desc" data-i18n="exp3Desc">
                 İstanbul Nişantaşı Üniversitesi Bilgisayar Mühendisliği 3. sınıf öğrencisi olarak; veri analitiği,
                 finansal risk modelleme ve kurumsal karar destek ekiplerinde staj ve junior pozisyonlar için hazır.
@@ -911,10 +954,10 @@
                 SQL, Python ve analitik bakış açısıyla kuruma ölçülebilir katma değer sağlamayı hedeflemektedir.
               </p>
               <div class="timeline-tech-stack">
-                <span>Finansal Risk Analitiği</span>
-                <span>İleri SQL & Python</span>
-                <span>Veri Modelleme</span>
-                <span>Karar Destek</span>
+                <span data-i18n="exp3Tag1">Finansal Risk Analitiği</span>
+                <span data-i18n="exp3Tag2">İleri SQL & Python</span>
+                <span data-i18n="exp3Tag3">Veri Modelleme</span>
+                <span data-i18n="exp3Tag4">Karar Destek</span>
               </div>
             </div>
           </div>
@@ -929,9 +972,12 @@
       <div class="container">
         <!-- Section Header -->
         <div class="section-header reveal">
-          <span class="section-tag"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="projTag">Ürettiklerim</span></span>
-          <h2 class="section-title"><span data-i18n="projTitlePre">Öne Çıkan </span><span class="gradient-text" data-i18n="projTitleGrad">Projelerim</span></h2>
-          <p class="section-subtitle" data-i18n="projSubtitle">GitHub üzerindeki açık kaynaklı veri analitiği, SQL veri modelleme ve interaktif
+          <span class="section-tag"><i class="fa-solid fa-chart-pie"></i> <span
+              data-i18n="projTag">Ürettiklerim</span></span>
+          <h2 class="section-title"><span data-i18n="projTitlePre">Öne Çıkan </span><span class="gradient-text"
+              data-i18n="projTitleGrad">Projelerim</span></h2>
+          <p class="section-subtitle" data-i18n="projSubtitle">GitHub üzerindeki açık kaynaklı veri analitiği, SQL veri
+            modelleme ve interaktif
             karar destek paneli çalışmalarım.</p>
         </div>
 
@@ -960,7 +1006,8 @@
             </div>
             <div class="project-body">
               <div class="project-meta">
-                <span class="project-featured-star"><i class="fa-solid fa-star"></i> <span data-i18n="proj1Featured">Öne Çıkan</span></span>
+                <span class="project-featured-star"><i class="fa-solid fa-star"></i> <span data-i18n="proj1Featured">Öne
+                    Çıkan</span></span>
                 <span class="project-date">2026</span>
               </div>
               <h3 class="project-title" data-i18n="proj1Title">Kredi Risk Analitiği & Portföy Performans Paneli</h3>
@@ -982,7 +1029,8 @@
                   <i class="fa-brands fa-github"></i> <span data-i18n="projBtnCode">Kodlar</span>
                 </a>
                 <a href="#projects" class="project-link project-live-demo" data-project="1" title="Detaylı İncele">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="projBtnDetail">Proje Detayı</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="projBtnDetail">Proje
+                    Detayı</span>
                 </a>
               </div>
             </div>
@@ -1002,7 +1050,8 @@
             </div>
             <div class="project-body">
               <div class="project-meta">
-                <span class="project-featured-star"><i class="fa-solid fa-bolt"></i> <span data-i18n="proj2Featured">Yeni</span></span>
+                <span class="project-featured-star"><i class="fa-solid fa-bolt"></i> <span
+                    data-i18n="proj2Featured">Yeni</span></span>
                 <span class="project-date">2026</span>
               </div>
               <h3 class="project-title" data-i18n="proj2Title">E-Ticaret Satış & Operasyonel Analitik Paneli</h3>
@@ -1024,7 +1073,8 @@
                   <i class="fa-brands fa-github"></i> <span data-i18n="projBtnCode">Kodlar</span>
                 </a>
                 <a href="#projects" class="project-link project-live-demo" data-project="2" title="Detaylı İncele">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="projBtnDetail">Proje Detayı</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="projBtnDetail">Proje
+                    Detayı</span>
                 </a>
               </div>
             </div>
@@ -1039,17 +1089,22 @@
       <div class="container">
         <div class="cv-highlight-card glass-panel reveal">
           <div class="cv-highlight-content">
-            <span class="section-tag"><i class="fa-regular fa-file-pdf"></i> <span data-i18n="cvTag">Özgeçmiş Dokümanı</span></span>
-            <h2 class="cv-title"><span data-i18n="cvTitlePre">Detaylı CV'mi </span><span class="gradient-text" data-i18n="cvTitleGrad">İnceleyin veya İndirin</span></h2>
+            <span class="section-tag"><i class="fa-regular fa-file-pdf"></i> <span data-i18n="cvTag">Özgeçmiş
+                Dokümanı</span></span>
+            <h2 class="cv-title"><span data-i18n="cvTitlePre">Detaylı CV'mi </span><span class="gradient-text"
+                data-i18n="cvTitleGrad">İnceleyin veya İndirin</span></h2>
             <p class="cv-description" data-i18n="cvDesc">
               İstanbul Nişantaşı Üniversitesi Bilgisayar Mühendisliği eğitimimi, veri analitiği yetkinliklerimi,
               bağımsız projelerimi ve sertifikalarımı içeren güncel CV dokümanımı doğrudan tarayıcınızda
               görüntüleyebilir veya PDF olarak yazdırabilirsiniz.
             </p>
             <div class="cv-features-list">
-              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> <span data-i18n="cvFeat1">Doğrulanmış Akademik Bilgiler & Nişantaşı Üniv. 3. Sınıf</span></div>
-              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> <span data-i18n="cvFeat2">Python, SQL, EDA, Makine Öğrenmesi & Power BI Yetkinlikleri</span></div>
-              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> <span data-i18n="cvFeat3">Zorunlu Staj & Junior Rol Fırsatlarına Hazır Format</span></div>
+              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> <span data-i18n="cvFeat1">Doğrulanmış
+                  Akademik Bilgiler & Nişantaşı Üniv. 3. Sınıf</span></div>
+              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> <span data-i18n="cvFeat2">Python, SQL,
+                  EDA, Makine Öğrenmesi & Power BI Yetkinlikleri</span></div>
+              <div class="cv-feat-item"><i class="fa-solid fa-circle-check"></i> <span data-i18n="cvFeat3">Zorunlu Staj
+                  & Junior Rol Fırsatlarına Hazır Format</span></div>
             </div>
             <div class="cv-actions-row">
               <button class="btn btn-primary-glow" id="cta-open-cv-btn">
@@ -1067,7 +1122,7 @@
               <div class="cv-sheet-header">
                 <div class="cv-sheet-info">
                   <h4>EFE TÜRKEL</h4>
-                  <p>Bilgisayar Müh. (3. Sınıf) | Veri Bilimi & Analitiği</p>
+                  <p data-i18n="cvMockupSub">Bilgisayar Müh. (3. Sınıf) | Veri Bilimi & Analitiği</p>
                 </div>
               </div>
               <div class="cv-sheet-lines">
@@ -1091,9 +1146,12 @@
       <div class="container">
         <!-- Section Header -->
         <div class="section-header reveal">
-          <span class="section-tag"><i class="fa-regular fa-paper-plane"></i> <span data-i18n="contactTag">İletişim</span></span>
-          <h2 class="section-title"><span data-i18n="contactTitlePre">Birlikte </span><span class="gradient-text" data-i18n="contactTitleGrad">Veriye Değer Katalım</span></h2>
-          <p class="section-subtitle" data-i18n="contactSubtitle">Veri analitiği odaklı bir staj, proje işbirliği veya kariyer fırsatı için bana
+          <span class="section-tag"><i class="fa-regular fa-paper-plane"></i> <span
+              data-i18n="contactTag">İletişim</span></span>
+          <h2 class="section-title"><span data-i18n="contactTitlePre">Birlikte </span><span class="gradient-text"
+              data-i18n="contactTitleGrad">Veriye Değer Katalım</span></h2>
+          <p class="section-subtitle" data-i18n="contactSubtitle">Veri analitiği odaklı bir staj, proje işbirliği veya
+            kariyer fırsatı için bana
             dilediğiniz zaman ulaşabilirsiniz.</p>
         </div>
 
@@ -1125,7 +1183,7 @@
             <div class="contact-card glass-panel">
               <div class="contact-card-icon mail-color"><i class="fa-regular fa-envelope"></i></div>
               <div class="contact-card-content">
-                <span class="contact-label">E-Posta</span>
+                <span class="contact-label" data-i18n="contactLabelEmail">E-Posta</span>
                 <a href="mailto:efefturkel@gmail.com" class="contact-value"
                   id="contact-mail-link">efefturkel@gmail.com</a>
               </div>
@@ -1136,8 +1194,10 @@
 
           <!-- Interactive Contact Form -->
           <div class="contact-form-panel glass-panel reveal-right">
-            <h3 class="form-title"><i class="fa-regular fa-paper-plane text-glow"></i> <span data-i18n="formTitle">Bana Mesaj Gönder</span></h3>
-            <p class="form-desc" data-i18n="formDesc">Formu doldurarak doğrudan bana ulaşabilirsiniz. Tüm mesajlara en kısa sürede dönüş
+            <h3 class="form-title"><i class="fa-regular fa-paper-plane text-glow"></i> <span data-i18n="formTitle">Bana
+                Mesaj Gönder</span></h3>
+            <p class="form-desc" data-i18n="formDesc">Formu doldurarak doğrudan bana ulaşabilirsiniz. Tüm mesajlara en
+              kısa sürede dönüş
               yapıyorum.</p>
 
             <form id="contact-form" action="https://formspree.io/f/maeelbre" method="POST" novalidate>
@@ -1145,42 +1205,52 @@
               <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
 
               <div class="form-group">
-                <label for="form-name"><span data-i18n="formLabelName">Adınız Soyadınız</span> <span class="required-star">*</span></label>
+                <label for="form-name"><span data-i18n="formLabelName">Adınız Soyadınız</span> <span
+                    class="required-star">*</span></label>
                 <div class="input-wrapper">
                   <i class="fa-regular fa-user input-icon"></i>
-                  <input type="text" id="form-name" name="name" maxlength="100" placeholder="Örn: Ahmet Yılmaz" data-i18n-placeholder="formPlaceholderName" required>
+                  <input type="text" id="form-name" name="name" maxlength="100" placeholder="Örn: Ahmet Yılmaz"
+                    data-i18n-placeholder="formPlaceholderName" required>
                 </div>
                 <span class="input-error-msg" id="name-error" data-i18n="formErrorName">Lütfen adınızı giriniz.</span>
               </div>
 
               <div class="form-group">
-                <label for="form-email"><span data-i18n="formLabelEmail">E-Posta Adresiniz</span> <span class="required-star">*</span></label>
+                <label for="form-email"><span data-i18n="formLabelEmail">E-Posta Adresiniz</span> <span
+                    class="required-star">*</span></label>
                 <div class="input-wrapper">
                   <i class="fa-regular fa-envelope input-icon"></i>
-                  <input type="email" id="form-email" name="email" maxlength="120" placeholder="Örn: ahmet@example.com" data-i18n-placeholder="formPlaceholderEmail" required>
+                  <input type="email" id="form-email" name="email" maxlength="120" placeholder="Örn: ahmet@example.com"
+                    data-i18n-placeholder="formPlaceholderEmail" required>
                 </div>
-                <span class="input-error-msg" id="email-error" data-i18n="formErrorEmail">Lütfen geçerli bir e-posta adresi giriniz.</span>
+                <span class="input-error-msg" id="email-error" data-i18n="formErrorEmail">Lütfen geçerli bir e-posta
+                  adresi giriniz.</span>
               </div>
 
               <div class="form-group">
-                <label for="form-subject"><span data-i18n="formLabelSubject">Konu</span> <span class="required-star">*</span></label>
+                <label for="form-subject"><span data-i18n="formLabelSubject">Konu</span> <span
+                    class="required-star">*</span></label>
                 <div class="input-wrapper">
                   <i class="fa-regular fa-bookmark input-icon"></i>
-                  <input type="text" id="form-subject" name="subject" maxlength="150" placeholder="Örn: Staj / Veri Analizi İşbirliği"
-                    data-i18n-placeholder="formPlaceholderSubject" required>
+                  <input type="text" id="form-subject" name="subject" maxlength="150"
+                    placeholder="Örn: Staj / Veri Analizi İşbirliği" data-i18n-placeholder="formPlaceholderSubject"
+                    required>
                 </div>
-                <span class="input-error-msg" id="subject-error" data-i18n="formErrorSubject">Lütfen mesaj konusunu belirtiniz.</span>
+                <span class="input-error-msg" id="subject-error" data-i18n="formErrorSubject">Lütfen mesaj konusunu
+                  belirtiniz.</span>
               </div>
 
               <div class="form-group">
-                <label for="form-message"><span data-i18n="formLabelMessage">Mesajınız</span> <span class="required-star">*</span></label>
+                <label for="form-message"><span data-i18n="formLabelMessage">Mesajınız</span> <span
+                    class="required-star">*</span></label>
                 <div class="input-wrapper textarea-wrapper">
                   <i class="fa-regular fa-comment-dots input-icon"></i>
                   <textarea id="form-message" name="message" rows="4" maxlength="2000"
                     placeholder="Projenizden, staj imkanlarından veya görüşmek istediğiniz konudan bahsedin..."
                     data-i18n-placeholder="formPlaceholderMessage" required></textarea>
                 </div>
-                <span class="input-error-msg" id="message-error" data-i18n="formErrorMessage">Lütfen mesajınızı yazınız.</span>
+                <span class="input-error-msg" id="message-error" data-i18n="formErrorMessage">Lütfen mesajınızı
+                  yazınız.</span>
               </div>
 
               <button type="submit" class="btn btn-primary-glow btn-full" id="submit-btn">
@@ -1207,7 +1277,8 @@
             <span class="logo-suffix">data</span>
             <span class="logo-bracket">]</span>
           </a>
-          <p class="footer-tagline" data-i18n="footerTagline">Veriyle düşünen, makine öğrenmesi ve iş zekasıyla değer üreten analitik portfolyo.
+          <p class="footer-tagline" data-i18n="footerTagline">Veriyle düşünen, makine öğrenmesi ve iş zekasıyla değer
+            üreten analitik portfolyo.
           </p>
         </div>
 
@@ -1230,8 +1301,10 @@
       </div>
 
       <div class="footer-bottom">
-        <p>© <span id="current-year">2026</span> <span data-i18n="footerCopy">Efe Fevzi Türkel. İstanbul Nişantaşı Üniversitesi Bilgisayar Mühendisliği.</span></p>
-        <p class="footer-subtext" data-i18n="footerSubtext">Veri Bilimi & Veri Analitiği Portfolyosu • Vanilla HTML5, CSS3 & Modern JavaScript.
+        <p>© <span id="current-year">2026</span> <span data-i18n="footerCopy">Efe Fevzi Türkel. İstanbul Nişantaşı
+            Üniversitesi Bilgisayar Mühendisliği.</span></p>
+        <p class="footer-subtext" data-i18n="footerSubtext">Veri Bilimi & Veri Analitiği Portfolyosu • Vanilla HTML5,
+          CSS3 & Modern JavaScript.
         </p>
       </div>
     </div>
@@ -1254,12 +1327,13 @@
       <div class="cv-header">
         <div class="cv-header-details">
           <h2 id="cv-modal-title" class="cv-name">EFE FEVZİ TÜRKEL</h2>
-          <p class="cv-headline" data-i18n="cvHeadline">Bilgisayar Mühendisliği Lisans Öğrencisi (3. Sınıf) | Veri & Finansal Risk Analitiği
+          <p class="cv-headline" data-i18n="cvHeadline">Bilgisayar Mühendisliği Lisans Öğrencisi (3. Sınıf) | Veri &
+            Finansal Risk Analitiği
             Adayı
           </p>
           <div class="cv-contact-chips">
             <span><i class="fa-solid fa-envelope"></i> efefturkel@gmail.com</span>
-            <span><i class="fa-solid fa-university"></i> İst. Nişantaşı Üniv. (3. Sınıf)</span>
+            <span><i class="fa-solid fa-university"></i> <span data-i18n="cvChipUniv">İst. Nişantaşı Üniv. (3. Sınıf)</span></span>
             <span><i class="fa-brands fa-github"></i> github.com/efe-turkel</span>
             <span><i class="fa-brands fa-linkedin"></i> linkedin.com/in/efe-fevzi-türke</span>
           </div>
@@ -1270,7 +1344,8 @@
 
       <!-- CV Summary -->
       <div class="cv-block">
-        <h3 class="cv-block-title"><i class="fa-solid fa-bullseye"></i> <span data-i18n="cvSummaryTitle">Özgeçmiş Özeti</span></h3>
+        <h3 class="cv-block-title"><i class="fa-solid fa-bullseye"></i> <span data-i18n="cvSummaryTitle">Özgeçmiş
+            Özeti</span></h3>
         <p class="cv-text" data-i18n="cvSummaryText">
           Nişantaşı Üniversitesi Bilgisayar Mühendisliği 3. sınıf öğrencisi. İleri SQL sorgulama, Python (Pandas/NumPy)
           veri modelleme ve dinamik Excel karar panelleri alanlarında yetkin. Özellikle finansal risk analitiği,
@@ -1281,7 +1356,8 @@
 
       <!-- CV Experience -->
       <div class="cv-block">
-        <h3 class="cv-block-title"><i class="fa-solid fa-briefcase"></i> <span data-i18n="cvExpTitle">İş Deneyimleri</span></h3>
+        <h3 class="cv-block-title"><i class="fa-solid fa-briefcase"></i> <span data-i18n="cvExpTitle">İş
+            Deneyimleri</span></h3>
 
         <div class="cv-job">
           <div class="cv-job-header">
@@ -1289,70 +1365,81 @@
             <span class="cv-job-date" data-i18n="cvOpetDate">Mart 2025 - Kasım 2026 | OPET</span>
           </div>
           <ul class="cv-bullets">
-            <li data-i18n="cvOpetBullet1">Yoğun ve dinamik saha operasyonlarında müşteri hizmetleri, finansal mutabakat ve operasyonel süreç
+            <li data-i18n="cvOpetBullet1">Yoğun ve dinamik saha operasyonlarında müşteri hizmetleri, finansal mutabakat
+              ve operasyonel süreç
               takibi yürütüldü.</li>
-            <li data-i18n="cvOpetBullet2">Vardiya intizamı, kasa/stok sorumluluğu ve kriz anlarında soğukkanlı problem çözme refleksleri
+            <li data-i18n="cvOpetBullet2">Vardiya intizamı, kasa/stok sorumluluğu ve kriz anlarında soğukkanlı problem
+              çözme refleksleri
               geliştirildi.</li>
-            <li data-i18n="cvOpetBullet3">Yüksek iş disiplini, takım koordinasyonu ve kesintisiz sorumluluk bilinciyle çalışıldı.</li>
+            <li data-i18n="cvOpetBullet3">Yüksek iş disiplini, takım koordinasyonu ve kesintisiz sorumluluk bilinciyle
+              çalışıldı.</li>
           </ul>
         </div>
       </div>
 
       <!-- CV Education -->
       <div class="cv-block">
-        <h3 class="cv-block-title"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="cvEduTitle">Eğitim Bilgileri</span></h3>
+        <h3 class="cv-block-title"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="cvEduTitle">Eğitim
+            Bilgileri</span></h3>
         <div class="cv-job">
           <div class="cv-job-header">
             <strong data-i18n="cvEduUniv">Nişantaşı Üniversitesi — Bilgisayar Mühendisliği (Lisans)</strong>
             <span class="cv-job-date" data-i18n="cvEduDate">Ekim 2024 - Devam Ediyor (3. Sınıf)</span>
           </div>
-          <p class="cv-text" data-i18n="cvEduText">Veri Yapıları, Algoritmalar, Veritabanı Sistemleri, İstatistik & Olasılık, Bilgisayar
+          <p class="cv-text" data-i18n="cvEduText">Veri Yapıları, Algoritmalar, Veritabanı Sistemleri, İstatistik &
+            Olasılık, Bilgisayar
             Mimarisi ve Yazılım Mühendisliği müfredatı.</p>
         </div>
       </div>
 
       <!-- CV Certificates -->
       <div class="cv-block">
-        <h3 class="cv-block-title"><i class="fa-solid fa-award"></i> <span data-i18n="cvCertTitle">Sertifika & Eğitimler</span></h3>
+        <h3 class="cv-block-title"><i class="fa-solid fa-award"></i> <span data-i18n="cvCertTitle">Sertifika &
+            Eğitimler</span></h3>
         <div class="cv-job">
           <div class="cv-job-header">
             <strong data-i18n="cvCertName">Veri Bilimi ve Yapay Zeka Sertifikası</strong>
             <span class="cv-job-date" data-i18n="cvCertDate">Eylül 2026 | Coderspace</span>
           </div>
-          <p class="cv-text" data-i18n="cvCertText">Python ile Veri Analizi, Scikit-Learn, Keşifsel Veri Analizi (EDA) ve Yapay Zeka temelleri
+          <p class="cv-text" data-i18n="cvCertText">Python ile Veri Analizi, Scikit-Learn, Keşifsel Veri Analizi (EDA)
+            ve Yapay Zeka temelleri
             onaylı sertifika programı.</p>
         </div>
       </div>
 
       <!-- CV Skills -->
       <div class="cv-block">
-        <h3 class="cv-block-title"><i class="fa-solid fa-code"></i> <span data-i18n="cvSkillsTitle">Yetenekler</span></h3>
+        <h3 class="cv-block-title"><i class="fa-solid fa-code"></i> <span data-i18n="cvSkillsTitle">Yetenekler</span>
+        </h3>
         <div class="cv-skills-cloud">
           <div class="cv-skill-group">
-            <strong data-i18n="cvSkillG1">Veritabanı & Sorgulama:</strong> SQL, MySQL, PostgreSQL, İlişkisel Veritabanı Tasarımı
+            <strong data-i18n="cvSkillG1">Veritabanı & Sorgulama:</strong> <span data-i18n="cvSkillG1Val">SQL, MySQL, PostgreSQL, İlişkisel Veritabanı Tasarımı</span>
           </div>
           <div class="cv-skill-group">
             <strong data-i18n="cvSkillG2">Programlama & Analiz:</strong> Python, Pandas, NumPy, Jupyter, HTML
           </div>
           <div class="cv-skill-group">
-            <strong data-i18n="cvSkillG3">Görselleştirme & Raporlama:</strong> Matplotlib, Microsoft Excel (İleri Düzey), Dashboard Tasarımı
+            <strong data-i18n="cvSkillG3">Görselleştirme & Raporlama:</strong> <span data-i18n="cvSkillG3Val">Matplotlib, Microsoft Excel (İleri Düzey), Dashboard Tasarımı</span>
           </div>
           <div class="cv-skill-group">
-            <strong><span data-i18n="cvSkillG4">Diller:</span></strong> <span data-i18n="cvSkillLangVal">İngilizce (İyi), Türkçe (Anadil)</span>
+            <strong><span data-i18n="cvSkillG4">Diller:</span></strong> <span data-i18n="cvSkillLangVal">İngilizce
+              (İyi), Türkçe (Anadil)</span>
           </div>
         </div>
       </div>
 
       <!-- CV Projects -->
       <div class="cv-block">
-        <h3 class="cv-block-title"><i class="fa-solid fa-flask"></i> <span data-i18n="cvProjectsTitle">Öne Çıkan Projeler</span></h3>
+        <h3 class="cv-block-title"><i class="fa-solid fa-flask"></i> <span data-i18n="cvProjectsTitle">Öne Çıkan
+            Projeler</span></h3>
 
         <div class="cv-job">
           <div class="cv-job-header">
             <strong data-i18n="cvProj1Title">Kredi Risk Analitiği & Portföy Performans Paneli</strong>
-            <span class="cv-job-date">Eylül 2026</span>
+            <span class="cv-job-date" data-i18n="edu2Badge">Eylül 2026</span>
           </div>
-          <p class="cv-text" data-i18n="cvProj1Text">Finansal veri analizi, müşteri kredi risk segmentasyonu (Normal, Riskli, NPL) ve portföy
+          <p class="cv-text" data-i18n="cvProj1Text">Finansal veri analizi, müşteri kredi risk segmentasyonu (Normal,
+            Riskli, NPL) ve portföy
             kârlılık metriklerinin
             değerlendirildiği karar destek projesi.</p>
         </div>
@@ -1360,16 +1447,18 @@
         <div class="cv-job">
           <div class="cv-job-header">
             <strong data-i18n="cvProj2Title">E-Commerce Sales & Operational Analytics Dashboard</strong>
-            <span class="cv-job-date">Eylül 2026</span>
+            <span class="cv-job-date" data-i18n="edu2Badge">Eylül 2026</span>
           </div>
-          <p class="cv-text" data-i18n="cvProj2Text">SQL ve Excel/Python kullanılarak satış trendleri, kategori analitiği ve operasyonel
+          <p class="cv-text" data-i18n="cvProj2Text">SQL ve Excel/Python kullanılarak satış trendleri, kategori
+            analitiği ve operasyonel
             metriklerin izlendiği analitik kontrol paneli.</p>
         </div>
       </div>
 
       <!-- CV Hobbies -->
       <div class="cv-block">
-        <h3 class="cv-block-title"><i class="fa-solid fa-heart"></i> <span data-i18n="cvSportsTitle">Spor & Disiplin</span></h3>
+        <h3 class="cv-block-title"><i class="fa-solid fa-heart"></i> <span data-i18n="cvSportsTitle">Spor &
+            Disiplin</span></h3>
         <p class="cv-text" data-i18n="cvSportsText">
           Uzun yıllar süren lisanslı Taekwondo sporu ile kazanılmış resmi dereceler; bu branşın kazandırdığı yüksek
           mental odaklanma, dayanıklılık ve disiplin anlayışı. Güncel olarak aktif fitness disiplini.
@@ -1415,12 +1504,9 @@
   <!-- JavaScript Application Logic -->
   <script src="script.js"></script>
 
-  <!-- Scroll animasyon katmanı + hero sahnesi -->
-  <script src="demo-effects.js"></script>
-  <script src="hero-scene.js"></script>
-
   <!-- Cloudflare Web Analytics -->
-  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a1d5e6301c4944c6b99c1a841d9fa1fc"}'></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon='{"token": "a1d5e6301c4944c6b99c1a841d9fa1fc"}'></script>
   <!-- End Cloudflare Web Analytics -->
 </body>
 
