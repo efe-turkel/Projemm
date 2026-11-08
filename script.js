@@ -1501,7 +1501,10 @@ function initScrollReveal() {
     setupStagger();
     setupSettleObserver();
     setupSpotlight();
-    if (finePointer && !reduceMotion) setupMagnetic();
+    if (finePointer && !reduceMotion) {
+      setupMagnetic();
+      setupDataCursor();
+    }
     const dots = setupDots();
     setupScrollEffects(dots);
   });
@@ -1600,22 +1603,34 @@ function initScrollReveal() {
     wrap.className = 'fx-dots';
     wrap.setAttribute('aria-label', 'Bölüm gezintisi');
 
+    // Data Pipeline Telemetry Header & Progress Rail
+    const telemetry = document.createElement('span');
+    telemetry.className = 'fx-telemetry';
+    telemetry.textContent = '0%';
+    wrap.appendChild(telemetry);
+
+    const rail = document.createElement('span');
+    rail.className = 'fx-dots-rail';
+    rail.setAttribute('aria-hidden', 'true');
+    wrap.appendChild(rail);
+
     const labelFor = id => {
       const link = document.querySelector('#nav-links a[href="#' + id + '"]');
       if (link) return link.textContent.trim();
       return root.lang === 'en' ? 'Resume' : 'Özgeçmiş';
     };
 
-    const dots = sections.map(sec => {
+    const dots = sections.map((sec, idx) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'fx-dot';
+      const prefix = '0' + (idx + 1) + ' · ';
       b.setAttribute('aria-label', labelFor(sec.id));
-      b.dataset.label = labelFor(sec.id);
-      b.addEventListener('mouseenter', () => { b.dataset.label = labelFor(sec.id); });
+      b.dataset.label = prefix + labelFor(sec.id);
+      b.addEventListener('mouseenter', () => { b.dataset.label = prefix + labelFor(sec.id); });
       b.addEventListener('click', () => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }));
       wrap.appendChild(b);
-      return { el: b, sec };
+      return { el: b, sec, idx };
     });
 
     document.body.appendChild(wrap);
@@ -1624,19 +1639,24 @@ function initScrollReveal() {
       dots.forEach(d => {
         const lbl = labelFor(d.sec.id);
         d.el.setAttribute('aria-label', lbl);
-        d.el.dataset.label = lbl;
+        d.el.dataset.label = '0' + (d.idx + 1) + ' · ' + lbl;
       });
     };
-    return dots;
+    return { dots, wrap, telemetry };
   }
 
-  function setupScrollEffects(dots) {
+  function setupScrollEffects(dotState) {
+    const { dots, wrap, telemetry } = dotState;
     const sections = Array.from(document.querySelectorAll('main > section'));
     const auroras = Array.from(document.querySelectorAll('.aurora-glow'));
     const heroVisual = document.querySelector('.hero-visual');
+    const tideTrack = document.getElementById('scroll-tide-track');
+    const timelineItems = Array.from(document.querySelectorAll('.timeline-item'));
     const auroraSpeed = [0.10, 0.18, 0.06];
     let ticking = false;
     let wasOn = true;
+    let lastY = window.scrollY;
+    let skewTimer = 0;
 
     function resetInline() {
       sections.forEach(s => s.style.removeProperty('--exit'));
@@ -1656,8 +1676,23 @@ function initScrollReveal() {
 
       const vh = window.innerHeight;
       const y = window.scrollY;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+      const pct = clamp(Math.round((y / maxScroll) * 100), 0, 100);
+
+      // Update Data Pipeline Rail & Telemetry Readout
+      if (wrap) wrap.style.setProperty('--rail-fill', pct + '%');
+      if (telemetry) telemetry.textContent = pct + '%';
 
       if (!reduceMotion) {
+        // Scroll Tide Velocity Skew
+        const dy = clamp(y - lastY, -60, 60);
+        lastY = y;
+        if (tideTrack) {
+          tideTrack.style.setProperty('--tide-skew', (dy * -0.18).toFixed(2));
+          clearTimeout(skewTimer);
+          skewTimer = setTimeout(() => tideTrack.style.setProperty('--tide-skew', '0'), 140);
+        }
+
         sections.forEach(sec => {
           const r = sec.getBoundingClientRect();
           const start = vh * 0.6;
@@ -1672,6 +1707,13 @@ function initScrollReveal() {
           const p = clamp(y, 0, vh * 1.2);
           heroVisual.style.translate = '0 ' + (-p * 0.08).toFixed(1) + 'px';
         }
+
+        // Scroll-Linked Timeline Illumination
+        timelineItems.forEach(item => {
+          const r = item.getBoundingClientRect();
+          const lit = r.top < vh * 0.72 && r.bottom > vh * 0.15;
+          item.classList.toggle('tide-lit', lit);
+        });
       }
 
       let activeIdx = 0;
@@ -1692,6 +1734,34 @@ function initScrollReveal() {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     update();
+  }
+
+  function setupDataCursor() {
+    const ring = document.createElement('div');
+    ring.className = 'fx-cursor-ring';
+    ring.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(ring);
+
+    const HOVER_SEL = 'a, button, .project-card, .skill-card, .stat-card, .contact-card, input, textarea';
+    let raf = 0, tx = -100, ty = -100;
+
+    document.addEventListener('pointermove', e => {
+      tx = e.clientX;
+      ty = e.clientY;
+      if (!ring.classList.contains('is-visible')) ring.classList.add('is-visible');
+      const interactive = e.target && e.target.closest && e.target.closest(HOVER_SEL);
+      ring.classList.toggle('is-hover', !!interactive);
+      if (!raf) {
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          ring.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
+        });
+      }
+    }, { passive: true });
+
+    document.addEventListener('pointerleave', () => {
+      ring.classList.remove('is-visible');
+    });
   }
 })();
 
