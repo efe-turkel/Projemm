@@ -950,11 +950,11 @@ function initTypewriter() {
   const roles = (typeof translations !== 'undefined' && translations[currentLang]?.typewriterRoles)
     ? translations[currentLang].typewriterRoles
     : [
-        'Bilgisayar Mühendisliği Öğrencisiyim.',
-        'Veri & Risk Analitiği Adayıyım.',
-        'Finansal Veri & Karar Destek Odaklıyım.',
-        'Python & SQL ile Değer Üretiyorum.'
-      ];
+      'Bilgisayar Mühendisliği Öğrencisiyim.',
+      'Veri & Risk Analitiği Adayıyım.',
+      'Finansal Veri & Karar Destek Odaklıyım.',
+      'Python & SQL ile Değer Üretiyorum.'
+    ];
 
   let roleIndex = 0;
   let charIndex = 0;
@@ -1237,8 +1237,8 @@ function initModals() {
       : projectData[id];
     if (!data || !projectContent) return;
 
-    const featuresHeading = isEn 
-      ? '<i class="fa-solid fa-sparkles text-glow"></i> Key Features & Analytical Takeaways:' 
+    const featuresHeading = isEn
+      ? '<i class="fa-solid fa-sparkles text-glow"></i> Key Features & Analytical Takeaways:'
       : '<i class="fa-solid fa-sparkles text-glow"></i> Temel Özellikler & Analitik Çıkarımlar:';
     const techHeading = isEn
       ? '<i class="fa-solid fa-code"></i> Tech Stack & Methodologies:'
