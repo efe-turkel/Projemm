@@ -1139,26 +1139,55 @@ function initTimelineSwitcher() {
 }
 
 /* ===================================================================
-   12. INTERACTIVE MODALS (CV & PROJECT DETAILS)
+   12. INTERACTIVE MODALS & DIRECT CV PDF ROUTER
    =================================================================== */
 function initModals() {
+  const CV_PDF_URL = 'assets/Efe_Fevzi_Turkel_CV.pdf';
+  const CV_TRIGGER_SELECTOR = [
+    '[data-cv-action]',
+    '#open-cv-btn',
+    '#mobile-cv-btn',
+    '#hero-cv-btn',
+    '#about-cv-btn',
+    '#cta-open-cv-btn',
+    '#cta-download-cv-btn',
+    '#cv-mockup-link',
+    '#footer-cv-btn',
+    '#cv-print-btn'
+  ].join(', ');
+
   const cvModal = document.getElementById('cv-modal');
-  const openCvButtons = [
-    document.getElementById('open-cv-btn'),
-    document.getElementById('hero-cv-btn'),
-    document.getElementById('about-cv-btn'),
-    document.getElementById('cta-open-cv-btn')
-  ];
   const closeCvModalBtn = document.getElementById('close-cv-modal');
   const cvCloseBottomBtn = document.getElementById('cv-close-bottom');
-  const printCvBtn = document.getElementById('cv-print-btn');
-  const ctaDownloadCvBtn = document.getElementById('cta-download-cv-btn');
 
-  function openCV() {
-    if (cvModal) {
-      cvModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      playSound('click');
+  // Strict allowlist validation against Open Redirect / Path Traversal / URI injection
+  function isSafePdfUrl(url) {
+    return typeof url === 'string' && /^assets\/[A-Za-z0-9_.-]+\.pdf$/.test(url);
+  }
+
+  function openCV(e) {
+    if (!isSafePdfUrl(CV_PDF_URL)) return;
+    playSound('click');
+
+    // Close mobile navigation drawer if open
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    if (mobileDrawer) mobileDrawer.classList.remove('open');
+
+    // If triggered via a native <a href="assets/Efe_Fevzi_Turkel_CV.pdf">, let browser open PDF directly
+    const triggerEl = e && e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (triggerEl && triggerEl.getAttribute('href') === CV_PDF_URL) {
+      return;
+    }
+
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
+
+    const newWin = window.open(CV_PDF_URL, '_blank', 'noopener,noreferrer');
+    if (newWin) {
+      newWin.opener = null;
+    } else {
+      window.location.href = CV_PDF_URL;
     }
   }
 
@@ -1170,23 +1199,18 @@ function initModals() {
     }
   }
 
-  openCvButtons.forEach(btn => {
-    if (btn) btn.addEventListener('click', openCV);
+  // Global event delegation: any CV trigger anywhere on the site directly opens the PDF
+  document.addEventListener('click', (e) => {
+    const trigger = e.target && e.target.closest ? e.target.closest(CV_TRIGGER_SELECTOR) : null;
+    if (trigger) {
+      openCV(e);
+    }
   });
+
+  window.openCV = openCV;
 
   if (closeCvModalBtn) closeCvModalBtn.addEventListener('click', closeCV);
   if (cvCloseBottomBtn) cvCloseBottomBtn.addEventListener('click', closeCV);
-
-  // Print / Save as PDF handlers
-  function triggerPrint() {
-    openCV();
-    setTimeout(() => {
-      window.print();
-    }, 350);
-  }
-
-  if (printCvBtn) printCvBtn.addEventListener('click', triggerPrint);
-  if (ctaDownloadCvBtn) ctaDownloadCvBtn.addEventListener('click', triggerPrint);
 
   // Project Detail Modal
   const projectModal = document.getElementById('project-modal');

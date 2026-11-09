@@ -141,11 +141,12 @@
           <i class="fa-solid fa-moon"></i>
         </button>
 
-        <!-- CV Modal Trigger Button -->
-        <button class="btn btn-outline-glow btn-sm" id="open-cv-btn">
-          <i class="fa-regular fa-file-lines"></i>
+        <!-- Direct CV PDF Trigger Button -->
+        <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+          class="btn btn-outline-glow btn-sm" id="open-cv-btn" data-cv-action="view">
+          <i class="fa-regular fa-file-pdf"></i>
           <span data-i18n="navCvBtn">CV Görüntüle</span>
-        </button>
+        </a>
 
         <!-- Mobile Menu Toggle Button -->
         <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Menüyü Aç">
@@ -176,6 +177,9 @@
           data-i18n="navProjects">Projeler</span></a>
       <a href="#contact" class="mobile-nav-link"><i class="fa-regular fa-paper-plane"></i> <span
           data-i18n="navContact">İletişim</span></a>
+      <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+        class="mobile-nav-link" id="mobile-cv-btn" data-cv-action="view"><i class="fa-regular fa-file-pdf"></i> <span
+          data-i18n="navCvBtn">CV Görüntüle</span></a>
       <div class="mobile-drawer-socials">
         <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i
             class="fa-brands fa-github"></i></a>
@@ -222,10 +226,11 @@
               <i class="fa-solid fa-chart-pie"></i>
               <span data-i18n="heroBtnProjects">Projelerimi İncele</span>
             </a>
-            <button class="btn btn-secondary-glass" id="hero-cv-btn">
-              <i class="fa-solid fa-download"></i>
+            <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+              class="btn btn-secondary-glass" id="hero-cv-btn" data-cv-action="view">
+              <i class="fa-regular fa-file-pdf"></i>
               <span data-i18n="heroBtnCv">Özgeçmiş / CV</span>
-            </button>
+            </a>
             <a href="#contact" class="btn btn-ghost">
               <i class="fa-regular fa-comments"></i>
               <span data-i18n="heroBtnContact">İletişime Geç</span>
@@ -535,10 +540,11 @@
             </div>
 
             <div class="about-cta-row">
-              <button class="btn btn-primary-glow" id="about-cv-btn">
+              <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+                class="btn btn-primary-glow" id="about-cv-btn" data-cv-action="view">
                 <i class="fa-solid fa-file-pdf"></i>
                 <span data-i18n="aboutBtnCv">CV Detaylarını Aç</span>
-              </button>
+              </a>
               <a href="#contact" class="btn btn-outline-glow">
                 <i class="fa-regular fa-envelope"></i>
                 <span data-i18n="aboutBtnMsg">Mesaj Bırak</span>
@@ -1129,18 +1135,23 @@
                   & Junior Rol Fırsatlarına Hazır Format</span></div>
             </div>
             <div class="cv-actions-row">
-              <button class="btn btn-primary-glow" id="cta-open-cv-btn">
+              <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+                class="btn btn-primary-glow" id="cta-open-cv-btn" data-cv-action="view">
                 <i class="fa-regular fa-eye"></i>
                 <span data-i18n="cvBtnOpen">CV'yi Şimdi Aç & İncele</span>
-              </button>
-              <button class="btn btn-outline-glow" id="cta-download-cv-btn">
+              </a>
+              <a href="assets/Efe_Fevzi_Turkel_CV.pdf" download="Efe_Fevzi_Turkel_CV.pdf" target="_blank"
+                rel="noopener noreferrer" class="btn btn-outline-glow" id="cta-download-cv-btn"
+                data-cv-action="download">
                 <i class="fa-solid fa-file-arrow-down"></i>
                 <span data-i18n="cvBtnPdf">PDF Olarak Yazdır / Kaydet</span>
-              </button>
+              </a>
             </div>
           </div>
           <div class="cv-preview-graphic">
-            <div class="cv-mockup-sheet">
+            <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+              class="cv-mockup-sheet" id="cv-mockup-link" data-cv-action="view"
+              style="display: block; text-decoration: none; cursor: pointer;" aria-label="CV Görüntüle (PDF)">
               <div class="cv-sheet-header">
                 <div class="cv-sheet-info">
                   <h4>EFE TÜRKEL</h4>
@@ -1157,7 +1168,7 @@
               <div class="cv-sheet-stamp">
                 <i class="fa-solid fa-stamp"></i> <span data-i18n="cvStamp">GÜNCEL CV</span>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -1310,6 +1321,8 @@
           <a href="#skills" data-i18n="navSkills">Yetenekler</a>
           <a href="#experience" data-i18n="navExperience">Eğitim & Yolculuk</a>
           <a href="#projects" data-i18n="navProjects">Projeler</a>
+          <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer" id="footer-cv-btn"
+            data-cv-action="view" data-i18n="navCvBtn">CV Görüntüle</a>
           <a href="#contact" data-i18n="navContact">İletişim</a>
         </div>
 
@@ -1492,9 +1505,10 @@
 
       <!-- CV Actions Bottom -->
       <div class="cv-modal-footer">
-        <button class="btn btn-outline-glow btn-sm" id="cv-print-btn">
-          <i class="fa-solid fa-print"></i> <span data-i18n="cvBtnPrint">Yazdır / PDF İndir</span>
-        </button>
+        <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+          class="btn btn-outline-glow btn-sm" id="cv-print-btn" data-cv-action="view">
+          <i class="fa-solid fa-file-pdf"></i> <span data-i18n="cvBtnPrint">Yazdır / PDF İndir</span>
+        </a>
         <button class="btn btn-primary-glow btn-sm" id="cv-close-bottom">
           <i class="fa-solid fa-check"></i> <span data-i18n="cvBtnClose">Kapat</span>
         </button>
