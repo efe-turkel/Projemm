@@ -38,7 +38,7 @@ const translations = {
     heroSocialLabel: "Bağlantılarım:",
     badge1Number: "3. Sınıf",
     badge1Text: "Nişantaşı Üniv. Müh.",
-    badge2Number: "150K+",
+    badge2Number: "250K+",
     badge2Text: "İşlenen Veri Satırı",
     badge3Number: "Python & SQL",
     badge3Text: "Analitik Modelleme",
@@ -358,7 +358,7 @@ const translations = {
     heroSocialLabel: "Connect:",
     badge1Number: "Junior",
     badge1Text: "Nişantaşı Univ. Eng.",
-    badge2Number: "150K+",
+    badge2Number: "250K+",
     badge2Text: "Processed Data Rows",
     badge3Number: "Python & SQL",
     badge3Text: "Analytical Modeling",
@@ -718,3 +718,11 @@ const projectModalData = {
     }
   }
 };
+
+// Deep freeze translation dictionaries against runtime tampering / prototype pollution
+(function deepFreeze(obj) {
+  if (obj && typeof obj === 'object' && !Object.isFrozen(obj)) {
+    Object.freeze(obj);
+    Object.keys(obj).forEach(key => deepFreeze(obj[key]));
+  }
+})({ translations, projectModalData });

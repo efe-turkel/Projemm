@@ -2,5 +2,13 @@
 Thumbs.db
 node_modules/
 .env
+.env.*
 .idea/
 .vscode/
+.agent/
+.claude/
+*.local.json
+__pycache__/
+*.py[cod]
+*.bak
+*.log

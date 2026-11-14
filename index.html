@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="tr" data-theme="dark">
+<html lang="tr" data-theme="dark" class="fx-on" data-fx-lang="tr">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com https://*.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <title>Efe Türkel | Veri Bilimi & Veri Analitiği | Bilgisayar Mühendisliği Öğrencisi</title>
   <meta name="description"
     content="İstanbul Nişantaşı Üniversitesi Bilgisayar Mühendisliği 3. sınıf öğrencisi Efe Türkel'in Veri Bilimi, Veri Analizi, Makine Öğrenmesi ve İş Zekası (Power BI/SQL) portfolyosu.">
@@ -12,12 +15,19 @@
   <meta name="author" content="Efe Türkel">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
-  <!-- Open Graph / Meta -->
+  <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Efe Fevzi Türkel | Veri Bilimi Portfolyosu">
+  <meta property="og:locale" content="tr_TR">
   <meta property="og:title" content="Efe Türkel | Veri Bilimi & Veri Analitiği Portfolyosu">
   <meta property="og:description"
     content="Veri analizi, makine öğrenmesi modelleri, SQL veritabanı analitiği ve Power BI dashboard çalışmaları.">
-  <meta property="og:image" content="assets/avatar.jpg">
+  <meta property="og:image" content="https://efe-turkel.github.io/assets/avatar.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Efe Türkel | Veri Bilimi & Veri Analitiği Portfolyosu">
+  <meta name="twitter:description"
+    content="Veri analizi, makine öğrenmesi modelleri, SQL veritabanı analitiği ve Power BI dashboard çalışmaları.">
+  <meta name="twitter:image" content="https://efe-turkel.github.io/assets/avatar.jpg">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml"
@@ -28,7 +38,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- FontAwesome 6 Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -36,19 +46,17 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" href="style.css">
-  <script>
-    // Animasyon katmanını ilk boyamadan önce etkinleştir (titreme olmasın)
-    document.documentElement.classList.add('fx-on');
-    // Açılış alt başlığı için kayıtlı dili ilk boyamadan önce işaretle
-    document.documentElement.setAttribute('data-fx-lang', localStorage.getItem('efe_lang') === 'en' ? 'en' : 'tr');
-  </script>
 </head>
 
 <body>
   <!-- Açılış perdesi -->
   <div class="fx-intro" id="fx-intro" aria-hidden="true">
     <div class="fx-intro-inner">
-      <div class="fx-intro-name" id="fx-intro-name"></div>
+      <div class="fx-intro-name" id="fx-intro-name">
+        <span class="fx-word"><span class="fx-letter" style="--d:0">E</span><span class="fx-letter" style="--d:1">F</span><span class="fx-letter" style="--d:2">E</span></span>
+        <span class="fx-word"><span class="fx-letter" style="--d:4">F</span><span class="fx-letter" style="--d:5">E</span><span class="fx-letter" style="--d:6">V</span><span class="fx-letter" style="--d:7">Z</span><span class="fx-letter" style="--d:8">İ</span></span>
+        <span class="fx-word"><span class="fx-letter" style="--d:10">T</span><span class="fx-letter" style="--d:11">Ü</span><span class="fx-letter" style="--d:12">R</span><span class="fx-letter" style="--d:13">K</span><span class="fx-letter" style="--d:14">E</span><span class="fx-letter" style="--d:15">L</span></span>
+      </div>
       <div class="fx-intro-line"></div>
       <div class="fx-intro-sub">
         <span class="fx-sub-tr">Veri Bilimi</span>
@@ -56,27 +64,6 @@
       </div>
     </div>
   </div>
-  <script>
-    // Açılış adını harf harf oluştur (her harf kademeli belirir)
-    (function () {
-      var host = document.getElementById('fx-intro-name');
-      if (!host) return;
-      var d = 0;
-      'EFE FEVZİ TÜRKEL'.split(' ').forEach(function (word) {
-        var w = document.createElement('span');
-        w.className = 'fx-word';
-        word.split('').forEach(function (ch) {
-          var l = document.createElement('span');
-          l.className = 'fx-letter';
-          l.style.setProperty('--d', d++);
-          l.textContent = ch;
-          w.appendChild(l);
-        });
-        host.appendChild(w);
-        d += 1;
-      });
-    })();
-  </script>
 
   <!-- Scroll Progress Indicator -->
   <div id="scroll-progress-container">
@@ -142,7 +129,7 @@
         </button>
 
         <!-- Direct CV PDF Trigger Button -->
-        <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+        <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer"
           class="btn btn-outline-glow btn-sm" id="open-cv-btn" data-cv-action="view">
           <i class="fa-regular fa-file-pdf"></i>
           <span data-i18n="navCvBtn">CV Görüntüle</span>
@@ -177,13 +164,13 @@
           data-i18n="navProjects">Projeler</span></a>
       <a href="#contact" class="mobile-nav-link"><i class="fa-regular fa-paper-plane"></i> <span
           data-i18n="navContact">İletişim</span></a>
-      <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+      <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer"
         class="mobile-nav-link" id="mobile-cv-btn" data-cv-action="view"><i class="fa-regular fa-file-pdf"></i> <span
           data-i18n="navCvBtn">CV Görüntüle</span></a>
       <div class="mobile-drawer-socials">
         <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i
             class="fa-brands fa-github"></i></a>
-        <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer"
+        <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrkel" target="_blank" rel="noopener noreferrer"
           aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
         <a href="mailto:efefturkel@gmail.com" aria-label="E-Posta"><i class="fa-regular fa-envelope"></i></a>
       </div>
@@ -226,7 +213,7 @@
               <i class="fa-solid fa-chart-pie"></i>
               <span data-i18n="heroBtnProjects">Projelerimi İncele</span>
             </a>
-            <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+            <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer"
               class="btn btn-secondary-glass" id="hero-cv-btn" data-cv-action="view">
               <i class="fa-regular fa-file-pdf"></i>
               <span data-i18n="heroBtnCv">Özgeçmiş / CV</span>
@@ -246,7 +233,7 @@
                 <i class="fa-brands fa-github"></i>
                 <span class="social-tooltip">GitHub</span>
               </a>
-              <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrkel" target="_blank" rel="noopener noreferrer"
                 class="social-icon-box linkedin-hover" title="LinkedIn Profilim" id="hero-linkedin-link">
                 <i class="fa-brands fa-linkedin-in"></i>
                 <span class="social-tooltip">LinkedIn</span>
@@ -285,7 +272,7 @@
               <div class="floating-badge badge-bottom-right float-anim-2">
                 <div class="badge-icon tech-color"><i class="fa-solid fa-chart-line"></i></div>
                 <div class="badge-info">
-                  <span class="badge-number" data-i18n="badge2Number">150K+</span>
+                  <span class="badge-number" data-i18n="badge2Number">250K+</span>
                   <span class="badge-text" data-i18n="badge2Text">İşlenen Veri Satırı</span>
                 </div>
               </div>
@@ -540,7 +527,7 @@
             </div>
 
             <div class="about-cta-row">
-              <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+              <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer"
                 class="btn btn-primary-glow" id="about-cv-btn" data-cv-action="view">
                 <i class="fa-solid fa-file-pdf"></i>
                 <span data-i18n="aboutBtnCv">CV Detaylarını Aç</span>
@@ -1135,12 +1122,12 @@
                   & Junior Rol Fırsatlarına Hazır Format</span></div>
             </div>
             <div class="cv-actions-row">
-              <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+              <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer"
                 class="btn btn-primary-glow" id="cta-open-cv-btn" data-cv-action="view">
                 <i class="fa-regular fa-eye"></i>
                 <span data-i18n="cvBtnOpen">CV'yi Şimdi Aç & İncele</span>
               </a>
-              <a href="assets/Efe_Fevzi_Turkel_CV.pdf" download="Efe_Fevzi_Turkel_CV.pdf" target="_blank"
+              <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" download="Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank"
                 rel="noopener noreferrer" class="btn btn-outline-glow" id="cta-download-cv-btn"
                 data-cv-action="download">
                 <i class="fa-solid fa-file-arrow-down"></i>
@@ -1149,7 +1136,7 @@
             </div>
           </div>
           <div class="cv-preview-graphic">
-            <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+            <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer"
               class="cv-mockup-sheet" id="cv-mockup-link" data-cv-action="view"
               style="display: block; text-decoration: none; cursor: pointer;" aria-label="CV Görüntüle (PDF)">
               <div class="cv-sheet-header">
@@ -1207,8 +1194,8 @@
               <div class="contact-card-icon li-color"><i class="fa-brands fa-linkedin-in"></i></div>
               <div class="contact-card-content">
                 <span class="contact-label">LinkedIn</span>
-                <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer"
-                  class="contact-value" id="contact-li-link">linkedin.com/in/efe-fevzi-türke</a>
+                <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrkel" target="_blank" rel="noopener noreferrer"
+                  class="contact-value" id="contact-li-link">linkedin.com/in/efe-fevzi-türkel</a>
               </div>
               <i class="fa-solid fa-chevron-right contact-arrow"></i>
             </div>
@@ -1242,8 +1229,8 @@
                     class="required-star">*</span></label>
                 <div class="input-wrapper">
                   <i class="fa-regular fa-user input-icon"></i>
-                  <input type="text" id="form-name" name="name" maxlength="100" placeholder="Örn: Ahmet Yılmaz"
-                    data-i18n-placeholder="formPlaceholderName" required>
+                  <input type="text" id="form-name" name="name" minlength="2" maxlength="100" autocomplete="name"
+                    placeholder="Örn: Ahmet Yılmaz" data-i18n-placeholder="formPlaceholderName" required>
                 </div>
                 <span class="input-error-msg" id="name-error" data-i18n="formErrorName">Lütfen adınızı giriniz.</span>
               </div>
@@ -1253,8 +1240,8 @@
                     class="required-star">*</span></label>
                 <div class="input-wrapper">
                   <i class="fa-regular fa-envelope input-icon"></i>
-                  <input type="email" id="form-email" name="email" maxlength="120" placeholder="Örn: ahmet@example.com"
-                    data-i18n-placeholder="formPlaceholderEmail" required>
+                  <input type="email" id="form-email" name="email" minlength="5" maxlength="120" autocomplete="email"
+                    placeholder="Örn: ahmet@example.com" data-i18n-placeholder="formPlaceholderEmail" required>
                 </div>
                 <span class="input-error-msg" id="email-error" data-i18n="formErrorEmail">Lütfen geçerli bir e-posta
                   adresi giriniz.</span>
@@ -1265,7 +1252,7 @@
                     class="required-star">*</span></label>
                 <div class="input-wrapper">
                   <i class="fa-regular fa-bookmark input-icon"></i>
-                  <input type="text" id="form-subject" name="subject" maxlength="150"
+                  <input type="text" id="form-subject" name="subject" minlength="2" maxlength="150" autocomplete="off"
                     placeholder="Örn: Staj / Veri Analizi İşbirliği" data-i18n-placeholder="formPlaceholderSubject"
                     required>
                 </div>
@@ -1278,7 +1265,7 @@
                     class="required-star">*</span></label>
                 <div class="input-wrapper textarea-wrapper">
                   <i class="fa-regular fa-comment-dots input-icon"></i>
-                  <textarea id="form-message" name="message" rows="4" maxlength="2000"
+                  <textarea id="form-message" name="message" rows="4" minlength="10" maxlength="2000" autocomplete="off"
                     placeholder="Projenizden, staj imkanlarından veya görüşmek istediğiniz konudan bahsedin..."
                     data-i18n-placeholder="formPlaceholderMessage" required></textarea>
                 </div>
@@ -1321,7 +1308,7 @@
           <a href="#skills" data-i18n="navSkills">Yetenekler</a>
           <a href="#experience" data-i18n="navExperience">Eğitim & Yolculuk</a>
           <a href="#projects" data-i18n="navProjects">Projeler</a>
-          <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer" id="footer-cv-btn"
+          <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer" id="footer-cv-btn"
             data-cv-action="view" data-i18n="navCvBtn">CV Görüntüle</a>
           <a href="#contact" data-i18n="navContact">İletişim</a>
         </div>
@@ -1329,7 +1316,7 @@
         <div class="footer-socials">
           <a href="https://github.com/efe-turkel" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i
               class="fa-brands fa-github"></i></a>
-          <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrke/" target="_blank" rel="noopener noreferrer"
+          <a href="https://www.linkedin.com/in/efe-fevzi-t%C3%BCrkel" target="_blank" rel="noopener noreferrer"
             aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
           <a href="mailto:efefturkel@gmail.com" aria-label="E-Posta"><i class="fa-regular fa-envelope"></i></a>
         </div>
@@ -1505,7 +1492,7 @@
 
       <!-- CV Actions Bottom -->
       <div class="cv-modal-footer">
-        <a href="assets/Efe_Fevzi_Turkel_CV.pdf" target="_blank" rel="noopener noreferrer"
+        <a href="assets/Efe_Fevzi_Turkel_CV_TR.pdf" target="_blank" rel="noopener noreferrer"
           class="btn btn-outline-glow btn-sm" id="cv-print-btn" data-cv-action="view">
           <i class="fa-solid fa-file-pdf"></i> <span data-i18n="cvBtnPrint">Yazdır / PDF İndir</span>
         </a>
@@ -1532,7 +1519,7 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Background Music (Eminem - Lose Yourself) -->
-  <audio id="bg-music" loop preload="auto">
+  <audio id="bg-music" loop preload="none">
     <source src="assets/eminem-lose-yourself.mp3" type="audio/mpeg">
     <source src="assets/eminem-lose-yourself.m4a" type="audio/mp4">
   </audio>
@@ -1544,7 +1531,7 @@
   <script src="script.js"></script>
 
   <!-- Cloudflare Web Analytics -->
-  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" crossorigin="anonymous"
     data-cf-beacon='{"token": "a1d5e6301c4944c6b99c1a841d9fa1fc"}'></script>
   <!-- End Cloudflare Web Analytics -->
 </body>

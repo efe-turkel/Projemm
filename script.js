@@ -4,6 +4,28 @@
  * sound synthesis, smooth scroll observers, 3D tilt, and dynamic filters.
  */
 
+// Safe Web Storage API wrapper (prevents SecurityError / QuotaExceededError in strict privacy modes)
+const safeStorage = {
+  get(key) {
+    try {
+      return window.localStorage ? window.localStorage.getItem(key) : null;
+    } catch (_) {
+      return null;
+    }
+  },
+  set(key, value) {
+    try {
+      if (window.localStorage) window.localStorage.setItem(key, String(value));
+    } catch (_) {
+      // Ignore storage restrictions in private/sandboxed browsing
+    }
+  }
+};
+
+// Synchronize intro curtain state immediately (CSP-safe external script)
+document.documentElement.classList.add('fx-on');
+document.documentElement.setAttribute('data-fx-lang', safeStorage.get('efe_lang') === 'en' ? 'en' : 'tr');
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize all modular components
   initSoundEffects();
@@ -56,10 +78,10 @@ function initMusicPlayer() {
   }
 
   // Önceki tercih kontrolü
-  const savedMusic = localStorage.getItem('efe_music_enabled');
+  const savedMusic = safeStorage.get('efe_music_enabled');
   if (savedMusic === 'true') {
     const resumeOnGesture = () => {
-      if (bgMusic && bgMusic.paused && localStorage.getItem('efe_music_enabled') === 'true') {
+      if (bgMusic && bgMusic.paused && safeStorage.get('efe_music_enabled') === 'true') {
         bgMusic.play().then(() => {
           musicPlaying = true;
           updateMusicUI();
@@ -90,7 +112,7 @@ function toggleMusic() {
   if (bgMusic.paused) {
     bgMusic.play().then(() => {
       musicPlaying = true;
-      localStorage.setItem('efe_music_enabled', 'true');
+      safeStorage.set('efe_music_enabled', 'true');
       updateMusicUI();
       showToast(t?.toastMusicPlaying || '🎵 Çalıyor: Eminem - Lose Yourself', 'info');
     }).catch(err => {
@@ -100,7 +122,7 @@ function toggleMusic() {
   } else {
     bgMusic.pause();
     musicPlaying = false;
-    localStorage.setItem('efe_music_enabled', 'false');
+    safeStorage.set('efe_music_enabled', 'false');
     updateMusicUI();
     showToast(t?.toastMusicPaused || 'Müzik duraklatıldı 🔇', 'info');
   }
@@ -135,7 +157,7 @@ function playSound(type) {
    =================================================================== */
 function initTheme() {
   const themeToggleBtn = document.getElementById('theme-toggle');
-  const storedTheme = localStorage.getItem('efe_theme');
+  const storedTheme = safeStorage.get('efe_theme');
   const currentTheme = storedTheme === 'light' ? 'light' : 'dark';
 
   document.documentElement.setAttribute('data-theme', currentTheme);
@@ -146,7 +168,7 @@ function initTheme() {
       const activeTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = activeTheme === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('efe_theme', newTheme);
+      safeStorage.set('efe_theme', newTheme);
       updateThemeIcon(newTheme);
       playSound('toggle');
       const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
@@ -171,9 +193,86 @@ function updateThemeIcon(theme) {
    2.1 MULTI-LANGUAGE SYSTEM (TR / EN)
    =================================================================== */
 const ALLOWED_LANGS = ['tr', 'en'];
-let currentLang = ALLOWED_LANGS.includes(localStorage.getItem('efe_lang'))
-  ? localStorage.getItem('efe_lang')
+const CV_PDF_MAP = Object.freeze({
+  tr: 'assets/Efe_Fevzi_Turkel_CV_TR.pdf',
+  en: 'assets/Efe_Fevzi_Turkel_CV_EN.pdf'
+});
+const storedInitialLang = safeStorage.get('efe_lang');
+let currentLang = ALLOWED_LANGS.includes(storedInitialLang)
+  ? storedInitialLang
   : 'tr';
+
+function getActiveCvPdfUrl(lang = currentLang) {
+  return lang === 'en' ? CV_PDF_MAP.en : CV_PDF_MAP.tr;
+}
+
+function updateCvLinks(lang = currentLang) {
+  const targetPdf = getActiveCvPdfUrl(lang);
+  const downloadFileName = lang === 'en' ? 'Efe_Fevzi_Turkel_CV_EN.pdf' : 'Efe_Fevzi_Turkel_CV_TR.pdf';
+  const cvSelector = [
+    '[data-cv-action]',
+    '#open-cv-btn',
+    '#mobile-cv-btn',
+    '#hero-cv-btn',
+    '#about-cv-btn',
+    '#cta-open-cv-btn',
+    '#cta-download-cv-btn',
+    '#cv-mockup-link',
+    '#footer-cv-btn',
+    '#cv-print-btn'
+  ].join(', ');
+
+  document.querySelectorAll(cvSelector).forEach(el => {
+    if (el.tagName === 'A') {
+      el.setAttribute('href', targetPdf);
+      if (el.hasAttribute('download') || el.getAttribute('data-cv-action') === 'download') {
+        el.setAttribute('download', downloadFileName);
+      }
+    }
+  });
+}
+
+// Safe rich-text renderer without innerHTML (allows only <strong>, <em>, <b>, <i>)
+function setSafeLocalizedContent(el, str) {
+  if (typeof str !== 'string') return;
+  if (!str.includes('<')) {
+    el.textContent = str;
+    return;
+  }
+  el.textContent = '';
+  const tokenRegex = /(<\/?(?:strong|em|b|i)>)/gi;
+  const parts = str.split(tokenRegex);
+  let currentParent = el;
+  const stack = [el];
+
+  parts.forEach(part => {
+    if (!part) return;
+    const lower = part.toLowerCase();
+    if (lower === '<strong>' || lower === '<b>') {
+      const node = document.createElement('strong');
+      currentParent.appendChild(node);
+      stack.push(node);
+      currentParent = node;
+    } else if (lower === '<em>' || lower === '<i>') {
+      const node = document.createElement('em');
+      currentParent.appendChild(node);
+      stack.push(node);
+      currentParent = node;
+    } else if (lower === '</strong>' || lower === '</b>' || lower === '</em>' || lower === '</i>') {
+      if (stack.length > 1) {
+        stack.pop();
+        currentParent = stack[stack.length - 1];
+      }
+    } else {
+      currentParent.appendChild(document.createTextNode(part));
+    }
+  });
+}
+
+function getSafeTranslation(dict, key) {
+  if (!dict || typeof key !== 'string') return undefined;
+  return Object.prototype.hasOwnProperty.call(dict, key) ? dict[key] : undefined;
+}
 
 function initLanguage() {
   const langToggleBtn = document.getElementById('lang-toggle');
@@ -197,9 +296,10 @@ function initLanguage() {
 }
 
 function setLanguage(lang, showNotification = false) {
-  if (typeof translations === 'undefined' || !translations[lang]) return;
+  if (!ALLOWED_LANGS.includes(lang) || typeof translations === 'undefined' || !translations[lang]) return;
+  const dict = translations[lang];
   currentLang = lang;
-  localStorage.setItem('efe_lang', lang);
+  safeStorage.set('efe_lang', lang);
   document.documentElement.setAttribute('lang', lang);
   document.documentElement.setAttribute('data-fx-lang', lang);
 
@@ -223,31 +323,27 @@ function setLanguage(lang, showNotification = false) {
   }
 
   // Update document title
-  if (translations[lang].pageTitle) {
-    document.title = translations[lang].pageTitle;
+  if (dict.pageTitle) {
+    document.title = dict.pageTitle;
   }
 
   // Update sound toggle button title/label
   updateMusicUI();
 
-  // Translate all data-i18n elements
+  // Translate all data-i18n elements safely without innerHTML
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    const val = translations[lang][key];
-    if (val !== undefined) {
-      if (val.includes('<') && val.includes('>')) {
-        el.innerHTML = val;
-      } else {
-        el.textContent = val;
-      }
+    const val = getSafeTranslation(dict, key);
+    if (typeof val === 'string') {
+      setSafeLocalizedContent(el, val);
     }
   });
 
   // Translate data-i18n-placeholder
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    const val = translations[lang][key];
-    if (val !== undefined) {
+    const val = getSafeTranslation(dict, key);
+    if (typeof val === 'string') {
       el.placeholder = val;
     }
   });
@@ -255,8 +351,8 @@ function setLanguage(lang, showNotification = false) {
   // Translate data-i18n-title
   document.querySelectorAll('[data-i18n-title]').forEach(el => {
     const key = el.getAttribute('data-i18n-title');
-    const val = translations[lang][key];
-    if (val !== undefined) {
+    const val = getSafeTranslation(dict, key);
+    if (typeof val === 'string') {
       el.title = val;
     }
   });
@@ -264,11 +360,14 @@ function setLanguage(lang, showNotification = false) {
   // Translate data-i18n-aria
   document.querySelectorAll('[data-i18n-aria]').forEach(el => {
     const key = el.getAttribute('data-i18n-aria');
-    const val = translations[lang][key];
-    if (val !== undefined) {
+    const val = getSafeTranslation(dict, key);
+    if (typeof val === 'string') {
       el.setAttribute('aria-label', val);
     }
   });
+
+  // Update localized CV PDF links (TR vs EN)
+  updateCvLinks(lang);
 
   // Restart typewriter with localized roles
   initTypewriter();
@@ -283,7 +382,7 @@ function setLanguage(lang, showNotification = false) {
 
   if (showNotification) {
     playSound('click');
-    showToast(translations[lang].toastLangChanged || 'Language changed', 'info');
+    showToast(dict.toastLangChanged || 'Language changed', 'info');
   }
 }
 
@@ -1142,7 +1241,6 @@ function initTimelineSwitcher() {
    12. INTERACTIVE MODALS & DIRECT CV PDF ROUTER
    =================================================================== */
 function initModals() {
-  const CV_PDF_URL = 'assets/Efe_Fevzi_Turkel_CV.pdf';
   const CV_TRIGGER_SELECTOR = [
     '[data-cv-action]',
     '#open-cv-btn',
@@ -1165,17 +1263,25 @@ function initModals() {
     return typeof url === 'string' && /^assets\/[A-Za-z0-9_.-]+\.pdf$/.test(url);
   }
 
+  // Synchronize CV links on modal/router initialization
+  updateCvLinks(currentLang);
+
   function openCV(e) {
-    if (!isSafePdfUrl(CV_PDF_URL)) return;
+    const activePdfUrl = getActiveCvPdfUrl(currentLang);
+    if (!isSafePdfUrl(activePdfUrl)) return;
     playSound('click');
 
     // Close mobile navigation drawer if open
     const mobileDrawer = document.getElementById('mobile-drawer');
     if (mobileDrawer) mobileDrawer.classList.remove('open');
 
-    // If triggered via a native <a href="assets/Efe_Fevzi_Turkel_CV.pdf">, let browser open PDF directly
+    // If triggered via a native <a href="...">, ensure its href matches active language and let browser open/download PDF directly
     const triggerEl = e && e.target && e.target.closest ? e.target.closest('a[href]') : null;
-    if (triggerEl && triggerEl.getAttribute('href') === CV_PDF_URL) {
+    if (triggerEl) {
+      triggerEl.setAttribute('href', activePdfUrl);
+      if (triggerEl.hasAttribute('download') || triggerEl.getAttribute('data-cv-action') === 'download') {
+        triggerEl.setAttribute('download', currentLang === 'en' ? 'Efe_Fevzi_Turkel_CV_EN.pdf' : 'Efe_Fevzi_Turkel_CV_TR.pdf');
+      }
       return;
     }
 
@@ -1183,11 +1289,11 @@ function initModals() {
       e.preventDefault();
     }
 
-    const newWin = window.open(CV_PDF_URL, '_blank', 'noopener,noreferrer');
+    const newWin = window.open(activePdfUrl, '_blank', 'noopener,noreferrer');
     if (newWin) {
       newWin.opener = null;
     } else {
-      window.location.href = CV_PDF_URL;
+      window.location.href = activePdfUrl;
     }
   }
 
@@ -1253,47 +1359,136 @@ function initModals() {
     }
   };
 
+  function isSafeAssetImageUrl(url) {
+    return typeof url === 'string' && /^assets\/[A-Za-z0-9_.-]+\.(png|jpg|jpeg|webp|svg)$/.test(url);
+  }
+
+  function isSafeRepoUrl(url) {
+    return typeof url === 'string' && /^https:\/\/github\.com\/efe-turkel\/[A-Za-z0-9_.-]+$/.test(url);
+  }
+
   function openProjectModal(id) {
-    window._currentProjectId = id;
+    const safeId = String(id);
+    if (!Object.prototype.hasOwnProperty.call(projectData, safeId)) return;
+
+    window._currentProjectId = safeId;
     const isEn = currentLang === 'en';
-    const data = (typeof projectModalData !== 'undefined' && projectModalData[id] && projectModalData[id][currentLang])
-      ? projectModalData[id][currentLang]
-      : projectData[id];
+    const hasLocalized = (
+      typeof projectModalData !== 'undefined' &&
+      Object.prototype.hasOwnProperty.call(projectModalData, safeId) &&
+      projectModalData[safeId] &&
+      Object.prototype.hasOwnProperty.call(projectModalData[safeId], currentLang)
+    );
+    const data = hasLocalized ? projectModalData[safeId][currentLang] : projectData[safeId];
     if (!data || !projectContent) return;
 
-    const featuresHeading = isEn
-      ? '<i class="fa-solid fa-sparkles text-glow"></i> Key Features & Analytical Takeaways:'
-      : '<i class="fa-solid fa-sparkles text-glow"></i> Temel Özellikler & Analitik Çıkarımlar:';
-    const techHeading = isEn
-      ? '<i class="fa-solid fa-code"></i> Tech Stack & Methodologies:'
-      : '<i class="fa-solid fa-code"></i> Kullanılan Teknolojiler & Beceriler:';
+    const featuresHeadingText = isEn
+      ? ' Key Features & Analytical Takeaways:'
+      : ' Temel Özellikler & Analitik Çıkarımlar:';
+    const techHeadingText = isEn
+      ? ' Tech Stack & Methodologies:'
+      : ' Kullanılan Teknolojiler & Beceriler:';
     const githubBtnLabel = data.githubBtnText || (isEn ? 'Open GitHub Repository & Inspect Code' : 'GitHub Deposunu Aç & Kodları İncele');
 
-    projectContent.innerHTML = `
-      <div style="margin-bottom: 20px;">
-        <span class="project-category-badge" style="position: static; margin-bottom: 12px; display: inline-block;">${data.category}</span>
-        <h2 style="font-size: 1.8rem; margin-top: 8px; margin-bottom: 12px;">${data.title}</h2>
-      </div>
-      <div style="border-radius: 16px; overflow: hidden; margin-bottom: 24px; max-height: 400px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center;">
-        <img src="${data.image}" alt="${data.title}" style="width: 100%; height: auto; max-height: 380px; object-fit: contain; display: block;">
-      </div>
-      <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-size: 1.05rem;">
-        ${data.description}
-      </p>
-      <h4 style="margin-bottom: 12px; font-size: 1.15rem;">${featuresHeading}</h4>
-      <ul style="padding-left: 20px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.7;">
-        ${data.features.map(f => `<li>${f}</li>`).join('')}
-      </ul>
-      <h4 style="margin-bottom: 12px; font-size: 1.15rem;">${techHeading}</h4>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;">
-        ${data.tech.map(t => `<span style="font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--bg-glass); border: 1px solid var(--border-color); color: var(--accent-cyan);">${t}</span>`).join('')}
-      </div>
-      <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-        <a href="${data.github}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-glow btn-sm">
-          <i class="fa-brands fa-github"></i> ${githubBtnLabel}
-        </a>
-      </div>
-    `;
+    // Clear modal content safely without innerHTML
+    projectContent.textContent = '';
+
+    // 1. Header container
+    const headerDiv = document.createElement('div');
+    headerDiv.style.marginBottom = '20px';
+
+    const badgeSpan = document.createElement('span');
+    badgeSpan.className = 'project-category-badge';
+    badgeSpan.style.cssText = 'position: static; margin-bottom: 12px; display: inline-block;';
+    badgeSpan.textContent = String(data.category || '');
+
+    const titleH2 = document.createElement('h2');
+    titleH2.style.cssText = 'font-size: 1.8rem; margin-top: 8px; margin-bottom: 12px;';
+    titleH2.textContent = String(data.title || '');
+
+    headerDiv.appendChild(badgeSpan);
+    headerDiv.appendChild(titleH2);
+    projectContent.appendChild(headerDiv);
+
+    // 2. Image wrapper
+    if (isSafeAssetImageUrl(data.image)) {
+      const imgWrap = document.createElement('div');
+      imgWrap.style.cssText = 'border-radius: 16px; overflow: hidden; margin-bottom: 24px; max-height: 400px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center;';
+
+      const imgEl = document.createElement('img');
+      imgEl.src = data.image;
+      imgEl.alt = String(data.title || '');
+      imgEl.style.cssText = 'width: 100%; height: auto; max-height: 380px; object-fit: contain; display: block;';
+      imgWrap.appendChild(imgEl);
+      projectContent.appendChild(imgWrap);
+    }
+
+    // 3. Description paragraph
+    const descP = document.createElement('p');
+    descP.style.cssText = 'color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-size: 1.05rem;';
+    descP.textContent = String(data.description || '');
+    projectContent.appendChild(descP);
+
+    // 4. Features heading & list
+    const featH4 = document.createElement('h4');
+    featH4.style.cssText = 'margin-bottom: 12px; font-size: 1.15rem;';
+    const featIcon = document.createElement('i');
+    featIcon.className = 'fa-solid fa-sparkles text-glow';
+    featH4.appendChild(featIcon);
+    featH4.appendChild(document.createTextNode(featuresHeadingText));
+    projectContent.appendChild(featH4);
+
+    const featUl = document.createElement('ul');
+    featUl.style.cssText = 'padding-left: 20px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.7;';
+    if (Array.isArray(data.features)) {
+      data.features.forEach(f => {
+        const li = document.createElement('li');
+        li.textContent = String(f);
+        featUl.appendChild(li);
+      });
+    }
+    projectContent.appendChild(featUl);
+
+    // 5. Tech heading & tags
+    const techH4 = document.createElement('h4');
+    techH4.style.cssText = 'margin-bottom: 12px; font-size: 1.15rem;';
+    const techIcon = document.createElement('i');
+    techIcon.className = 'fa-solid fa-code';
+    techH4.appendChild(techIcon);
+    techH4.appendChild(document.createTextNode(techHeadingText));
+    projectContent.appendChild(techH4);
+
+    const techWrap = document.createElement('div');
+    techWrap.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;';
+    if (Array.isArray(data.tech)) {
+      data.tech.forEach(t => {
+        const tagSpan = document.createElement('span');
+        tagSpan.style.cssText = 'font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--bg-glass); border: 1px solid var(--border-color); color: var(--accent-cyan);';
+        tagSpan.textContent = String(t);
+        techWrap.appendChild(tagSpan);
+      });
+    }
+    projectContent.appendChild(techWrap);
+
+    // 6. Action footer
+    if (isSafeRepoUrl(data.github)) {
+      const actionWrap = document.createElement('div');
+      actionWrap.style.cssText = 'display: flex; gap: 14px; flex-wrap: wrap;';
+
+      const ghLink = document.createElement('a');
+      ghLink.href = data.github;
+      ghLink.target = '_blank';
+      ghLink.rel = 'noopener noreferrer';
+      ghLink.className = 'btn btn-primary-glow btn-sm';
+
+      const ghIcon = document.createElement('i');
+      ghIcon.className = 'fa-brands fa-github';
+      ghLink.appendChild(ghIcon);
+      ghLink.appendChild(document.createTextNode(' ' + String(githubBtnLabel)));
+
+      actionWrap.appendChild(ghLink);
+      projectContent.appendChild(actionWrap);
+    }
 
     if (projectModal) {
       projectModal.classList.add('open');
@@ -1354,21 +1549,40 @@ function initContactForm() {
 
   if (!form) return;
 
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/maeelbre';
+  const COOLDOWN_MS = 60000;
+  const COOLDOWN_KEY = 'efe_form_cooldown';
+
   const fields = [
-    { input: document.getElementById('form-name'), error: document.getElementById('name-error') },
-    { input: document.getElementById('form-email'), error: document.getElementById('email-error'), isEmail: true },
-    { input: document.getElementById('form-subject'), error: document.getElementById('subject-error') },
-    { input: document.getElementById('form-message'), error: document.getElementById('message-error') }
+    { key: 'name', input: document.getElementById('form-name'), error: document.getElementById('name-error'), minLen: 2, maxLen: 100, singleLine: true },
+    { key: 'email', input: document.getElementById('form-email'), error: document.getElementById('email-error'), minLen: 5, maxLen: 120, isEmail: true, singleLine: true },
+    { key: 'subject', input: document.getElementById('form-subject'), error: document.getElementById('subject-error'), minLen: 2, maxLen: 150, singleLine: true },
+    { key: 'message', input: document.getElementById('form-message'), error: document.getElementById('message-error'), minLen: 10, maxLen: 2000, singleLine: false }
   ];
 
+  // Strict email validation (prevents header/CRLF injection and malformed addresses)
   function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return typeof email === 'string' &&
+      email.length >= 5 &&
+      email.length <= 120 &&
+      !/[\r\n\x00-\x1F\x7F]/.test(email) &&
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
   }
 
-  let lastSubmitTime = 0;
+  // Strip control characters and CR/LF (prevents SMTP header injection)
+  function sanitizeField(val, singleLine) {
+    if (typeof val !== 'string') return '';
+    return singleLine
+      ? val.replace(/[\r\n\x00-\x1F\x7F]+/g, ' ').trim()
+      : val.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/g, '').trim();
+  }
+
+  let lastSubmitTime = Number(safeStorage.get(COOLDOWN_KEY)) || 0;
+  let isSubmitting = false;
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     // Anti-spam Honeypot check
     const honeypot = form.querySelector('input[name="_gotcha"]');
@@ -1377,9 +1591,11 @@ function initContactForm() {
       return;
     }
 
-    // Client-side rate limit (60s cooldown against spam flooding)
+    // Persistent client-side rate limit (60s cooldown across page reloads)
     const now = Date.now();
-    if (now - lastSubmitTime < 60000) {
+    const storedCooldown = Number(safeStorage.get(COOLDOWN_KEY)) || 0;
+    const effectiveLastSubmit = Math.max(lastSubmitTime, storedCooldown);
+    if (effectiveLastSubmit > 0 && now - effectiveLastSubmit < COOLDOWN_MS && now >= effectiveLastSubmit) {
       const waitMsg = currentLang === 'en'
         ? 'Please wait a moment before sending another message.'
         : 'Yeni bir mesaj göndermeden önce lütfen 1 dakika bekleyiniz.';
@@ -1388,22 +1604,24 @@ function initContactForm() {
     }
 
     let isValid = true;
+    const cleanPayload = new FormData();
 
-    fields.forEach(({ input, error, isEmail }) => {
+    fields.forEach(({ key, input, error, minLen, maxLen, isEmail, singleLine }) => {
       if (!input) return;
-      const val = input.value.trim();
+      const val = sanitizeField(input.value, singleLine);
 
-      if (!val) {
-        error.classList.add('show');
+      if (!val || val.length < minLen || val.length > maxLen) {
+        if (error) error.classList.add('show');
         input.style.borderColor = '#ff4757';
         isValid = false;
       } else if (isEmail && !validateEmail(val)) {
-        error.classList.add('show');
+        if (error) error.classList.add('show');
         input.style.borderColor = '#ff4757';
         isValid = false;
       } else {
-        error.classList.remove('show');
+        if (error) error.classList.remove('show');
         input.style.borderColor = '';
+        cleanPayload.append(key, val);
       }
     });
 
@@ -1412,40 +1630,51 @@ function initContactForm() {
       return;
     }
 
-    // Real asynchronous sending to Formspree
+    // Real asynchronous sending to Formspree with strict timeout & parameter allowlist
+    isSubmitting = true;
     const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
     if (submitBtn && btnText) {
       submitBtn.disabled = true;
-      btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ' + (t?.formSending || 'Gönderiliyor...');
+      btnText.textContent = '';
+      const spinner = document.createElement('i');
+      spinner.className = 'fa-solid fa-spinner fa-spin';
+      btnText.appendChild(spinner);
+      btnText.appendChild(document.createTextNode(' ' + (t?.formSending || 'Gönderiliyor...')));
     }
 
-    const formData = new FormData(form);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
 
-    fetch('https://formspree.io/f/maeelbre', {
+    fetch(FORMSPREE_ENDPOINT, {
       method: 'POST',
-      body: formData,
+      body: cleanPayload,
+      mode: 'cors',
+      credentials: 'omit',
+      referrerPolicy: 'strict-origin-when-cross-origin',
       headers: {
         'Accept': 'application/json'
-      }
+      },
+      signal: controller.signal
     })
       .then(response => {
         if (response.ok) {
-          lastSubmitTime = Date.now();
+          const completedAt = Date.now();
+          lastSubmitTime = completedAt;
+          safeStorage.set(COOLDOWN_KEY, String(completedAt));
           form.reset();
           playSound('success');
           showToast(t?.formSuccess || 'Mesajınız başarıyla iletildi! En kısa sürede dönüş yapacağım. 🚀', 'success');
         } else {
-          return response.json().then(data => {
-            throw new Error((data && data.error) || 'Mesaj gönderilemedi');
-          });
+          throw new Error('Form submission failed');
         }
       })
-      .catch(error => {
-        console.error('Formspree submission error:', error);
+      .catch(() => {
         playSound('click');
         showToast(t?.formErrorGeneral || 'Bir hata oluştu. Lütfen doğrudan efefturkel@gmail.com adresine yazınız.', 'warning');
       })
       .finally(() => {
+        clearTimeout(timeoutId);
+        isSubmitting = false;
         if (submitBtn && btnText) {
           submitBtn.disabled = false;
           btnText.textContent = t?.formBtnSubmit || 'Mesajı Gönder';
@@ -1795,7 +2024,9 @@ function initScrollReveal() {
 (function () {
   'use strict';
 
-  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const escAttr = s => esc(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  const isSafeAssetPath = p => typeof p === 'string' && /^assets\/[A-Za-z0-9_.-]+\.(png|jpg|jpeg|webp|svg)$/.test(p);
 
   function hl(line) {
     let out = esc(line);
@@ -1875,7 +2106,7 @@ function initScrollReveal() {
       '<div class="dash-kpis">' +
       '<div class="dash-kpi">AUC<b>0.94</b></div>' +
       '<div class="dash-kpi">NPL<b>1.8%</b></div>' +
-      '<div class="dash-kpi">ROWS<b>150K</b></div>' +
+      '<div class="dash-kpi">ROWS<b>250K</b></div>' +
       '</div>' +
       '<div class="dash-bars">' + bars + '</div>' +
       '<svg class="dash-line" viewBox="0 0 120 30" preserveAspectRatio="none" aria-hidden="true">' +
@@ -1893,13 +2124,15 @@ function initScrollReveal() {
   }
 
   function build(mount) {
-    const src = mount.dataset.char || 'assets/efe_character.png';
-    const alt = mount.dataset.alt || 'Efe Fevzi Türkel';
-    const bg = mount.dataset.bg || 'assets/desk_scene.jpg';
+    const rawSrc = mount.dataset.char || 'assets/efe_character.png';
+    const src = isSafeAssetPath(rawSrc) ? rawSrc : 'assets/efe_character.png';
+    const alt = escAttr(mount.dataset.alt || 'Efe Fevzi Türkel');
+    const rawBg = mount.dataset.bg || 'assets/desk_scene.jpg';
+    const bg = isSafeAssetPath(rawBg) ? rawBg : 'assets/desk_scene.jpg';
     mount.classList.add('hero-scene');
     mount.innerHTML =
       '<div class="scene-stage">' +
-      '<img class="scene-bg" src="' + bg + '" alt="" aria-hidden="true" draggable="false">' +
+      '<img class="scene-bg" src="' + escAttr(bg) + '" alt="" aria-hidden="true" draggable="false">' +
       '<div class="screen-glow g-left"></div>' +
       '<div class="screen-glow g-center"></div>' +
       '<div class="screen-glow g-right"></div>' +
@@ -1918,7 +2151,7 @@ function initScrollReveal() {
       '</div>' +
       '<div class="scene-backlight"></div>' +
       '<div class="scene-bits" aria-hidden="true">' + bits() + '</div>' +
-      '<img class="scene-char" id="profile-img" src="' + src + '" alt="' + alt + '" draggable="false">';
+      '<img class="scene-char" id="profile-img" src="' + escAttr(src) + '" alt="' + alt + '" draggable="false">';
   }
 
   document.addEventListener('DOMContentLoaded', () => {
