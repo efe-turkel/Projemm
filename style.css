@@ -3731,3 +3731,166 @@ textarea:focus-visible {
     display: none !important;
   }
 }
+
+
+/* ===================================================================
+   MOBILE PERFORMANCE & NAVBAR FIXES (telefon optimizasyonu)
+   =================================================================== */
+@media (max-width: 768px), (pointer: coarse) {
+  /* Ağır GPU efektlerini kapat: backdrop-filter, blur(), sürekli animasyonlar */
+  *, *::before, *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .aurora-glow {
+    filter: none;
+    animation: none;
+    opacity: 0.22;
+    width: 320px;
+    height: 320px;
+  }
+
+  .avatar-glow-ring {
+    filter: none;
+    animation: none;
+  }
+
+  .screen-glow,
+  .scene-backlight {
+    filter: none;
+    animation: none;
+  }
+
+  .scene-screen *,
+  .scene-bits span,
+  .scene-char {
+    animation: none !important;
+  }
+
+  .scroll-tide-track {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  /* Kaydırmada tetiklenen blur/transform reveal efektlerini hafiflet */
+  html.fx-on .reveal,
+  html.fx-on .reveal-left,
+  html.fx-on .reveal-right,
+  html.fx-on .reveal-zoom {
+    filter: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  html.fx-on .reveal       { transform: translateY(24px); }
+  html.fx-on .reveal-left  { transform: translateY(24px); }
+  html.fx-on .reveal-right { transform: translateY(24px); }
+  html.fx-on .reveal-zoom  { transform: scale(0.96); }
+
+  html.fx-on .reveal.active,
+  html.fx-on .reveal-left.active,
+  html.fx-on .reveal-right.active,
+  html.fx-on .reveal-zoom.active {
+    transition-delay: 0s;
+  }
+
+  html.fx-on .hero-section .reveal.active,
+  html.fx-on .hero-section .reveal-left.active,
+  html.fx-on .hero-section .reveal-right.active,
+  html.fx-on .hero-section .reveal-zoom.active {
+    transition-delay: calc(1.6s + var(--i, 0) * 60ms);
+  }
+
+  /* Bölüm çıkış (parallax) efektini kaldır: her karede transform/opacity hesaplatıyordu */
+  html.fx-on main > section > .container {
+    transform: none;
+    opacity: 1;
+    will-change: auto;
+  }
+
+  .fx-dots,
+  .fx-cursor-ring {
+    display: none !important;
+  }
+
+  /* Yatay taşma / zıplama engelle */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* NAVBAR: telefonda sığsın ve her zaman görünsün */
+@media (max-width: 768px) {
+  .navbar-wrapper {
+    top: 10px;
+    z-index: 1100;
+  }
+
+  .navbar-container {
+    width: 94%;
+    padding: 8px 12px;
+    gap: 8px;
+    background: rgba(13, 19, 34, 0.94);
+  }
+
+  [data-theme="light"] .navbar-container {
+    background: rgba(255, 255, 255, 0.96);
+  }
+
+  .brand-logo {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .logo-suffix {
+    font-size: 0.95rem;
+  }
+
+  .nav-actions {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Dil ve CV butonları mobilde menü (drawer) içinde zaten mevcut */
+  .nav-actions .lang-switch-btn,
+  .nav-actions #open-cv-btn {
+    display: none;
+  }
+
+  .nav-actions .icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .mobile-drawer {
+    display: flex;
+    left: 3%;
+    width: 94%;
+    max-height: calc(100vh - 110px);
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #0d1322;
+    visibility: hidden;
+    transition: transform 0.25s ease, opacity 0.25s ease, visibility 0s linear 0.25s;
+  }
+
+  [data-theme="light"] .mobile-drawer {
+    background: #ffffff;
+  }
+
+  .mobile-drawer.open {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}

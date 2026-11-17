@@ -22,6 +22,10 @@ const safeStorage = {
   }
 };
 
+// Mobil / dokunmatik cihaz tespiti (performans optimizasyonları için)
+const IS_MOBILE = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+if (IS_MOBILE) document.documentElement.classList.add('is-mobile');
+
 // Synchronize intro curtain state immediately (CSP-safe external script)
 document.documentElement.classList.add('fx-on');
 document.documentElement.setAttribute('data-fx-lang', safeStorage.get('efe_lang') === 'en' ? 'en' : 'tr');
@@ -326,6 +330,8 @@ function initCanvasBackground() {
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
+      // Mobil tarayıcılarda adres çubuğu kaydırırken yalnızca yükseklik değişir; yeniden çizim yapma (takılmayı önler)
+      if (IS_MOBILE && window.innerWidth === width) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       initDataStreamFormulas();
@@ -336,7 +342,9 @@ function initCanvasBackground() {
   // A. Scatter & Cluster Data Nodes (Graph Network)
   // -------------------------------------------------------------
   const nodes = [];
-  const nodeCount = Math.min(Math.max(Math.floor((width * height) / 32000), 32), 52);
+  const nodeCount = IS_MOBILE
+    ? 16
+    : Math.min(Math.max(Math.floor((width * height) / 32000), 32), 52);
   const maxDistance = 135;
   const maxDistSq = maxDistance * maxDistance;
 
@@ -411,7 +419,7 @@ function initCanvasBackground() {
   // B. Traveling Data Packets (Photon pulses along graph edges)
   // -------------------------------------------------------------
   const packets = [];
-  const packetCount = 14;
+  const packetCount = IS_MOBILE ? 4 : 14;
 
   class DataPacket {
     constructor() {
@@ -459,10 +467,12 @@ function initCanvasBackground() {
       ctx.beginPath();
       ctx.arc(curX, curY, 2.4, 0, Math.PI * 2);
       ctx.fillStyle = isDark ? '#00f2fe' : '#0284c7';
-      ctx.shadowColor = isDark ? '#00f2fe' : '#0284c7';
-      ctx.shadowBlur = 8;
+      if (!IS_MOBILE) {
+        ctx.shadowColor = isDark ? '#00f2fe' : '#0284c7';
+        ctx.shadowBlur = 8;
+      }
       ctx.fill();
-      ctx.shadowBlur = 0;
+      if (!IS_MOBILE) ctx.shadowBlur = 0;
     }
   }
 
@@ -497,7 +507,7 @@ function initCanvasBackground() {
   let floatingChips = [];
   function initDataStreamFormulas() {
     floatingChips = [];
-    const count = Math.min(Math.max(Math.floor(width / 130), 8), 15);
+    const count = IS_MOBILE ? 4 : Math.min(Math.max(Math.floor(width / 130), 8), 15);
     for (let i = 0; i < count; i++) {
       floatingChips.push({
         text: formulasData[i % formulasData.length],
@@ -833,10 +843,26 @@ function initCanvasBackground() {
       ctx.stroke();
     }
 
-    requestAnimationFrame(animate);
   }
 
-  animate();
+  // Mobilde 30 FPS sınırı + sekme gizliyken / hızlı kaydırma sırasında çizimi duraklat
+  const frameInterval = IS_MOBILE ? 1000 / 30 : 0;
+  let lastFrame = 0;
+  let lastScrollAt = 0;
+  if (IS_MOBILE) {
+    window.addEventListener('scroll', () => { lastScrollAt = performance.now(); }, { passive: true });
+  }
+
+  function loop(ts) {
+    requestAnimationFrame(loop);
+    if (document.hidden) return;
+    if (IS_MOBILE && ts - lastScrollAt < 120) return;
+    if (frameInterval && ts - lastFrame < frameInterval) return;
+    lastFrame = ts;
+    animate();
+  }
+
+  requestAnimationFrame(loop);
 }
 
 /* ===================================================================
@@ -846,12 +872,17 @@ function initScrollProgress() {
   const progressBar = document.getElementById('scroll-progress-bar');
   if (!progressBar) return;
 
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const progress = (scrollTop / scrollHeight) * 100;
-    progressBar.style.width = `${progress}%`;
-  });
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = Math.max(1, document.documentElement.scrollHeight - document.documentElement.clientHeight);
+      progressBar.style.width = `${(scrollTop / scrollHeight) * 100}%`;
+    });
+  }, { passive: true });
 }
 
 /* ===================================================================
@@ -893,8 +924,18 @@ function initNavbar() {
     });
   }
 
-  // Scroll spy & navbar styling
+  // Scroll spy & navbar styling (rAF ile sınırlandırıldı, pasif dinleyici)
+  let navTicking = false;
   window.addEventListener('scroll', () => {
+    if (navTicking) return;
+    navTicking = true;
+    requestAnimationFrame(() => {
+      navTicking = false;
+      onNavScroll();
+    });
+  }, { passive: true });
+
+  function onNavScroll() {
     const scrollY = window.pageYOffset;
 
     // Toggle Back To Top visibility
@@ -921,7 +962,7 @@ function initNavbar() {
         });
       }
     });
-  });
+  }
 }
 
 /* ===================================================================
@@ -1827,8 +1868,7 @@ function initScrollReveal() {
       if (wrap) wrap.style.setProperty('--rail-fill', pct + '%');
       if (telemetry) telemetry.textContent = pct + '%';
 
-      if (!reduceMotion) {
-        // Scroll Tide Velocity Skew
+      if (!reduceMotion && !IS_MOBILE) {
         const dy = clamp(y - lastY, -60, 60);
         lastY = y;
         if (tideTrack) {
