@@ -652,7 +652,7 @@ const projectModalData = {
         'Stratejik Analitik Çıkarımlar: Yüksek tahsilat hacimli meslek gruplarında yoğunlaşan gecikmeler tespit edilerek ek teminat kriteri önerildi'
       ],
       tech: ['SQL (PostgreSQL / MySQL)', 'Excel Pivot Tables', 'Dilimleyiciler (Slicers)', 'Rapor Bağlantıları', 'KPI Mimarisi', 'Portföy Risk Modellemesi'],
-      github: 'https://github.com/efe-turkel/credit-risk-analytics-dashboard',
+      github: 'https://github.com/efefevziturkel/credit-risk-analytics-dashboard',
       githubBtnText: 'GitHub Deposunu Aç & Kodları İncele'
     },
     en: {
@@ -669,7 +669,7 @@ const projectModalData = {
         'Quantitative Strategic Recommendations: Identified credit risk concentrations in specific occupation clusters and recommended adjusted collateral criteria'
       ],
       tech: ['SQL (PostgreSQL / MySQL)', 'Excel Dynamic Pivots', 'Interactive Slicers', 'Report Connections', 'KPI Architecture', 'Portfolio Credit Risk'],
-      github: 'https://github.com/efe-turkel/credit-risk-analytics-dashboard',
+      github: 'https://github.com/efefevziturkel/credit-risk-analytics-dashboard',
       githubBtnText: 'Open GitHub Repository & Inspect Code'
     }
   },
@@ -687,7 +687,7 @@ const projectModalData = {
         'Çoklu Pivot Table & Slicers: Tek panel üzerinden departman ve kategori bazlı anlık interaktif filtreleme desteği'
       ],
       tech: ['SQL (Foreign Key & JOIN)', 'Excel Dinamik Dashboard', 'Pivot Tablolar', 'Operasyonel Metrikler', 'Veri Temizleme', 'Kârlılık Analizi'],
-      github: 'https://github.com/efe-turkel/ecommerce-sales-sql-excel',
+      github: 'https://github.com/efefevziturkel/ecommerce-sales-sql-excel',
       githubBtnText: 'GitHub Deposunu Aç & Kodları İncele'
     },
     en: {
@@ -703,7 +703,7 @@ const projectModalData = {
         'Dynamic Multi-Pivot Dashboard: Synchronized multi-table slicers enabling real-time drilldowns by department, fulfillment channel, and category'
       ],
       tech: ['SQL (Foreign Key & JOINs)', 'Excel Dynamic Dashboard', 'Pivot Tables', 'Operational Metrics', 'Data Wrangling', 'Profitability Modeling'],
-      github: 'https://github.com/efe-turkel/ecommerce-sales-sql-excel',
+      github: 'https://github.com/efefevziturkel/ecommerce-sales-sql-excel',
       githubBtnText: 'Open GitHub Repository & Inspect Code'
     }
   }

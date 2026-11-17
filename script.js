@@ -1270,8 +1270,8 @@ function initModals() {
         'Stratejik Analitik Çıkarımlar: Yüksek tahsilat hacimli meslek gruplarında yoğunlaşan gecikmeler tespit edilerek ek teminat kriteri önerildi'
       ],
       tech: ['SQL (PostgreSQL / MySQL)', 'Excel Pivot Tables', 'Dilimleyiciler (Slicers)', 'Rapor Bağlantıları', 'KPI Mimarisi', 'Portföy Risk Modellemesi'],
-      github: 'https://github.com/efe-turkel/credit-risk-analytics-dashboard',
-      demo: 'https://github.com/efe-turkel/credit-risk-analytics-dashboard'
+      github: 'https://github.com/efefevziturkel/credit-risk-analytics-dashboard',
+      demo: 'https://github.com/efefevziturkel/credit-risk-analytics-dashboard'
     },
     2: {
       title: 'E-Ticaret Satış & Operasyonel Analitik Paneli',
@@ -1286,8 +1286,8 @@ function initModals() {
         'Çoklu Pivot Table & Slicers: Tek panel üzerinden departman ve kategori bazlı anlık interaktif filtreleme desteği'
       ],
       tech: ['SQL (Foreign Key & JOIN)', 'Excel Dinamik Dashboard', 'Pivot Tablolar', 'Operasyonel Metrikler', 'Veri Temizleme', 'Kârlılık Analizi'],
-      github: 'https://github.com/efe-turkel/ecommerce-sales-sql-excel',
-      demo: 'https://github.com/efe-turkel/ecommerce-sales-sql-excel'
+      github: 'https://github.com/efefevziturkel/ecommerce-sales-sql-excel',
+      demo: 'https://github.com/efefevziturkel/ecommerce-sales-sql-excel'
     }
   };
 
@@ -1296,7 +1296,7 @@ function initModals() {
   }
 
   function isSafeRepoUrl(url) {
-    return typeof url === 'string' && /^https:\/\/github\.com\/efe-turkel\/[A-Za-z0-9_.-]+$/.test(url);
+    return typeof url === 'string' && /^https:\/\/github\.com\/efefevziturkel\/[A-Za-z0-9_.-]+$/.test(url);
   }
 
   function openProjectModal(id) {
