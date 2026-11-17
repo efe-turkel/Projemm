@@ -28,7 +28,6 @@ document.documentElement.setAttribute('data-fx-lang', safeStorage.get('efe_lang'
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize all modular components
-  initSoundEffects();
   initTheme();
   initLanguage();
   initCanvasBackground();
@@ -44,113 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
 });
 
-/* ===================================================================
-   1. BACKGROUND MUSIC PLAYER (Eminem - Lose Yourself, Verse 1)
-   =================================================================== */
-let bgMusic = null;
-let musicPlaying = false;
-
-function initSoundEffects() {
-  initMusicPlayer();
-}
-
-function initMusicPlayer() {
-  bgMusic = document.getElementById('bg-music');
-  const soundToggleBtn = document.getElementById('sound-toggle');
-
-  if (bgMusic) {
-    bgMusic.volume = 0.55; // Dengeli ve net ses seviyesi
-
-    bgMusic.addEventListener('play', () => {
-      musicPlaying = true;
-      updateMusicUI();
-    });
-
-    bgMusic.addEventListener('pause', () => {
-      musicPlaying = false;
-      updateMusicUI();
-    });
-
-    bgMusic.addEventListener('ended', () => {
-      bgMusic.currentTime = 0;
-      bgMusic.play().catch(() => { });
-    });
-  }
-
-  // Önceki tercih kontrolü
-  const savedMusic = safeStorage.get('efe_music_enabled');
-  if (savedMusic === 'true') {
-    const resumeOnGesture = () => {
-      if (bgMusic && bgMusic.paused && safeStorage.get('efe_music_enabled') === 'true') {
-        bgMusic.play().then(() => {
-          musicPlaying = true;
-          updateMusicUI();
-        }).catch(() => { });
-      }
-      window.removeEventListener('pointerdown', resumeOnGesture);
-      window.removeEventListener('keydown', resumeOnGesture);
-    };
-    window.addEventListener('pointerdown', resumeOnGesture, { once: true });
-    window.addEventListener('keydown', resumeOnGesture, { once: true });
-  }
-
-  if (soundToggleBtn) {
-    soundToggleBtn.addEventListener('click', toggleMusic);
-  }
-
-  updateMusicUI();
-}
-
-function toggleMusic() {
-  if (!bgMusic) {
-    bgMusic = document.getElementById('bg-music');
-  }
-  if (!bgMusic) return;
-
-  const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
-
-  if (bgMusic.paused) {
-    bgMusic.play().then(() => {
-      musicPlaying = true;
-      safeStorage.set('efe_music_enabled', 'true');
-      updateMusicUI();
-      showToast(t?.toastMusicPlaying || '🎵 Çalıyor: Eminem - Lose Yourself', 'info');
-    }).catch(err => {
-      console.warn('Playback error:', err);
-      showToast(t?.toastMusicPrompt || 'Müziği başlatmak için lütfen tıklayın', 'warning');
-    });
-  } else {
-    bgMusic.pause();
-    musicPlaying = false;
-    safeStorage.set('efe_music_enabled', 'false');
-    updateMusicUI();
-    showToast(t?.toastMusicPaused || 'Müzik duraklatıldı 🔇', 'info');
-  }
-}
-
-function updateMusicUI() {
-  const soundToggleBtn = document.getElementById('sound-toggle');
-  if (!soundToggleBtn) return;
-  const icon = soundToggleBtn.querySelector('i');
-  const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : null;
-
-  if (musicPlaying) {
-    if (icon) icon.className = 'fa-solid fa-volume-high';
-    soundToggleBtn.classList.add('is-playing');
-    soundToggleBtn.setAttribute('title', t?.soundTitlePause || 'Müziği Durdur (Eminem - Lose Yourself)');
-    soundToggleBtn.setAttribute('aria-label', t?.soundTitlePause || 'Müziği Durdur');
-  } else {
-    if (icon) icon.className = 'fa-solid fa-volume-xmark';
-    soundToggleBtn.classList.remove('is-playing');
-    soundToggleBtn.setAttribute('title', t?.soundTitlePlay || 'Müziği Çal (Eminem - Lose Yourself)');
-    soundToggleBtn.setAttribute('aria-label', t?.soundTitlePlay || 'Müziği Çal');
-  }
-}
-
-// Geriye dönük uyumluluk: diğer tıklama olaylarındaki playSound çağrıları hata üretmesin
-function playSound(type) {
-  // Eminem Lose Yourself arka plan müziği devrede
-}
+// Geriye dönük uyumluluk: etkileşim noktalarındaki playSound çağrıları sessiz çalışsın
+function playSound() {}
 
 /* ===================================================================
    2. THEME CONTROLLER (Dark / Light Mode)
@@ -326,9 +220,6 @@ function setLanguage(lang, showNotification = false) {
   if (dict.pageTitle) {
     document.title = dict.pageTitle;
   }
-
-  // Update sound toggle button title/label
-  updateMusicUI();
 
   // Translate all data-i18n elements safely without innerHTML
   document.querySelectorAll('[data-i18n]').forEach(el => {

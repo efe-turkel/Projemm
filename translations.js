@@ -16,8 +16,6 @@ const translations = {
     navProjects: "Projeler",
     navContact: "İletişim",
     navCvBtn: "CV Görüntüle",
-    soundTitlePlay: "Müziği Çal (Eminem - Lose Yourself)",
-    soundTitlePause: "Müziği Durdur (Eminem - Lose Yourself)",
     themeTitle: "Karanlık / Aydınlık Tema",
     langTitle: "Dili Değiştir (Türkçe / English)",
 
@@ -298,9 +296,6 @@ const translations = {
     toastLangChanged: "Türkçe diline geçildi 🇹🇷",
     toastThemeDark: "Karanlık tema etkinleştirildi 🌙",
     toastThemeLight: "Aydınlık tema etkinleştirildi ☀️",
-    toastMusicPlaying: "🎵 Çalıyor: Eminem - Lose Yourself",
-    toastMusicPaused: "Müzik duraklatıldı 🔇",
-    toastMusicPrompt: "Müziği başlatmak için lütfen tıklayın",
 
     // Additional Timeline, CV & Contact Labels
     edu1Tag1: "Veri Yapıları & Algoritmalar",
@@ -336,8 +331,6 @@ const translations = {
     navProjects: "Projects",
     navContact: "Contact",
     navCvBtn: "View Resume",
-    soundTitlePlay: "Play Music (Eminem - Lose Yourself)",
-    soundTitlePause: "Pause Music (Eminem - Lose Yourself)",
     themeTitle: "Toggle Dark / Light Theme",
     langTitle: "Switch Language (Turkish / English)",
 
@@ -618,9 +611,6 @@ const translations = {
     toastLangChanged: "Switched to English 🌐",
     toastThemeDark: "Dark theme activated 🌙",
     toastThemeLight: "Light theme activated ☀️",
-    toastMusicPlaying: "🎵 Playing: Eminem - Lose Yourself",
-    toastMusicPaused: "Music paused 🔇",
-    toastMusicPrompt: "Click to play background music",
 
     // Additional Timeline, CV & Contact Labels
     edu1Tag1: "Data Structures & Algorithms",
