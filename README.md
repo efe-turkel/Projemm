@@ -26,8 +26,9 @@
 
 ---
 
-## 📬 İletişim (Contact)
+## 📬 İletişim & Canlı Demo (Contact & Live Demo)
 
+- **🌐 Canlı Web Sitesi:** [efe-turkel.github.io/website](https://efe-turkel.github.io/website/)
 - **GitHub:** [github.com/efe-turkel](https://github.com/efe-turkel)
 - **LinkedIn:** [linkedin.com/in/efe-fevzi-türkel](https://www.linkedin.com/in/efe-fevzi-t%C3%BCrkel)
 - **E-Posta:** [efefturkel@gmail.com](mailto:efefturkel@gmail.com)
